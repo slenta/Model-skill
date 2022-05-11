@@ -58,7 +58,7 @@ class concat(object):
                 
                 time_his = dhis.time
                 dhis['time'] = nc.num2date(time_his[:],time_his.units)
-                dhis = dhis.sel(time=slice(1850, 2035))
+                dhis = dhis.sel(time=slice('1850-01', '2035-01'))
                 lon, lat = dhis.lon.values
                 lat = dhis.lat.values
                 his = dhis.tos.values[:, ::-1, :]
