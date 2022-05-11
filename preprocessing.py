@@ -16,12 +16,11 @@ cfg.set_args()
 
 class concat(object):
 
-    def __init__(self, start_years, end_years, ensemble_members, hist_path, scenario_path, scenario):
+    def __init__(self, start_years, end_years, ensemble_members, scenario_path, scenario):
         super(concat, self).__init__()
 
         self.start_years = start_years
         self.ensemble_members = ensemble_members
-        self.paths = hist_path
         self.scenario_path = scenario_path
         self.scenario = scenario
         self.end_years = end_years
@@ -41,7 +40,7 @@ class concat(object):
                 yearly_specifics_hist = str(ensemble_member) + 'i1p1f1_gn_' + str(start_year) + '01-' + str(2039) + '12.nc'
 
         else:    
-            his_path = self.histpath + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20181212/' + cfg.model_specifics + '_historical_r'
+            his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20181212/' + cfg.model_specifics + '_historical_r'
 
         path = his_path + yearly_specifics_hist
 

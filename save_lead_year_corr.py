@@ -7,7 +7,7 @@ from leadyear import calculate_leadyear
 cfg.set_args()
 
 #concatenate and save historical simulations in a single file
-concate = concat(cfg.hist_start_years, cfg.hist_end_years, cfg.ensemble_member, cfg.historical_path, cfg.scenario_path, cfg.scenario)
+concate = concat(cfg.hist_start_years, cfg.hist_end_years, cfg.ensemble_member, cfg.scenario_path, cfg.scenario)
 concate.concat()
 
 #save lead correlation for cfg.lead_year
