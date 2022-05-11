@@ -81,6 +81,7 @@ class concat(object):
 
             n = hist.shape
 
+            print(time)
 
             ds = xr.Dataset(data_vars=dict(historical=(["time", "x", "y"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
