@@ -1,7 +1,7 @@
 #Loading and using all required classes to calculate leadyear timeseries
 
 import config as cfg
-from Code.preprocessing import concat
+from preprocessing import concat
 from leadyear import calculate_leadyear
 
 cfg.set_args()
