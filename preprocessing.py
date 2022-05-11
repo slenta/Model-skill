@@ -55,7 +55,7 @@ class concat(object):
             time = []  
             for i in range(len(self.start_years)): #run over all start years and concatenate contained variables
                 hist_path = self.get_path(self.start_years[i], self.end_years[i], self.ensemble_members[k])
-                ofile = cfg.tmp_path + 'historical_' + str(self.lead_year) + '.nc'
+                ofile = cfg.tmp_path + 'historical.nc'
                
                 cdo.remapbil(cfg.tmp_path + 'template.nc', input=hist_path, output=ofile)
                 
