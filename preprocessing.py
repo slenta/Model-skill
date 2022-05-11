@@ -3,6 +3,7 @@
 from importlib.resources import path
 from tracemalloc import start
 from typing_extensions import Self
+from anyio import open_file
 import netCDF4 as nc
 import xarray as xr
 import numpy as np
@@ -54,13 +55,21 @@ class concat(object):
             time = []  
             for i in range(len(self.start_years)): #run over all start years and concatenate contained variables
                 hist_path = self.get_path(self.start_years[i], self.end_years[i], self.ensemble_members[k])
-                dhis = xr.open_dataset(hist_path, decode_times=False)
+                ofile = cfg.tmp_path + 'historical_' + str(self.lead_year) + '.nc'
+               
+                cdo.remapbil(cfg.tmp_path + 'template.nc', input=hist_path, output=ofile)
                 
+                dhis = xr.open_dataset(ofile, decode_times=False)
+
+                #get lon, lat values from template
+                ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
+                lon = ds.lon.values
+                lat = ds.lat.values
+
                 time_his = dhis.time
                 dhis['time'] = nc.num2date(time_his[:],time_his.units)
                 dhis = dhis.sel(time=slice('1850-01', '2035-01'))
-                lon = dhis.longitude.values
-                lat = dhis.latitude.values
+ 
                 his = dhis.tos.values[:, ::-1, :]
                 if i==0:
                     hist = his
