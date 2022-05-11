@@ -54,7 +54,7 @@ class concat(object):
         for k in range(len(self.ensemble_members)): #mean over ensemble members
             time = []  
             for i in range(len(self.start_years)): #run over all start years and concatenate contained variables
-                hist_path = self.get_path(1960, self.start_years[i], self.end_years[i], self.ensemble_members[k])
+                hist_path = self.get_path(self.start_years[i], self.end_years[i], self.ensemble_members[k])
                 dhis = xr.open_dataset(hist_path, decode_times=False)
                 
                 time_his = dhis.time
