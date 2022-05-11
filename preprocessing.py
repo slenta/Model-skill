@@ -10,6 +10,7 @@ import numpy as np
 import config as cfg
 import cdo
 cdo = cdo.Cdo()
+import os
 
 cfg.set_args()
 
@@ -76,6 +77,7 @@ class concat(object):
                 else:
                     hist = np.concatenate((hist, his), axis=0)
                 time.append(time_his)
+                os.remove(ofile)
 
             n = hist.shape
 
