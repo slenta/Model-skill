@@ -53,6 +53,8 @@ class concat(object):
         #concatenate the different variables and save in a new file
 
         for k in range(len(self.ensemble_members)): #mean over ensemble members
+
+            print(k)
             time = []  
             hist_path = []
             for i in range(len(self.start_years)): #run over all start years and concatenate contained variables
@@ -77,7 +79,6 @@ class concat(object):
 
             n = hist.shape
             time = dhis.time.values
-            print(time)
 
             #get lon, lat values from template
             ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
@@ -87,7 +88,7 @@ class concat(object):
             ds = xr.Dataset(data_vars=dict(historical=(["time", "x", "y"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
             attrs=dict(description="Complete Historical Data " + cfg.model_specifics))
-            
+
             os.remove(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
             ds.to_netcdf(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
 
