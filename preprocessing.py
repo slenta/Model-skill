@@ -90,7 +90,7 @@ class concat(object):
             lat = ds.lat.values
             print(lon.shape, lat.shape)
 
-            ds = xr.Dataset(data_vars=dict(tos=(["time", "lon", "lat"], hist)),
+            ds = xr.Dataset(data_vars=dict(tos=(["time", "lat", "lon"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
             attrs=dict(description="Complete Historical Data " + cfg.model_specifics))
 
