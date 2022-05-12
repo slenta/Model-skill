@@ -56,10 +56,9 @@ class concat(object):
         for k in range(len(self.ensemble_members)): #mean over ensemble members
 
             print(k)
-            time = []  
-            hist_path = np.zeros(len(self.start_years))
+            hist_path = []
             for i in range(len(self.start_years)): #run over all start years and concatenate contained variables
-                hist_path[i] = self.get_path(self.start_years[i], self.end_years[i], self.ensemble_members[k])
+                hist_path.append(self.get_path(self.start_years[i], self.end_years[i], self.ensemble_members[k]))
             
                 ofile=cfg.tmp_path + self.name + str(self.lead_year)
                 cdo.remapbil(cfg.tmp_path + 'template.nc', input=hist_path[i], output=ofile + str(i) + '.nc')
