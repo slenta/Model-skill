@@ -70,7 +70,6 @@ class concat(object):
             time_his = dhis.time
             dhis['time'] = nc.num2date(time_his[:],time_his.units)
             dhis = dhis.sel(time=slice('1850-01', '2035-01'))
-            dhis = dhis.sel(x=slice(0, 256))
             #time_indv = dhis.time.values
             
             hist = dhis.tos.values[:, ::-1, :]
