@@ -30,6 +30,7 @@ class residual(object):
         std_hind = np.std(hind, axis=0)
         std_his = np.std(his, axis=0)
         ratio = std_hind/std_his
+        print(ratio.shape, acc.shape)
 
         #third step: multiply standard deviation and correlation to find scaling factor
         scaling = ratio * acc

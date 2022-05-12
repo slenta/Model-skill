@@ -209,8 +209,6 @@ class get_variable(object):
             time = ds.time
             ds['time'] = nc.num2date(time[:],time.units)
 
-            print(self.start_year, self.end_year)
-
             #select wanted timeframe
             ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
 
