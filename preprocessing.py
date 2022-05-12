@@ -137,7 +137,7 @@ class ensemble_means(object):
     
     def get_paths(self, ensemble_member):
 
-        yearly_specifics = '-r' + str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + str(self.start_month) + '-' + str(self.end_year_file) + '12.nc'
+        yearly_specifics = str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + str(self.start_month) + '-' + str(self.end_year_file) + '12.nc'
         path = self.path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + self.mod_year + cfg.model_specifics + self.name
 
         path = path + yearly_specifics
