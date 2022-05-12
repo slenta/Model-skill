@@ -218,7 +218,9 @@ class get_variable(object):
 
     def get_coords(self):
         
-        ds = xr.load_dataset(self.path, decode_times=False)
+        ofile = cfg.tmp_path + self.name + str(self.lead_year) + '.nc'
+        
+        ds = xr.load_dataset(ofile, decode_times=False)
         time = ds.time
         ds['time'] = nc.num2date(time[:],time.units)
         ds = ds.sel(time=slice(str(self.start_year) + '-01', str(self.end_year) + '-01'))
