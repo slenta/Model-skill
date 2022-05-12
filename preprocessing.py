@@ -217,7 +217,7 @@ class get_variable(object):
         return var
 
     def get_coords(self):
-
+        
         ds = xr.load_dataset(self.path, decode_times=False)
         time = ds.time
         ds['time'] = nc.num2date(time[:],time.units)
