@@ -67,11 +67,10 @@ class concat(object):
             time_his = dhis.time
             dhis['time'] = nc.num2date(time_his[:],time_his.units)
             dhis = dhis.sel(time=slice('1850-01', '2035-01'))
-
+            dhis = dhis.sel(x=slice(0, 256))
             #time_indv = dhis.time.values
-            #
+            
             hist = dhis.tos.values[:, ::-1, :]
-            plt.imshow(hist[0])
             print(hist.shape)
             #if i==0:
             #    hist = his
@@ -87,6 +86,7 @@ class concat(object):
             ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
             lon = ds.lon.values
             lat = ds.lat.values
+            print(lon.shape, lat.shape)
 
             ds = xr.Dataset(data_vars=dict(tos=(["time", "lon", "lat"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
