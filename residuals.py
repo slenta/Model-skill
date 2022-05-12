@@ -26,6 +26,7 @@ class residual(object):
         #first step: calculate correlation between hindcast and historical
         for j in range(n[1]):
             for k in range(n[2]):
+                print(hind.shape, his.shape)
                 acc[j, k] = pearsonr(hind[:, j, k], his[:, j, k])[0]
         
         #second step: calculate ratios of standard deviations
