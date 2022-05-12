@@ -87,7 +87,8 @@ class concat(object):
             ds = xr.Dataset(data_vars=dict(historical=(["time", "x", "y"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
             attrs=dict(description="Complete Historical Data " + cfg.model_specifics))
-
+            
+            os.remove(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
             ds.to_netcdf(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
 
 
