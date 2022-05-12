@@ -11,6 +11,7 @@ import config as cfg
 import cdo
 cdo = cdo.Cdo()
 import os
+import matplotlib.pyplot as plt
 
 cfg.set_args()
 
@@ -70,6 +71,8 @@ class concat(object):
             #time_indv = dhis.time.values
             #
             hist = dhis.tos.values[:, ::-1, :]
+            plt.imshow(hist[0])
+            print(hist.shape)
             #if i==0:
             #    hist = his
             #else:
@@ -85,7 +88,7 @@ class concat(object):
             lon = ds.lon.values
             lat = ds.lat.values
 
-            ds = xr.Dataset(data_vars=dict(historical=(["time", "x", "y"], hist)),
+            ds = xr.Dataset(data_vars=dict(tos=(["time", "x", "y"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
             attrs=dict(description="Complete Historical Data " + cfg.model_specifics))
 
