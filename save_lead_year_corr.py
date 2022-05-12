@@ -4,6 +4,9 @@ import config as cfg
 from preprocessing import concat
 from leadyear import calculate_leadyear
 
+import tempfile
+tempfile.tempdir ='/mnt/lustre02/work/uo1075/u301617/tmp'
+
 cfg.set_args()
 
 #concatenate and save historical simulations in a single file
