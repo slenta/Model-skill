@@ -124,8 +124,8 @@ class ensemble_means(object):
         ds = ds.sel(time=slice(str(self.start_year) + '-01', str(self.end_year) + '-01'))
 
         #select wanted spatial frame
-        ds = ds.sel(lon = slice(cfg.lon1, cfg.lon2))
-        ds = ds.sel(lat = slice(cfg.lat1, cfg.lat2))
+        ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
+        ds = ds.sel(lat = slice(cfg.lonlats[2], cfg.lonlats[3]))
 
         #load sst values, reverse longitude dimension
         var = ds[self.variable][:, ::-1, :]
@@ -154,7 +154,6 @@ class ensemble_means(object):
                 
                 if self.mode=='hist':
                     path = cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc'
-                    print(xr.load_dataset(path, decode_times=False))
                 
                 else:
                     path = self.get_paths(self.ensemble_members[k])
