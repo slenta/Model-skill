@@ -70,25 +70,14 @@ class concat(object):
             time_his = dhis.time
             dhis['time'] = nc.num2date(time_his[:],time_his.units)
             dhis = dhis.sel(time=slice('1850-01', '2035-01'))
-            #time_indv = dhis.time.values
             
             hist = dhis.tos.values[:, ::-1, :]
-            print(hist.shape)
-            #if i==0:
-            #    hist = his
-            #else:
-            #    hist = np.concatenate((hist, his), axis=0)
-            #time.append(time_indv)
-            #os.remove(ofile)
-
-            n = hist.shape
             time = dhis.time.values
 
             #get lon, lat values from template
             ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
             lon = ds.lon.values
             lat = ds.lat.values
-            print(lon.shape, lat.shape)
 
             ds = xr.Dataset(data_vars=dict(tos=(["time", "lat", "lon"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
