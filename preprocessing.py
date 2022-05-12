@@ -142,11 +142,6 @@ class ensemble_means(object):
 
         return var
     
-    def remap(self, infile, outfile):
-
-        #remap grids to fit each other to coarsest grids - template 1°x1° grid
-        cdo.remapbil(cfg.tmp_path + 'template.nc', input=infile, output=outfile)
-    
     def get_paths(self, ensemble_member):
 
         yearly_specifics = '-r' + str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + str(self.start_month) + '-' + str(self.end_year_file) + '12.nc'
@@ -165,6 +160,7 @@ class ensemble_means(object):
                 
                 if self.mode=='hist':
                     path = cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc'
+                    print(xr.load_dataset(path, decode_times=False))
                 
                 else:
                     path = self.get_paths(self.ensemble_members[k])
@@ -174,7 +170,9 @@ class ensemble_means(object):
                 ofile = cfg.tmp_path + self.name + str(self.lead_year) + '.nc'
 
                 #remap grids to allow for correlation calculation
-                self.remap(path, ofile)
+                #fit each other to coarsest grids - template 1°x1° grid
+
+                cdo.remapbil(cfg.tmp_path + 'template.nc', input=path, output=ofile)
 
                 indv = self.__getitem__()
                 member.append(indv)
