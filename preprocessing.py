@@ -58,7 +58,7 @@ class concat(object):
             for i in range(len(self.start_years)): #run over all start years and concatenate contained variables
                 hist_path.append(self.get_path(self.start_years[i], self.end_years[i], self.ensemble_members[k]))
 
-            dhis = xr.merge([xr.load_dataarray(hist_path[i], decode_times=False) for i in range(len(hist_path))])
+            dhis = xr.merge([xr.load_dataset(hist_path[i], decode_times=False) for i in range(len(hist_path))])
 
 
             time_his = dhis.time
