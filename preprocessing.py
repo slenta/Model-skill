@@ -121,7 +121,7 @@ class ensemble_means(object):
         ds['time'] = nc.num2date(time[:],time.units)
 
         #select wanted timeframe
-        ds = ds.sel(time=slice(str(self.start_year) + '-01', str(self.end_year) + '-01'))
+        ds = ds.sel(time=slice(str(self.start_year) + '-01', str(self.end_year-1) + '-12'))
 
         #select wanted spatial frame
         ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
@@ -208,6 +208,8 @@ class get_variable(object):
             #decode times into day-month-year shape
             time = ds.time
             ds['time'] = nc.num2date(time[:],time.units)
+
+            print(self.start_year, self.end_year)
 
             #select wanted timeframe
             ds = ds.sel(time=slice(str(self.start_year) + '-01', str(self.end_year - 1) + '-12'))
