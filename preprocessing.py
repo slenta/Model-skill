@@ -131,8 +131,7 @@ class ensemble_means(object):
         var = ds[self.variable][:, ::-1, :]
 
         #get out all NaNs
-        x = np.isnan(var)
-        var[x] = 0.1
+        np.nan_to_num(var, copy=False, nan=0.1)
 
         return var
     
