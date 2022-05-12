@@ -127,7 +127,7 @@ class ensemble_means(object):
         ds['time'] = nc.num2date(time[:],time.units)
 
         #select wanted timeframe
-        ds = ds.sel(time=slice(self.start_year, self.end_year))
+        ds = ds.sel(time=slice(str(self.start_year) + '-01', str(self.end_year) + '-01'))
 
         #select wanted spatial frame
         ds = ds.sel(lon = slice(cfg.lon1, cfg.lon2))
@@ -220,7 +220,7 @@ class get_variable(object):
             ds['time'] = nc.num2date(time[:],time.units)
 
             #select wanted timeframe
-            ds = ds.sel(time=slice(self.start_year, self.end_year))
+            ds = ds.sel(time=slice(str(self.start_year) + '-01', str(self.end_year) + '-01'))
 
             var = ds[self.variable]
         
@@ -231,7 +231,7 @@ class get_variable(object):
         ds = xr.load_dataset(self.path, decode_times=False)
         time = ds.time
         ds['time'] = nc.num2date(time[:],time.units)
-        ds = ds.sel(time=slice(self.start_year, self.end_year))
+        ds = ds.sel(time=slice(str(self.start_year) + '-01', str(self.end_year) + '-01'))
 
 
         lon = ds.lon.values
