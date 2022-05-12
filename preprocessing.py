@@ -54,36 +54,35 @@ class concat(object):
 
         for k in range(len(self.ensemble_members)): #mean over ensemble members
             time = []  
+            hist_path = []
             for i in range(len(self.start_years)): #run over all start years and concatenate contained variables
-                hist_path = self.get_path(self.start_years[i], self.end_years[i], self.ensemble_members[k])
-                ofile = cfg.tmp_path + 'historical.nc'
-               
-                cdo.remapbil(cfg.tmp_path + 'template.nc', input=hist_path, output=ofile)
-                
-                dhis = xr.open_dataset(ofile, decode_times=False)
+                hist_path.append(self.get_path(self.start_years[i], self.end_years[i], self.ensemble_members[k]))
 
-                #get lon, lat values from template
-                ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
-                lon = ds.lon.values
-                lat = ds.lat.values
+            dhis = xr.merge([xr.load_dataarray(hist_path[i], decode_times=False) for i in range(len(hist_path))])
 
-                time_his = dhis.time
-                dhis['time'] = nc.num2date(time_his[:],time_his.units)
-                dhis = dhis.sel(time=slice('1850-01', '2035-01'))
 
-                time_indv = dhis.time.values
- 
-                his = dhis.tos.values[:, ::-1, :]
-                if i==0:
-                    hist = his
-                else:
-                    hist = np.concatenate((hist, his), axis=0)
-                time.append(time_indv)
-                os.remove(ofile)
+            time_his = dhis.time
+            dhis['time'] = nc.num2date(time_his[:],time_his.units)
+            dhis = dhis.sel(time=slice('1850-01', '2035-01'))
+
+            #time_indv = dhis.time.values
+            #
+            hist = dhis.tos.values[:, ::-1, :]
+            #if i==0:
+            #    hist = his
+            #else:
+            #    hist = np.concatenate((hist, his), axis=0)
+            #time.append(time_indv)
+            #os.remove(ofile)
 
             n = hist.shape
-
+            time = dhis.time.values
             print(time)
+
+            #get lon, lat values from template
+            ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
+            lon = ds.lon.values
+            lat = ds.lat.values
 
             ds = xr.Dataset(data_vars=dict(historical=(["time", "x", "y"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
