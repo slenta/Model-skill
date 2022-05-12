@@ -93,7 +93,7 @@ class calculate_leadyear(object):
     
     def save_lead_corr(self):
 
-        hind_corr, res_hind_corr, hist_corr, diff = self.calculate_lead_corr(self.lead_year)
+        hind_corr, res_hind_corr, hist_corr, diff = self.calculate_lead_corr()
         n = hind_corr.shape
         
         if type(self.lead_year) != int:
