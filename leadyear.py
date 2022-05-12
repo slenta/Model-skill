@@ -36,9 +36,6 @@ class calculate_leadyear(object):
         time, lon, lat = hind.get_coords()        
         hind = hind.__getitem__()
 
-
-
-
         residual_dataset = residual(cfg.model_specifics, self.lead_year, cfg.residual_path)
         residual_dataset.save_data(obs, hist, hind, time, lon, lat)
         
