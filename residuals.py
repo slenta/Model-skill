@@ -30,13 +30,12 @@ class residual(object):
         std_hind = np.std(hind, axis=0)
         std_his = np.std(his, axis=0)
         ratio = std_hind/std_his
-        print(ratio.shape, acc.shape)
 
         #third step: multiply standard deviation and correlation to find scaling factor
         scaling = ratio * acc
+        scaling = np.array(scaling)
         
         #fourth step: subtract scaled historical ensemble mean from hindcasts to create residual hindcasts
-        print(his.shape, scaling.shape)
         scaled_hist = scaling * his
         res_hind = hind - scaled_hist
 

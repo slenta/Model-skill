@@ -171,6 +171,7 @@ class ensemble_means(object):
 
         
         mean = np.mean(member, axis=0)
+        mean = np.array(mean)
   
         return mean
 
