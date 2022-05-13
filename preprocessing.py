@@ -214,6 +214,7 @@ class get_variable(object):
             ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
 
             var = ds[self.variable]
+            var = np.array(var)
         
         return var
 
