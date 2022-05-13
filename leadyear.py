@@ -42,7 +42,7 @@ class calculate_leadyear(object):
 
         #load dataset and select lead year(s)
         if type(self.lead_year) == int:
-            ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + str(self.lead_year) + '.nc', decode_times=False)
+            ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + '_' + str(self.lead_year) + '.nc', decode_times=False)
             ds = ds.sel(year=ds.year.values[self.lead_year - 1])
 
         else:
