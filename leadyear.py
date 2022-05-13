@@ -31,10 +31,10 @@ class calculate_leadyear(object):
             end_year=end_year, start_month='01', variable='tos', ensemble=True, mode='hist')
         hist = hist.__getitem__()
 
-        hind = get_variable(cfg.hindcast_path, lead_year=self.lead_year, name=cfg.hind_name + str(start_year) + '-r', ensemble_members=cfg.ensemble_member, mod_year=cfg.hind_mod, start_year=start_year,
+        hin = get_variable(cfg.hindcast_path, lead_year=self.lead_year, name=cfg.hind_name + str(start_year) + '-r', ensemble_members=cfg.ensemble_member, mod_year=cfg.hind_mod, start_year=start_year,
             end_year=end_year, start_month=cfg.start_month_hind, start_year_file=start_year, end_year_file=start_year + 10, variable='tos', ensemble=True)
-        time, lon, lat = hind.get_coords()        
-        hind = hind.__getitem__()
+        hind = hin.__getitem__()
+        time, lon, lat = hin.get_coords()        
 
         residual_dataset = residual(self.lead_year, cfg.residual_path, start_year)
         residual_dataset.save_data(obs, hist, hind, time, lon, lat)
