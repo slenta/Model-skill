@@ -24,8 +24,20 @@ class calculate_leadyear(object):
     def __getitem__(self, start_year, end_year):
         print(start_year)
         
+        #transform lead years into lead year
+        if type(self.lead_year) == int:
+            lead_year = self.lead_year
+
+        else:
+            self.lead_year = self.lead_year.split()
+            lead_year1 = int(self.lead_year[0])
+            lead_year2 = int(self.lead_year[1])
+            lead_year = lead_year1 + 2*lead_year2
+
+
+
         #process variables to create residual dataset, if required choose scenario path instead of hist path
-        obs = get_variable(cfg.observation_path, lead_year=self.lead_year, start_year=start_year, end_year=end_year)
+        obs = get_variable(cfg.observation_path, lead_year=lead_year, start_year=start_year, end_year=end_year)
         obs = obs.__getitem__()
 
         hist = get_variable(cfg.historical_path, lead_year=self.lead_year, name=cfg.hist_name, ensemble_members=cfg.ensemble_member, start_year=start_year,
@@ -39,19 +51,16 @@ class calculate_leadyear(object):
 
         residual_dataset = residual(self.lead_year, cfg.residual_path, start_year)
         residual_dataset.save_data(obs, hist, hind, time, lon, lat)
-        
 
-        #load dataset and select lead year(s)
+        #select only lead year from residuals
         if type(self.lead_year) == int:
             ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + '_' + str(self.lead_year) + '.nc', decode_times=False)
             ds = ds.sel(year=ds.year.values[self.lead_year - 1])
-
         else:
-            self.lead_year = self.lead_year.split()
-            lead_year1 = int(self.lead_year[0])
-            lead_year2 = int(self.lead_year[1])
-            ds = xr.open_dataset(self.resids + '_' + str(lead_year1 + 2*lead_year2) + '.nc', decode_times=False)
+            ds = xr.open_dataset(self.resids + '_' + str(lead_year) + '.nc', decode_times=False)
             ds = ds.sel(year=slice(ds.year.values[lead_year1 - 1], ds.year.values[lead_year2 - 1])).mean('year')
+
+
         
         obs = ds.observation.values
         hind = ds.hindcast.values
