@@ -47,7 +47,9 @@ class calculate_leadyear(object):
         hin = get_variable(cfg.hindcast_path, lead_year=lead_year, name=cfg.hind_name + str(start_year) + '-r', ensemble_members=cfg.ensemble_member, mod_year=cfg.hind_mod, start_year=start_year,
             end_year=end_year, start_month=cfg.start_month_hind, start_year_file=start_year, end_year_file=start_year + 10, variable='tos', ensemble=True)
         hind = hin.__getitem__()
-        time, lon, lat = hin.get_coords()        
+        time, lon, lat = hin.get_coords()    
+
+        print(obs.shape, hist.shape, hind.shape)    
 
         residual_dataset = residual(lead_year, cfg.residual_path, start_year)
         residual_dataset.save_data(obs, hist, hind, time, lon, lat)
