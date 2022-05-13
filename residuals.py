@@ -39,8 +39,7 @@ class residual(object):
         scaled_hist = scaling * his
         res_hind = hind - scaled_hist
 
-        x = np.isnan(res_hind)
-        res_hind[x] = 0.1
+        np.nan_to_num(res_hind, copy=False, nan=0.1)
 
         return res_hind
 
@@ -68,8 +67,7 @@ class residual(object):
         scaled_hist = scaling * his
         res_obs = obs - scaled_hist
 
-        x = np.isnan(res_obs)
-        res_obs[x] = 0.1
+        np.nan_to_num(res_obs, copy=False, nan=0.1)
 
         return res_obs
 
