@@ -10,11 +10,11 @@ cfg.set_args()
 
 class residual(object):
 
-    def __init__(self, model, lead_year, finalpath):
+    def __init__(self, lead_year, finalpath, start_year):
 
-        self.model = model
         self.lead_year = lead_year
         self.finalpath = finalpath
+        self.start_year = start_year
 
     def hind_res(self, his, hind):
         
@@ -83,7 +83,7 @@ class residual(object):
         ds = xr.Dataset(data_vars=dict(res_hind=(["time", "x", "y"], res_hind), res_obs=(["time", "x", "y"], res_obs), observation=(["time", "x", "y"], obs),
         hindcast=(["time", "x", "y"], hind), historical=(["time", "x", "y"], his)),
         coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time,),
-        attrs=dict(description="Residual Hindcast and Observations" + self.model))
+        attrs=dict(description="Residual Hindcast and Observations" + cfg.model_specifics))
 
         #calculate yearly means, assign lead year coordinate
         ds = ds.groupby('time.year').mean('time')
