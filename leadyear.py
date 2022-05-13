@@ -57,7 +57,7 @@ class calculate_leadyear(object):
             ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + '_' + str(self.lead_year) + '.nc', decode_times=False)
             ds = ds.sel(year=ds.year.values[self.lead_year - 1])
         else:
-            ds = xr.open_dataset(self.resids + '_' + str(lead_year) + '.nc', decode_times=False)
+            ds = xr.open_dataset(cfg.residual_path + '_' + str(lead_year) + '.nc', decode_times=False)
             ds = ds.sel(year=slice(ds.year.values[lead_year1 - 1], ds.year.values[lead_year2 - 1])).mean('year')
 
 
