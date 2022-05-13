@@ -22,6 +22,7 @@ class calculate_leadyear(object):
         self.lead_year = lead_year
 
     def __getitem__(self, start_year, end_year):
+        print(start_year)
         
         #process variables to create residual dataset, if required choose scenario path instead of hist path
         obs = get_variable(cfg.observation_path, lead_year=self.lead_year, start_year=start_year, end_year=end_year)
