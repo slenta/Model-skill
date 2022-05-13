@@ -43,7 +43,7 @@ def set_args():
     arg_parser.add_argument('--model_specifics', type=str, default='tos_Omon_MIROC6')
     arg_parser.add_argument('--tmp_path', type=str, default='./tmp/')
     arg_parser.add_argument('--lead_year', type=int, default=1)
-    arg_parser.add_argumselfent('--scenario', type=str, default='ssp245')
+    arg_parser.add_argument('--scenario', type=str, default='ssp245')
     arg_parser.add_argument('--lonlats', type=list, default=[0, 360, -90, 90])
     arg_parser.add_argument('--lead_years', type=str)
 
