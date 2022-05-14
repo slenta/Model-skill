@@ -134,6 +134,8 @@ class ly_series(object):
         hist_corr = f.get('hist_corr')
         res_hind_corr = f.get('res_hind_corr')
 
+        print(hind_corr, hist_corr, res_hind_corr)
+
         return hind_corr, hist_corr, res_hind_corr
 
     def ly_series(self):
