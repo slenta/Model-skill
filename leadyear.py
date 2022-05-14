@@ -105,7 +105,7 @@ class calculate_leadyear(object):
         n = hind_corr.shape
         
         if type(self.lead_year) != int:
-            self.lead_year = self.lead_year.split()
+            lead_year = self.lead_year.split()
             lead_year1 = int(self.lead_year[0])
             lead_year2 = int(self.lead_year[1])
             lead_year = lead_year1 + 2*lead_year2

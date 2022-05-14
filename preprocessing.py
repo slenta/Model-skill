@@ -218,6 +218,7 @@ class get_variable(object):
 
         #get out all NaNs
         np.nan_to_num(var, copy=False, nan=0.1)
+        print(np.isnan(var))
         
         return var
 
