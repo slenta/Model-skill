@@ -112,7 +112,7 @@ class calculate_leadyear(object):
             lead_year2 = int(self.lead_year[1])
             lead_year = lead_year1 + 2*lead_year2
 
-        f = h5.File(self.temp + 'correlation' + str(self.start_year) + '_' + str(self.end_year) + '_' + str(lead_year) + '.hdf5', 'w')
+        f = h5.File(cfg.tmp_path + 'correlation' + str(self.start_year) + '_' + str(self.end_year) + '_' + str(lead_year) + '.hdf5', 'w')
         dset1 = f.create_dataset('hind_corr', (n[0], n[1]), dtype = 'float32',data = hind_corr)
         dset2 = f.create_dataset('res_hind_corr', (n[0], n[1]), dtype = 'float32',data = res_hind_corr)
         dset3 = f.create_dataset('hist_corr', (n[0], n[1]), dtype = 'float32',data = hist_corr)
