@@ -215,6 +215,9 @@ class get_variable(object):
 
             var = ds[self.variable]
             var = np.array(var)
+
+        #get out all NaNs
+        np.nan_to_num(var, copy=False, nan=0.1)
         
         return var
 
