@@ -10,10 +10,9 @@ cfg.set_args()
 
 class residual(object):
 
-    def __init__(self, lead_year, finalpath, start_year):
+    def __init__(self, lead_year, start_year):
 
         self.lead_year = lead_year
-        self.finalpath = finalpath
         self.start_year = start_year
 
     def hind_res(self, his, hind):

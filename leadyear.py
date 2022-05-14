@@ -51,7 +51,7 @@ class calculate_leadyear(object):
 
         print(obs.shape, hist.shape, hind.shape)    
 
-        residual_dataset = residual(lead_year, cfg.residual_path, start_year)
+        residual_dataset = residual(lead_year, start_year)
         residual_dataset.save_data(obs, hist, hind, time, lon, lat)
 
         #select only lead year from residuals
