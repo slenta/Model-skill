@@ -60,6 +60,7 @@ class calculate_leadyear(object):
             ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + '_' + str(lead_year) + '.nc', decode_times=False)
             ds = ds.sel(year=slice(ds.year.values[lead_year1 - 1], ds.year.values[lead_year2 - 1])).mean('year')
 
+        print(np.isnan(obs).any(), np.isnan(hist).any(), np.isnan(hind).any())
 
         
         obs = ds.observation.values
@@ -81,7 +82,6 @@ class calculate_leadyear(object):
         for i in range(self.start_year, self.end_year):               
             obs[i - self.start_year], hist[i - self.start_year], hind[i - self.start_year], res_obs[i - self.start_year], res_hind[i - self.start_year] = self.__getitem__(i, i+10)
             
-
         n = hind.shape
         hind_corr = np.zeros((n[1], n[2]))
         hist_corr = np.zeros((n[1], n[2]))
