@@ -29,9 +29,9 @@ class calculate_leadyear(object):
             lead_year = self.lead_year
 
         else:
-            self.lead_year = self.lead_year.split()
-            lead_year1 = int(self.lead_year[0])
-            lead_year2 = int(self.lead_year[1])
+            lead_year = self.lead_year.split()
+            lead_year1 = int(lead_year[0])
+            lead_year2 = int(lead_year[1])
             lead_year = lead_year1 + 2*lead_year2
 
 
@@ -48,8 +48,6 @@ class calculate_leadyear(object):
             end_year=end_year, start_month=cfg.start_month_hind, start_year_file=start_year, end_year_file=start_year + 10, variable='tos', ensemble=True)
         hind = hin.__getitem__()
         time, lon, lat = hin.get_coords()    
-
-        print(obs.shape, hist.shape, hind.shape)    
 
         residual_dataset = residual(lead_year, start_year)
         residual_dataset.save_data(obs, hist, hind, time, lon, lat)
