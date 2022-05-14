@@ -69,6 +69,9 @@ class calculate_leadyear(object):
         res_obs = ds.res_obs.values
         res_hind = ds.res_hind.values
 
+        print(np.isnan(obs).any(), np.isnan(hist).any(), np.isnan(hind).any())
+
+
         return obs, hind, hist, res_obs, res_hind
 
     def calculate_lead_corr(self):
