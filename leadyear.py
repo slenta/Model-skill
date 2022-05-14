@@ -106,8 +106,8 @@ class calculate_leadyear(object):
         
         if type(self.lead_year) != int:
             lead_year = self.lead_year.split()
-            lead_year1 = int(self.lead_year[0])
-            lead_year2 = int(self.lead_year[1])
+            lead_year1 = int(lead_year[0])
+            lead_year2 = int(lead_year[1])
             lead_year = lead_year1 + 2*lead_year2
         else:
             lead_year = self.lead_year
