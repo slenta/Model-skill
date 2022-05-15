@@ -96,7 +96,7 @@ class concat(object):
 
             dh = xr.open_dataset(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc', decode_times=False)
             h = dh['tos']
-            plt.imshow(h)
+            plt.imshow(h[0])
             plt.show()
 
 
