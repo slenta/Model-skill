@@ -80,10 +80,6 @@ class concat(object):
             lon = ds.lon.values
             lat = ds.lat.values
 
-
-            plt.imshow(hist[0])
-            plt.show()
-
             np.nan_to_num(hist, copy=False, nan=0.1)
 
 
@@ -94,7 +90,7 @@ class concat(object):
             #os.remove(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
             ds.to_netcdf(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
 
-            dh = xr.open_dataset(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc', decode_times=False)
+            dh = xr.load_dataset(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc', decode_times=False)
             h = dh['tos']
             plt.imshow(h[0])
             plt.show()
@@ -139,6 +135,9 @@ class ensemble_means(object):
 
         #load sst values, reverse longitude dimension
         var = ds[self.variable]
+        if self.mode == 'hist':
+            plt.imshow(var[0])
+            plt.show()
 
         #get out all NaNs
         np.nan_to_num(var, copy=False, nan=0.1)
