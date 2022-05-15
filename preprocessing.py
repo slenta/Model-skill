@@ -158,6 +158,11 @@ class ensemble_means(object):
                 
                 if self.mode=='hist':
                     path = cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc'
+
+                    indv = self.__getitem__(path)
+                    plt.imshow(indv)
+                    plt.show()
+
                 
                 else:
                     ifile = self.get_paths(self.ensemble_members[k])
