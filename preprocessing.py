@@ -114,28 +114,34 @@ class ensemble_means(object):
 
     def __getitem__(self, path):
 
-        #load saved regridded data
-        ds = xr.load_dataset(path, decode_times=False)
-
-        #decode times into day-month-year shape
-        time = ds.time
-        ds['time'] = nc.num2date(time[:],time.units)
-
-        #select wanted timeframe
-        ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
-
-        #select wanted spatial frame
-        ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
-        ds = ds.sel(lat = slice(cfg.lonlats[2], cfg.lonlats[3]))
-
-        #load sst values, reverse longitude dimension
-        var = ds[self.variable]
-        if self.mode == 'hist':
+        if self.mode=='hist':
+            ds = xr.load_dataset(path, decode_times=False)
+            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+            var = ds[self.variable]
             plt.imshow(var[0])
             plt.show()
 
-        #get out all NaNs
-        np.nan_to_num(var, copy=False, nan=0.1)
+        else:
+            #load saved regridded data
+            ds = xr.load_dataset(path, decode_times=False)
+
+            #decode times into day-month-year shape
+            time = ds.time
+            ds['time'] = nc.num2date(time[:],time.units)
+
+            #select wanted timeframe
+            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+
+            #select wanted spatial frame
+            ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
+            ds = ds.sel(lat = slice(cfg.lonlats[2], cfg.lonlats[3]))
+
+            #load sst values, reverse longitude dimension
+            var = ds[self.variable][:, ::-1, :]
+
+
+            #get out all NaNs
+            np.nan_to_num(var, copy=False, nan=0.1)
 
         return var
     
@@ -175,7 +181,6 @@ class ensemble_means(object):
 
 
                     indv = self.__getitem__(path)
-                    indv = indv[:, ::-1, :]
 
                 member.append(indv)
 
