@@ -73,6 +73,7 @@ class concat(object):
             
             hist = dhis.tos.values[:, ::-1, :]
             time = dhis.time.values
+            hist = np.array(hist)
 
             #get lon, lat values from template
             ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
@@ -82,6 +83,9 @@ class concat(object):
 
             plt.imshow(hist[0])
             plt.show()
+
+            np.nan_to_num(hist, copy=False, nan=0.1)
+
 
             ds = xr.Dataset(data_vars=dict(tos=(["time", "lat", "lon"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
@@ -112,13 +116,10 @@ class ensemble_means(object):
         self.mode = mode
         self.lead_year = lead_year
 
-    def __getitem__(self):
-        
-        #define outputfile for cdo
-        ofile = cfg.tmp_path + self.name + str(self.lead_year) + '.nc'
+    def __getitem__(self, path):
 
         #load saved regridded data
-        ds = xr.load_dataset(ofile, decode_times=False)
+        ds = xr.load_dataset(path, decode_times=False)
 
         #decode times into day-month-year shape
         time = ds.time
@@ -159,18 +160,19 @@ class ensemble_means(object):
                     path = cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc'
                 
                 else:
-                    path = self.get_paths(self.ensemble_members[k])
+                    ifile = self.get_paths(self.ensemble_members[k])
 
 
-                #create outputfiles for cdo
-                ofile = cfg.tmp_path + self.name + str(self.lead_year) + '.nc'
+                    #create outputfiles for cdo
+                    path = cfg.tmp_path + self.name + str(self.lead_year) + '.nc'
 
-                #remap grids to allow for correlation calculation
-                #fit each other to coarsest grids - template 1°x1° grid
+                    #remap grids to allow for correlation calculation
+                    #fit each other to coarsest grids - template 1°x1° grid
 
-                cdo.remapbil(cfg.tmp_path + 'template.nc', input=path, output=ofile)
+                    cdo.remapbil(cfg.tmp_path + 'template.nc', input=ifile, output=path)
 
-                indv = self.__getitem__()
+
+                indv = self.__getitem__(path)
                 member.append(indv)
 
         
