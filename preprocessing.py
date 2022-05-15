@@ -221,6 +221,13 @@ class get_variable(object):
         
         return var
 
+    def plot(self):
+
+        var = self.__getitem__()
+
+        plt.imshow(var[0])
+
+
     def get_coords(self):
         
         ofile = cfg.tmp_path + self.name + str(self.lead_year) + '.nc'
