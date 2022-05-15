@@ -60,17 +60,12 @@ class calculate_leadyear(object):
             ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + '_' + str(lead_year) + '.nc', decode_times=False)
             ds = ds.sel(year=slice(ds.year.values[lead_year1 - 1], ds.year.values[lead_year2 - 1])).mean('year')
 
-        print(np.isnan(obs).any(), np.isnan(hist).any(), np.isnan(hind).any())
-
         
         obs = ds.observation.values
         hind = ds.hindcast.values
         hist = ds.historical.values
         res_obs = ds.res_obs.values
         res_hind = ds.res_hind.values
-
-        print(np.isnan(obs).any(), np.isnan(hist).any(), np.isnan(hind).any())
-
 
         return obs, hind, hist, res_obs, res_hind
 
@@ -96,7 +91,11 @@ class calculate_leadyear(object):
                 hind_corr[j, k] = pearsonr(hind[:, j, k], obs[:, j, k])[0]
                 hist_corr[j, k] = pearsonr(hist[:, j, k], obs[:, j, k])[0]
                 res_hind_corr[j, k] = pearsonr(res_hind[:, j, k], res_obs[:, j, k])[0]
+                if j == 0:
+                    print(hind_corr[j, k])
        
+        print('hind_corr: {}'.format(np.nanmean(hind_corr)))
+
 
         diff = hind_corr - hist_corr
 
