@@ -94,6 +94,11 @@ class concat(object):
             #os.remove(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
             ds.to_netcdf(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
 
+            dh = xr.open_dataset(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc', decode_times=False)
+            h = dh['tos']
+            plt.imshow(h)
+            plt.show()
+
 
 
 #class to calculated ensemble means for a certain variable
@@ -133,7 +138,7 @@ class ensemble_means(object):
         ds = ds.sel(lat = slice(cfg.lonlats[2], cfg.lonlats[3]))
 
         #load sst values, reverse longitude dimension
-        var = ds[self.variable][:, ::-1, :]
+        var = ds[self.variable]
 
         #get out all NaNs
         np.nan_to_num(var, copy=False, nan=0.1)
@@ -160,8 +165,6 @@ class ensemble_means(object):
                     path = cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc'
 
                     indv = self.__getitem__(path)
-                    plt.imshow(indv[0])
-                    plt.show()
 
                 
                 else:
@@ -177,7 +180,9 @@ class ensemble_means(object):
                     cdo.remapbil(cfg.tmp_path + 'template.nc', input=ifile, output=path)
 
 
-                indv = self.__getitem__(path)
+                    indv = self.__getitem__(path)
+                    indv = indv[:, ::-1, :]
+
                 member.append(indv)
 
         
