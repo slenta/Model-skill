@@ -90,11 +90,6 @@ class concat(object):
             #os.remove(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
             ds.to_netcdf(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
 
-            dh = xr.load_dataset(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc', decode_times=False)
-            h = dh['tos']
-            plt.imshow(h[0])
-            plt.show()
-
 
 
 #class to calculated ensemble means for a certain variable
