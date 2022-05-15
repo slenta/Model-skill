@@ -4,6 +4,7 @@ from importlib.resources import path
 from tracemalloc import start
 from typing_extensions import Self
 from anyio import open_file
+import matplotlib
 import netCDF4 as nc
 import xarray as xr
 import numpy as np
@@ -12,6 +13,8 @@ import cdo
 cdo = cdo.Cdo()
 import os
 import matplotlib.pyplot as plt
+
+matplotlib.use('Agg')
 
 cfg.set_args()
 
