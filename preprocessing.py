@@ -221,12 +221,13 @@ class get_variable(object):
         
         return var
 
-    def plot(self):
+    def plot(self, name):
 
         var = self.__getitem__()
 
         plt.imshow(var[0])
-
+        plt.savefig(cfg.tmp_path + name + '.pdf')
+        plt.show()
 
     def get_coords(self):
         
