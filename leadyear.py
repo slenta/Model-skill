@@ -49,6 +49,8 @@ class calculate_leadyear(object):
         hind = hin.__getitem__()
         time, lon, lat = hin.get_coords()    
 
+        print(obs.shape)
+
         plt.imshow(obs[0])
         plt.show()
         
