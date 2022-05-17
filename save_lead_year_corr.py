@@ -20,5 +20,6 @@ else:
     lead_year = cfg.lead_year
 
 ly = calculate_leadyear(cfg.start_year, cfg.end_year, lead_year=lead_year)
+ly.plot()
 ly.save_lead_corr()
 

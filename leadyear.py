@@ -118,7 +118,7 @@ class calculate_leadyear(object):
         plt.imshow(res_hind_corr, vmin=-1, vmax=1, cmap='coolwarm')
         plt.colorbar()
         plt.title('Residual Hindcast')
-        #plt.savefig('example_corr.pdf')
+        plt.savefig('example_corr_' + str(self.lead_year) + '.pdf')
         plt.show()
     
     def save_lead_corr(self):
