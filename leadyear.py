@@ -49,7 +49,11 @@ class calculate_leadyear(object):
         hind = hin.__getitem__()
         time, lon, lat = hin.get_coords()    
 
-        print(hind.shape, hist.shape, obs.shape)
+        plt.imshow(obs[0])
+        plt.show()
+        
+        plt.imshow(hist[0])
+        plt.show()
 
         residual_dataset = residual(lead_year, start_year)
         residual_dataset.save_data(obs, hist, hind, time, lon, lat)
@@ -98,6 +102,31 @@ class calculate_leadyear(object):
         diff = hind_corr - hist_corr
 
         return hind_corr, res_hind_corr, hist_corr, diff
+
+    def plot(self):
+        
+        hind_corr, res_hind_corr, hist_corr, diff = self.calculate_lead_corr(self.lead_year)
+        print(np.array(np.nanmean(np.nanmean(hist_corr))))
+        
+        plt.figure(figsize=(8, 8))
+        plt.subplot(2, 2, 1)
+        plt.title('Hindcast')
+        plt.imshow(hind_corr, vmin = -1, vmax=1, cmap='coolwarm')
+        plt.colorbar()
+        plt.subplot(2, 2, 2)
+        plt.title('Historical')
+        plt.imshow(hist_corr, vmin=-1, vmax=1, cmap='coolwarm')
+        plt.colorbar()
+        plt.subplot(2, 2, 3)
+        plt.imshow(diff, vmin=-1, vmax=1, cmap='coolwarm')
+        plt.colorbar()
+        plt.title('Difference: Hindcast - Historical')
+        plt.subplot(2, 2, 4)
+        plt.imshow(res_hind_corr, vmin=-1, vmax=1, cmap='coolwarm')
+        plt.colorbar()
+        plt.title('Residual Hindcast')
+        #plt.savefig('example_corr.pdf')
+        plt.show()
     
     def save_lead_corr(self):
 
@@ -133,8 +162,6 @@ class ly_series(object):
         hind_corr = f.get('hind_corr')
         hist_corr = f.get('hist_corr')
         res_hind_corr = f.get('res_hind_corr')
-
-        print(np.array(hind_corr), np.array(hist_corr), np.array(res_hind_corr))
 
         return hind_corr, hist_corr, res_hind_corr
 
