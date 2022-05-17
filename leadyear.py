@@ -184,7 +184,7 @@ class ly_series(object):
         hist_ly_ts.append(np.nanmean(np.nanmean(hist_corr_29, axis=0), axis=0))
 
         print(hind_ly_ts, res_hind_ly_ts, hist_ly_ts)
-        x = range(1, 13)
+        x = range(1, 12)
 
         fig, ax = plt.subplots()
         ax.plot(x, hind_ly_ts, 'x')
