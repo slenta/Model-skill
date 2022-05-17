@@ -125,7 +125,7 @@ class ensemble_means(object):
             ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
             var = ds[self.variable]
 
-            plt.imshow(var)
+            plt.imshow(var[0])
             plt.show()
 
         else:
