@@ -83,6 +83,18 @@ class concat(object):
             lon = ds.lon.values
             lat = ds.lat.values
 
+            ds1 = xr.load_dataset(hist_path[1])
+            ds2 = xr.load_dataset(hist_path[2])
+
+            h1 = ds1.tos.values
+            h2 = ds2.tos.values
+            
+            plt.imshow(h1[0])
+            plt.show()
+            plt.imshow(h2[0])
+            plt.show()
+
+
             np.nan_to_num(hist, copy=False, nan=0.1)
 
 
