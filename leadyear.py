@@ -187,9 +187,9 @@ class ly_series(object):
         x = range(1, 12)
 
         fig, ax = plt.subplots()
-        ax.plot(x, hind_ly_ts, 'x')
-        ax.plot(x, res_hind_ly_ts, '-')
-        ax.plot(x, hist_ly_ts, 'x')
+        ax.plot(x, hind_ly_ts, 'x', label='Hindcast correlation')
+        ax.plot(x, res_hind_ly_ts, '-', label='Residual hindcast correlation')
+        ax.plot(x, hist_ly_ts, 'x', label='Historical correlation')
         ax.set_xlabel('Leadyears')
         ax.set_ylabel('Anomal Correlation')
         ax.set_xticklabels(['1', '2', '3', '4', '5', '6', '7', '8', '9', '2-5', '2-9'])
