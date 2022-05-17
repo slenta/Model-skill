@@ -121,7 +121,7 @@ class ensemble_means(object):
             ds = xr.load_dataset(path, decode_times=False)
             #decode times into day-month-year shape
             time = ds.time
-            #ds['time'] = nc.num2date(time[:],time.units)
+            ds['time'] = nc.num2date(time[:],time.units)
             #ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
             var = ds[self.variable]
 
