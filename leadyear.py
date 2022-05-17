@@ -78,7 +78,7 @@ class calculate_leadyear(object):
         res_hind = np.zeros(shape=(self.end_year - self.start_year, 180, 360))
 
         for i in range(self.start_year, self.end_year):               
-            obs[i - self.start_year], hist[i - self.start_year], hind[i - self.start_year], res_obs[i - self.start_year], res_hind[i - self.start_year] = self.__getitem__(i, i+10)
+            obs[i - self.start_year], hind[i - self.start_year], hist[i - self.start_year], res_obs[i - self.start_year], res_hind[i - self.start_year] = self.__getitem__(i, i+10)
             
         n = hind.shape
         hind_corr = np.zeros((n[1], n[2]))
