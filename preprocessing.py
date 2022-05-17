@@ -83,11 +83,6 @@ class concat(object):
             lon = ds.lon.values
             lat = ds.lat.values
 
-            plt.imshow(hist[hist.shape[0] - 200])
-            plt.show()
-
-
-
             np.nan_to_num(hist, copy=False, nan=0.1)
 
 
@@ -127,13 +122,14 @@ class ensemble_means(object):
             #decode times into day-month-year shape
             time = ds.time
             ds['time'] = nc.num2date(time[:],time.units)
-            print(ds.time)
-            #ds = ds.sel(time=slice(str(self.start_year + 1) + '-01-16', str(self.end_year) + '-12-16'))
+
+            #select wanted spatial frame
+            ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
+            ds = ds.sel(lat = slice(cfg.lonlats[2], cfg.lonlats[3]))
+            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+
             #print(ds.time)
             var = ds[self.variable]
-            print(var.shape)
-            plt.imshow(var[var.shape[0] - 200])
-            plt.show()
 
         else:
             #load saved regridded data
