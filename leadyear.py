@@ -105,7 +105,7 @@ class calculate_leadyear(object):
 
     def plot(self):
         
-        hind_corr, res_hind_corr, hist_corr, diff = self.calculate_lead_corr(self.lead_year)
+        hind_corr, res_hind_corr, hist_corr, diff = self.calculate_lead_corr()
         print(np.array(np.nanmean(np.nanmean(hist_corr))))
         
         plt.figure(figsize=(8, 8))
