@@ -122,7 +122,7 @@ class ensemble_means(object):
             #decode times into day-month-year shape
             time = ds.time
             ds['time'] = nc.num2date(time[:],time.units)
-            #ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
             var = ds[self.variable]
 
             plt.imshow(var[0])
