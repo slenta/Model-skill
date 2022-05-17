@@ -67,14 +67,14 @@ class concat(object):
                 cdo.remapbil(cfg.tmp_path + 'template.nc', input=hist_path[i], output=ofile + str(i) + '.nc')
                 hist_path[i] = ofile + str(i) + '.nc'
             
-            dhis = xr.merge([xr.load_dataset(hist_path[i], decode_times=False) for i in range(len(hist_path))], compat='override')
+            dhis = xr.merge([xr.load_dataset(hist_path[i], decode_times=False) for i in range(len(hist_path))])
 
 
             time_his = dhis.time
             dhis['time'] = nc.num2date(time_his[:],time_his.units)
             dhis = dhis.sel(time=slice('1850-01', '2035-01'))
             
-            hist = dhis.tos.values[:, :, :]
+            hist = dhis.tos.values[:, ::-1, :]
             time = dhis.time.values
             hist = np.array(hist)
 
