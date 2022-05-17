@@ -14,7 +14,7 @@ cdo = cdo.Cdo()
 import os
 import matplotlib.pyplot as plt
 
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 
 cfg.set_args()
 
