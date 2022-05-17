@@ -74,7 +74,7 @@ class concat(object):
             dhis['time'] = nc.num2date(time_his[:],time_his.units)
             dhis = dhis.sel(time=slice('1850-01', '2035-01'))
             
-            hist = dhis.tos.values[:, ::-1, :]
+            hist = dhis.tos.values[:, :, :]
             time = dhis.time.values
             hist = np.array(hist)
 
