@@ -193,7 +193,7 @@ class ly_series(object):
         ax.set_xlabel('Leadyears')
         ax.set_ylabel('Anomaly Correlation')
         ax.set_xticks(x)
-        ax.set_xticklabels('1', '2', '3', '4', '5', '6', '7', '8', '9', '2-5', '2-9')
+        ax.set_xticklabels(['1', '2', '3', '4', '5', '6', '7', '8', '9', '2-5', '2-9'])
         ax.grid()
         fig.suptitle('Hindcast Correlation by Lead Year: 1960-2013')
         plt.legend()
