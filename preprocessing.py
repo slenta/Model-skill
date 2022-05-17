@@ -123,7 +123,7 @@ class ensemble_means(object):
             time = ds.time
             ds['time'] = nc.num2date(time[:],time.units)
             print(ds.time)
-            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01-16', str(self.end_year) + '-12-16'))
             print(ds.time)
             var = ds[self.variable]
 
