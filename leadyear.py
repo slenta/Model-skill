@@ -172,16 +172,16 @@ class ly_series(object):
             hist_ly_ts.append(np.nanmean(np.nanmean(hist_corr, axis=0), axis=0))
 
 
-        hind_corr_25, res_hind_corr_25, hist_corr_25 = self.load_lead_corr(lead_year=12)
-        hind_corr_29, res_hind_corr_29, hist_corr_29 = self.load_lead_corr(lead_year=20)
+        #hind_corr_25, res_hind_corr_25, hist_corr_25 = self.load_lead_corr(lead_year=12)
+        #hind_corr_29, res_hind_corr_29, hist_corr_29 = self.load_lead_corr(lead_year=20)
 
-        hind_ly_ts.append(np.nanmean(np.nanmean(hind_corr_25, axis=0), axis=0))
-        res_hind_ly_ts.append(np.nanmean(np.nanmean(res_hind_corr_25, axis=0), axis=0))
-        hist_ly_ts.append(np.nanmean(np.nanmean(hist_corr_25, axis=0), axis=0))
+        #hind_ly_ts.append(np.nanmean(np.nanmean(hind_corr_25, axis=0), axis=0))
+        #res_hind_ly_ts.append(np.nanmean(np.nanmean(res_hind_corr_25, axis=0), axis=0))
+        #hist_ly_ts.append(np.nanmean(np.nanmean(hist_corr_25, axis=0), axis=0))
 
-        hind_ly_ts.append(np.nanmean(np.nanmean(hind_corr_29, axis=0), axis=0))
-        res_hind_ly_ts.append(np.nanmean(np.nanmean(res_hind_corr_29, axis=0), axis=0))
-        hist_ly_ts.append(np.nanmean(np.nanmean(hist_corr_29, axis=0), axis=0))
+        #hind_ly_ts.append(np.nanmean(np.nanmean(hind_corr_29, axis=0), axis=0))
+        #res_hind_ly_ts.append(np.nanmean(np.nanmean(res_hind_corr_29, axis=0), axis=0))
+        #hist_ly_ts.append(np.nanmean(np.nanmean(hist_corr_29, axis=0), axis=0))
 
         print(hind_ly_ts, res_hind_ly_ts, hist_ly_ts)
         x = range(1, 13)
