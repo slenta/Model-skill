@@ -127,7 +127,7 @@ class ensemble_means(object):
             #print(ds.time)
             var = ds[self.variable]
             print(var.shape)
-            plt.imshow(var[var.shape[0]])
+            plt.imshow(var[var.shape[0] - 200])
             plt.show()
 
         else:
