@@ -13,9 +13,6 @@ import cdo
 cdo = cdo.Cdo()
 import os
 import matplotlib.pyplot as plt
-
-matplotlib.use('Agg')
-
 cfg.set_args()
 
 #class to concatenate files stored in different directories and save 
@@ -203,7 +200,7 @@ class ensemble_means(object):
 
 class get_variable(object):
 
-    def __init__(self, path, lead_year, name=None, ensemble_members=None, mod_year=None, start_year=None, end_year=None, start_month=None, start_year_file=None, end_year_file=None, variable='sst', ensemble=False, mode=None):
+    def __init__(self, path, lead_year=None, name=None, ensemble_members=None, mod_year=None, start_year=None, end_year=None, start_month=None, start_year_file=None, end_year_file=None, variable='sst', ensemble=False, mode=None):
         super(get_variable, self).__init__()
 
         self.path = path
