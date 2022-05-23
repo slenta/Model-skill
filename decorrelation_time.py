@@ -9,12 +9,12 @@ from scipy.stats import pearsonr
 #class to calculate decorrelation time for two datasets
 class decorrelation_time(object):
 
-    def __init__(self, variable, del_t):
+    def __init__(self, variable, del_t, threshold):
 
         self.variable = variable
         self.name = str(variable) + str(del_t)
         self.del_t = del_t
-
+        self.threshold = threshold
 
     def __getitem__(self):
         
