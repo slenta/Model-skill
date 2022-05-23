@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import config as cfg
 from scipy.stats import pearsonr
+import h5py as h5
 
 
 #class to calculate decorrelation time for two datasets
@@ -12,7 +13,7 @@ class decorrelation_time(object):
     def __init__(self, variable, del_t, threshold):
 
         self.variable = variable
-        self.name = str(variable) + str(del_t)
+        self.name = str(variable) + '_' + str(del_t)
         self.del_t = del_t
         self.threshold = threshold
 
@@ -49,12 +50,18 @@ class decorrelation_time(object):
         mask = np.where(decor <= self.threshold, np.nan, decor)
         mask = np.where(mask > self.threshold, 1, mask)
 
+        f = h5.File(cfg.tmp_path + 'decorrelation_time_' + self.name + '.hdf5', 'w')
+        f.create_dataset('decorrelation_time', decor.shape, dtype = 'float32',data = decor)
+        f.create_dataset('decor_mask', mask.shape, dtype = 'float32',data = mask)
+        f.close()
+
         return decor, mask
 
     def plot(self):
 
-        decor, mask = self.__getitem__()
-
+        f = h5.File(cfg.tmp_path + 'decorrelation_time_' + self.name + '.hdf5', 'w')
+        decor = f.get('decorrelation_time')
+        
         plt.figure(figsize=(8, 5))
         plt.imshow(decor)
         plt.xlabel('Longitudes')
