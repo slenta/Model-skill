@@ -34,8 +34,8 @@ class decorrelation_time(object):
                 #calculate running mean, if necessary
                 if self.del_t != 1:
                     var_mean = np.zeros(n[0] - (self.del_t - 1))
-                    for i in range(len(var_mean)):
-                        var_mean[i] = np.mean(var[i:i+self.del_t])
+                    for k in range(len(var_mean)):
+                        var_mean[k] = np.mean(var[k:k+self.del_t])
 
                 else:
                     var_mean = var[:, i, j]
