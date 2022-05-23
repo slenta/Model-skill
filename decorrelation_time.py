@@ -27,8 +27,9 @@ class decorrelation_time(object):
         decor = np.zeros((n[1], n[2]))
                 
         for i in range(n[1]):
+            print(i)
             for j in range(n[2]):
-                
+
                 #calculate running mean, if necessary
                 if self.del_t != 1:
                     var_mean = np.zeros(n[0] - (self.del_t - 1))
