@@ -23,6 +23,7 @@ cfg.set_args()
 #define threshold for decorrelation mask
 threshold = 1
 HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2021)
+HadIsst = get_variable.__getitem__()
 decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold)
 dc, mask = decor.__getitem__()
 decorrelation_time.plot()
