@@ -1,6 +1,5 @@
 #script to plot all wanted plots
 
-from torch import threshold
 from leadyear import ly_series
 import config as cfg
 from leadyear import calculate_leadyear
