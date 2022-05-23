@@ -24,7 +24,7 @@ ly.ly_series()
 threshold = 1
 HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2021)
 decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold)
-dc, mask = decorrelation_time.__getitem__()
+dc, mask = decor.__getitem__()
 decorrelation_time.plot()
 
 #plot correlation between ocean heat content and ssts
