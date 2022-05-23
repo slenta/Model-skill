@@ -16,8 +16,8 @@ cfg.set_args()
 #lys.plot()
 
 #plot leadyear correlation for all lead years
-ly = ly_series(cfg.start_year, cfg.end_year)
-ly.ly_series()
+#ly = ly_series(cfg.start_year, cfg.end_year)
+#ly.ly_series()
 
 #plot decorrelation time for HadISSTs
 #define threshold for decorrelation mask
