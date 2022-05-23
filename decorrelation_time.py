@@ -29,6 +29,8 @@ class decorrelation_time(object):
         for i in range(n[1]):
             for j in range(n[2]):
 
+                print(i, j)
+
                 #calculate running mean, if necessary
                 if self.del_t != 1:
                     var_mean = np.zeros(n[0] - (self.del_t - 1))
@@ -46,7 +48,7 @@ class decorrelation_time(object):
                 decor[i, j] = (1 + 2*np.sum(ac[:, i, j])) * self.del_t
 
         
-        mask = np.where(decor >= self.threshold, np.nan, decor)
+        mask = np.where(decor <= self.threshold, np.nan, decor)
         mask = np.where(mask > self.threshold, 1, mask)
 
         return decor, mask
