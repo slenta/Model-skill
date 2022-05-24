@@ -24,11 +24,11 @@ cfg.set_args()
 threshold = 1
 HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2021)
 HadIsst = HadIsst.__getitem__()
-decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold)
+decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold, name='HadIsst')
 dc, mask = decor.__getitem__()
 decorrelation_time.plot()
 
 #plot correlation between ocean heat content and ssts
 IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=1960, end_year=2021)
 IAP_Ohc = IAP_Ohc.__getitem__()
-correlation_plot(HadIsst, IAP_Ohc, del_t=8, name='Ohc_4yearmean')
+correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='HadIsst', name_2='IAP_Ohc')

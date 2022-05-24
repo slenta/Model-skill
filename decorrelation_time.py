@@ -10,10 +10,10 @@ import h5py as h5
 #class to calculate decorrelation time for two datasets
 class decorrelation_time(object):
 
-    def __init__(self, variable, del_t, threshold):
+    def __init__(self, variable, del_t, threshold, name):
 
         self.variable = variable
-        self.name = str(variable) + '_' + str(del_t)
+        self.name = name + '_' + str(del_t)
         self.del_t = del_t
         self.threshold = threshold
 
@@ -72,7 +72,7 @@ class decorrelation_time(object):
 
 
 #simple function to plot correlations between two variables
-def correlation_plot(var_1, var_2, del_t, name):
+def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     
     n = var_1.shape
     corr = np.zeros((n[1], n[2]))
@@ -101,5 +101,5 @@ def correlation_plot(var_1, var_2, del_t, name):
     plt.imshow(corr)
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
-    plt.title('Correlation between {} and {}'.format(str(var_1), str(var_2)))
-    plt.savefig(cfg.tmp_path + 'plots/correlation' + name + '.pdf')
+    plt.title('Correlation between {} and {}'.format(str(name_1), str(name_2)))
+    plt.savefig(cfg.tmp_path + 'plots/correlation_' + name_1 + '_' + name_2 + '.pdf')
