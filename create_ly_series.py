@@ -12,12 +12,12 @@ import matplotlib
 cfg.set_args()
 
 #plot correlation for a specific lead year
-#lys = calculate_leadyear(cfg.start_year, cfg.end_year, lead_year='2 9')
-#lys.plot()
+lys = calculate_leadyear(cfg.start_year, cfg.end_year, lead_year='2 9')
+lys.plot()
 
 #plot leadyear correlation for all lead years
-#ly = ly_series(cfg.start_year, cfg.end_year)
-#ly.ly_series()
+ly = ly_series(cfg.start_year, cfg.end_year)
+ly.ly_series()
 
 #plot decorrelation time for HadISSTs
 #define threshold for decorrelation mask
