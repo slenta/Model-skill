@@ -43,7 +43,7 @@ class decorrelation_time(object):
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))
 
                 print(np.sum(autocor[1:]))
-                print(np.sum(var_mean))
+                print(var_mean, autocor)
 
                 #calculate decorrelation time for each 
                 decor[i, j] = (1 + 2*np.sum(autocor)) * self.del_t
