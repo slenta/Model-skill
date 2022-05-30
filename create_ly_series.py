@@ -5,7 +5,8 @@ import config as cfg
 from leadyear import calculate_leadyear
 from preprocessing import get_variable
 from decorrelation_time import decorrelation_time
-from decorrelation_time import correlation_plot
+from plots import correlation_plot
+from plots import bias_plot
 import matplotlib
 
 matplotlib.use('Agg')
@@ -25,8 +26,17 @@ threshold = 1
 HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2021)
 HadIsst = HadIsst.__getitem__()
 decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold, name='HadIsst')
-dc, mask = decor.__getitem__()
+#dc, mask = decor.__getitem__()
 decor.plot()
+
+
+#plot ssh bias and correlation
+Aviro_ssh = get_variable(path=cfg.aviro_path, start_year=1990, end_year=2021)
+Aviro_ssh = Aviro_ssh.__getitem__()
+Assi_ssh = get_variable(path=cfg.assi_ssh_path, start_year=1990, end_year=2021)
+Assi_ssh = Assi_ssh.__getitem__()
+correlation_plot(Aviro_ssh, Assi_ssh, del_t=8, name_1='Aviro_ssh', name_2='Assimilation_ssh')
+bias_plot(Aviro_ssh, Assi_ssh, del_t=8, name_1='Aviro_ssh', name_2='Assimilation_ssh')
 
 #plot correlation between ocean heat content and ssts
 IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=1960, end_year=2021)
