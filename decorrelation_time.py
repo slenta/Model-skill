@@ -47,10 +47,12 @@ class decorrelation_time(object):
 
                 #calculate decorrelation time for each 
                 decor[i, j] = (1 + 2*np.sum(ac[:, i, j])) * self.del_t
+                print(decor[i, j])
 
         
         mask = np.where(decor <= self.threshold, np.nan, decor)
         mask = np.where(mask > self.threshold, 1, mask)
+        
 
         f = h5.File(cfg.tmp_path + 'decorrelation_time_' + self.name + '.hdf5', 'w')
         f.create_dataset('decorrelation_time', decor.shape, dtype = 'float32',data = decor)
