@@ -39,6 +39,7 @@ class decorrelation_time(object):
 
                 else:
                     var_mean = var[:, i, j]
+                
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))[1:]
 
@@ -61,7 +62,7 @@ class decorrelation_time(object):
     def plot(self):
 
         f = h5.File(cfg.tmp_path + 'decorrelation_time_' + self.name + '.hdf5', 'r')
-        decor = f.get('decorrelation_time')
+        decor = f.get('decor_mask')
         decor = np.array(decor)
         print(type(decor), decor)
         
