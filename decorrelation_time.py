@@ -42,12 +42,12 @@ class decorrelation_time(object):
                 
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))[1:]
-                print(autocor)
 
                 ac[:, i, j] = autocor
+                print(ac[:, i, j])
 
                 #calculate decorrelation time for each 
-                decor[i, j] = (1 + 2*np.sum(ac[:, i, j])) * self.del_t
+                decor[i, j] = (1 + 2*np.sum(autocor)) * self.del_t
                 print(decor[i, j])
 
         
