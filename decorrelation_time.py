@@ -63,7 +63,7 @@ class decorrelation_time(object):
         f = h5.File(cfg.tmp_path + 'decorrelation_time_' + self.name + '.hdf5', 'w')
         decor = f.get('decorrelation_time')
         decor = np.array(decor)
-        print(type(decor), decor[1, 1])
+        print(type(decor), decor)
         
         plt.figure(figsize=(8, 5))
         plt.imshow(decor)
