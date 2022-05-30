@@ -23,8 +23,7 @@ class decorrelation_time(object):
         var = self.variable
         n = var.shape
                     
-        #autocorrelation for each point in space
-        ac = np.zeros((n[0] - (self.del_t - 1)-1, n[1], n[2]))
+        #decorrelation time for each point in space
         decor = np.zeros((n[1], n[2]))
                 
         for i in range(n[1]):
@@ -41,9 +40,8 @@ class decorrelation_time(object):
                     var_mean = var[:, i, j]
                 
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
-                autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))[1:]
+                autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))
 
-                ac[:, i, j] = autocor
                 print(np.sum(autocor))
 
                 #calculate decorrelation time for each 
