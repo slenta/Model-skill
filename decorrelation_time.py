@@ -42,13 +42,8 @@ class decorrelation_time(object):
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))[1:]
 
-                print(np.sum(autocor[1:]))
-                #print(var_mean, autocor)
-                print(np.sum(var[:, i, j]))
-
                 #calculate decorrelation time for each 
                 decor[i, j] = (1 + 2*np.sum(autocor)) * 8
-                print(decor[i, j])
 
         
         mask = np.where(decor <= self.threshold, np.nan, decor)
