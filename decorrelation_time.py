@@ -34,7 +34,7 @@ class decorrelation_time(object):
                 if self.del_t != 1:
                     var_mean = np.zeros(n[0] - (self.del_t - 1))
                     for k in range(len(var_mean)):
-                        var_mean[k] = np.mean(var[k:k+self.del_t])
+                        var_mean[k] = np.mean(var[k:k+self.del_t, i, j], axis=0)
 
                 else:
                     var_mean = var[:, i, j]
@@ -44,9 +44,10 @@ class decorrelation_time(object):
 
                 print(np.sum(autocor[1:]))
                 print(var_mean, autocor)
+                print(np.sum(var[:, i, j]))
 
                 #calculate decorrelation time for each 
-                decor[i, j] = (1 + 2*np.sum(autocor)) * self.del_t
+                decor[i, j] = (1 + 2*np.sum(autocor)) * 1
                 print(decor[i, j])
 
         
