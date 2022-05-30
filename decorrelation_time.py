@@ -42,8 +42,8 @@ class decorrelation_time(object):
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))
 
-                print(np.sum(autocor[1:40]))
-                print(np.sum(var_mean[:, i, j]))
+                print(np.sum(autocor[1:]))
+                print(np.sum(var_mean))
 
                 #calculate decorrelation time for each 
                 decor[i, j] = (1 + 2*np.sum(autocor)) * self.del_t
@@ -109,3 +109,4 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     plt.ylabel('Latitudes')
     plt.title('Correlation between {} and {}'.format(str(name_1), str(name_2)))
     plt.savefig(cfg.tmp_path + 'plots/correlation_' + name_1 + '_' + name_2 + '.pdf')
+
