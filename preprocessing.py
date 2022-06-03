@@ -105,10 +105,12 @@ class concat(object):
     def get_paths(self):
         
         paths = []
-
+        print(self.path)
         for root, files in os.walk(self.path):
             for file in files:
                 paths.append(os.path.join(root,file))
+        print(paths)
+        
 
         return paths
 
