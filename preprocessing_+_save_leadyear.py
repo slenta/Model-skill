@@ -1,5 +1,6 @@
 #Loading and using all required classes to calculate leadyear timeseries
 
+from calendar import month
 import config as cfg
 from preprocessing import concat
 from leadyear import calculate_leadyear
@@ -18,7 +19,8 @@ cfg.set_args()
 #first concatenate daily data to monthly and save at tmp
 for i in range(1993, 2019):
     for j in range(1, 12):
-        con = concat(cfg.aviro_path + str(i) + '/' + str(j) + '/', 'Aviro_Ssh', variable='adt', start=str(i) + '-' + str(j), end=str(i + 1) + '-' + str(j))
+        month = str(j).zfill(2)
+        con = concat(cfg.aviro_path + str(i) + '/' + month + '/', 'Aviro_Ssh', variable='adt', start=str(i) + '-' + month, end=str(i + 1) + '-' + month)
         con.concat()
 #then: concatenate all monthly data over the whole timeframe
 con = concat(cfg.tmp_path + 'Aviro_Ssh/', name = 'Aviro_Ssh', variable='var', start='1993-01', end='2019-12')
