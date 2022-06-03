@@ -105,12 +105,10 @@ class concat(object):
     def get_paths(self):
         
         paths = []
-        print(self.path)
+
         for root, dirs, files in os.walk(self.path):
             for file in files:
                 paths.append(os.path.join(root,file))
-        print(paths)
-
 
         return paths
 
@@ -118,7 +116,6 @@ class concat(object):
 
         #concatenate the different variables and save in a new file
         paths = self.get_paths()
-        print(paths)
 
         for i in range(len(paths)):
             print(i)
@@ -126,7 +123,7 @@ class concat(object):
             #remap to common grid
             ofile=cfg.tmp_path + self.name + str(i) + '.nc'
             cdo.remapbil(cfg.tmp_path + 'template.nc', input=paths[i], output=ofile)  
-            path[i] = ofile
+            paths[i] = ofile
 
     
         ds = xr.merge([xr.load_dataset(path[i], decode_times=False) for i in range(len(paths))])
