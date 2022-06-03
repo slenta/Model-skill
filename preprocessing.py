@@ -17,7 +17,7 @@ cfg.set_args()
 
 #class to concatenate files stored in different directories and save 
 
-class concat(object):
+class concat_hist(object):
 
     def __init__(self, start_years, end_years, ensemble_members, scenario_path, scenario):
         super(concat, self).__init__()
@@ -36,14 +36,14 @@ class concat(object):
 
         if start_year == 2015:
             if ensemble_member <= 3:
-                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20190627/' + cfg.model_specifics + '_' + self.scenario + '_r'
+                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20190627/tos' + cfg.model_specifics + '_' + self.scenario + '_r'
 
             else:
-                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20200623/' + cfg.model_specifics + '_' + self.scenario + '_r'
+                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20200623/tos' + cfg.model_specifics + '_' + self.scenario + '_r'
                 yearly_specifics_hist = str(ensemble_member) + 'i1p1f1_gn_' + str(start_year) + '01-' + str(2039) + '12.nc'
 
         else:    
-            his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20181212/' + cfg.model_specifics + '_historical_r'
+            his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20181212/tos' + cfg.model_specifics + '_historical_r'
 
         path = his_path + yearly_specifics_hist
 
@@ -91,6 +91,67 @@ class concat(object):
             ds.to_netcdf(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
 
 
+class concat(object):
+
+    def __init__(self, path, name, variable, start, end):
+        super(concat, self).__init__()
+
+        self.start = start
+        self.variable = variable
+        self.path = path
+        self.name = name
+        self.end = end
+
+    def get_paths(self):
+        
+        paths = []
+
+        for root, files in os.walk(path):
+            for file in files:
+                paths.append(os.path.join(root,file))
+
+        return paths
+
+    def concat(self):
+
+        #concatenate the different variables and save in a new file
+        paths = self.get_paths()
+
+        for i in range(paths):
+
+            #remap to common grid
+            ofile=cfg.tmp_path + self.name
+            cdo.remapbil(cfg.tmp_path + 'template.nc', input=paths[i], output=ofile + str(i) + '.nc')
+            
+            path[i] = ofile + str(i) + '.nc'
+    
+        ds = xr.merge([xr.load_dataset(path[i], decode_times=False) for i in range(len(paths))])
+
+
+        time = ds.time
+        ds['time'] = nc.num2date(time[:],time.units)
+        ds = ds.sel(time=slice(self.start, self.end))
+        
+        var = np.array(ds[str(self.variable)])
+        time = ds.time.values
+
+        #get lon, lat values from template
+        ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
+        lon = ds.lon.values
+        lat = ds.lat.values
+
+        np.nan_to_num(var, copy=False, nan=0.1)
+
+
+        ds = xr.Dataset(data_vars=dict(var=(["time", "lat", "lon"], var)),
+        coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
+        attrs=dict(description="Concatenated data " + self.name + self.start))
+
+        #os.remove(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
+        ds.to_netcdf(cfg.tmp_path + str(self.name) + '/' + self.name + '_' + self.start + self.end + '.nc')
+
+
+
 
 #class to calculated ensemble means for a certain variable
 
@@ -114,48 +175,34 @@ class ensemble_means(object):
 
     def __getitem__(self, path):
 
-        if self.mode=='hist':
-            ds = xr.load_dataset(path, decode_times=False)
-            #decode times into day-month-year shape
-            time = ds.time
-            ds['time'] = nc.num2date(time[:],time.units)
 
-            #select wanted spatial frame
-            ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
-            ds = ds.sel(lat = slice(cfg.lonlats[2], cfg.lonlats[3]))
-            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+        #load saved regridded data
+        ds = xr.load_dataset(path, decode_times=False)
 
-            #print(ds.time)
-            var = ds[self.variable]
+        #decode times into day-month-year shape
+        time = ds.time
+        ds['time'] = nc.num2date(time[:],time.units)
 
-        else:
-            #load saved regridded data
-            ds = xr.load_dataset(path, decode_times=False)
+        #select wanted timeframe
+        ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
 
-            #decode times into day-month-year shape
-            time = ds.time
-            ds['time'] = nc.num2date(time[:],time.units)
+        #select wanted spatial frame
+        ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
+        ds = ds.sel(lat = slice(cfg.lonlats[2], cfg.lonlats[3]))
 
-            #select wanted timeframe
-            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
-
-            #select wanted spatial frame
-            ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
-            ds = ds.sel(lat = slice(cfg.lonlats[2], cfg.lonlats[3]))
-
-            #load sst values, reverse longitude dimension
-            var = ds[self.variable][:, ::-1, :]
+        #load sst values, reverse longitude dimension
+        var = ds[self.variable][:, ::-1, :]
 
 
-            #get out all NaNs
-            np.nan_to_num(var, copy=False, nan=0.1)
+        #get out all NaNs
+        np.nan_to_num(var, copy=False, nan=0.1)
 
         return var
     
     def get_paths(self, ensemble_member):
 
-        yearly_specifics = str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + str(self.start_month) + '-' + str(self.end_year_file) + '12.nc'
-        path = self.path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + self.mod_year + cfg.model_specifics + self.name
+        yearly_specifics = str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + self.start_month + '-' + str(self.end_year_file) + '12.nc'
+        path = self.path + str(ensemble_member) + 'i1p1f1/Omon/' + self.variable + '/gn/' + self.mod_year + self.variable + cfg.model_specifics + self.name
 
         path = path + yearly_specifics
 

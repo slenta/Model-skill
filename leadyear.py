@@ -118,7 +118,7 @@ class calculate_leadyear(object):
         plt.imshow(res_hind_corr, vmin=-1, vmax=1, cmap='coolwarm')
         plt.colorbar()
         plt.title('Residual Hindcast')
-        plt.savefig('example_corr_' + str(self.lead_year) + '.pdf')
+        plt.savefig(cfg.tmp_path + 'plots/example_corr_' + str(self.lead_year) + '.pdf')
         plt.show()
     
     def save_lead_corr(self):
@@ -195,7 +195,7 @@ class ly_series(object):
         ax.set_xticks(x)
         ax.set_xticklabels(['1', '2', '3', '4', '5', '6', '7', '8', '9', '2-5', '2-9'])
         ax.grid()
-        fig.suptitle('Hindcast Correlation by Lead Year: 1960-2013')
+        fig.suptitle('Hindcast Correlation by Lead Year: {} -- {}'.format(str(cfg.start_year), str(cfg.end_year)))
         plt.legend()
-        plt.savefig('Leadyear_timeseries_1960_2013.pdf')
+        plt.savefig('{}plots/leadyear_timeseries_,{}_{}.pdf'.format(cfg.tmp_path, str(cfg.start_year), str(cfg.end_year)))
         plt.show()

@@ -7,6 +7,8 @@ hindcast_path = None
 observation_path = None
 residual_path = None
 scenario_path = None
+assi_path = None
+aviro_path = None
 start_year = None
 end_year = None
 hist_start_years = None
@@ -22,6 +24,8 @@ lead_year = None
 hist_name = None
 hind_name = None
 hind_mod = None
+ssh_mod = None
+
 
 def set_args():
     arg_parser = argparse.ArgumentParser()
@@ -31,16 +35,19 @@ def set_args():
     arg_parser.add_argument('--observation_path', type=str, default='/pool/data/ICDC/ocean/hadisst1/DATA/HadISST_sst.nc')
     arg_parser.add_argument('--residual_path', type=str, default='/work/uo1075/u301617/HiWi_Vimal/Code/tmp/residuals/residual')
     arg_parser.add_argument('--scenario_path', type=str, default='/pool/data/CMIP6/data/ScenarioMIP/MIROC/MIROC6/ssp245/r')
+    arg_parser.add_argument('--assi_path', type=str, default='/pool/data/CMIP6/data/DCPP/MIROC/MIROC6/dcppA-assim/r')
+    arg_parser.add_argument('--aviro_path', type=str, default='/pool/data/ICDC/ocean/aviso_ssh/DATA/')
     arg_parser.add_argument('--hist_name', type=str, default='_historical_r')
     arg_parser.add_argument('--hind_name', type=str, default='_dcppA-hindcast_s')
     arg_parser.add_argument('--hind_mod', type=str, default='v20190821/')
+    arg_parser.add_argument('--ssh_mod', type=str, default='v20190821/')    
     arg_parser.add_argument('--hist_start_years', type=list, default=[1850, 1950, 2015])
     arg_parser.add_argument('--hist_end_years', type=list, default=[1949, 2014, 2100])
     arg_parser.add_argument('--start_year', type=int, default=1960)
     arg_parser.add_argument('--end_year', type=int, default=2011)
-    arg_parser.add_argument('--start_month_hind', type=int, default=11)
+    arg_parser.add_argument('--start_month_hind', type=int, default='11')
     arg_parser.add_argument('--ensemble_member', type=list, default=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-    arg_parser.add_argument('--model_specifics', type=str, default='tos_Omon_MIROC6')
+    arg_parser.add_argument('--model_specifics', type=str, default='_Omon_MIROC6')
     arg_parser.add_argument('--tmp_path', type=str, default='./tmp/')
     arg_parser.add_argument('--lead_year', type=int, default=1)
     arg_parser.add_argument('--scenario', type=str, default='ssp245')
@@ -57,6 +64,8 @@ def set_args():
     global observation_path
     global residual_path
     global scenario_path
+    global assi_path
+    global aviro_path
     global start_year
     global end_year
     global hist_start_years
@@ -72,6 +81,8 @@ def set_args():
     global hist_name
     global hind_name
     global hind_mod
+    global ssh_mod
+
 
     name = args.name
     historical_path = args.historical_path
@@ -79,6 +90,8 @@ def set_args():
     observation_path = args.observation_path
     residual_path = args.residual_path
     scenario_path = args.scenario_path
+    assi_path = args.assi_path
+    aviro_path = args.aviro_path
     start_year = args.start_year
     end_year = args.end_year
     hist_start_years = args.hist_start_years
@@ -94,3 +107,5 @@ def set_args():
     hist_name = args.hist_name
     hind_name = args.hind_name
     hind_mod = args.hind_mod
+    ssh_mod = args.ssh_mod
+
