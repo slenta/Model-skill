@@ -106,11 +106,11 @@ class concat(object):
         
         paths = []
         print(self.path)
-        for root, files in os.walk(self.path):
+        for root, dirs, files in os.walk(self.path):
             for file in files:
                 paths.append(os.path.join(root,file))
         print(paths)
-        
+
 
         return paths
 
