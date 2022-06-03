@@ -117,7 +117,7 @@ class concat(object):
         #concatenate the different variables and save in a new file
         paths = self.get_paths()
 
-        for i in range(paths):
+        for i in range(len(paths)):
 
             #remap to common grid
             ofile=cfg.tmp_path + self.name
