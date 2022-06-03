@@ -126,8 +126,7 @@ class concat(object):
 
     
         ds = xr.merge([xr.load_dataset(paths[i], decode_times=False) for i in range(len(paths))])
-        print(ds[self.variable].shape)
-
+        
         time = ds.time
         ds['time'] = nc.num2date(time[:],time.units)
         ds = ds.sel(time=slice(self.start, self.end))
