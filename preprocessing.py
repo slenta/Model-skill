@@ -118,6 +118,7 @@ class concat(object):
         paths = self.get_paths()
 
         for i in range(len(paths)):
+            print(i)
 
             #remap to common grid
             ofile=cfg.tmp_path + self.name
@@ -126,13 +127,13 @@ class concat(object):
             path[i] = ofile + str(i) + '.nc'
     
         ds = xr.merge([xr.load_dataset(path[i], decode_times=False) for i in range(len(paths))])
-
+        print(ds[self.variable].shape)
 
         time = ds.time
         ds['time'] = nc.num2date(time[:],time.units)
         ds = ds.sel(time=slice(self.start, self.end))
         
-        var = np.array(ds[str(self.variable)])
+        var = np.array(ds[self.variable])
         time = ds.time.values
 
         #get lon, lat values from template
