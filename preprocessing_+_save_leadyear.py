@@ -24,7 +24,7 @@ for i in range(1993, 2019):
         con = concat(cfg.aviro_path + str(i) + '/' + month + '/', 'Aviro_Ssh', variable='adt', start=str(i) + '-' + month, end=str(i + 1) + '-' + month)
         con.concat()
 #then: concatenate all monthly data over the whole timeframe
-con = concat(cfg.tmp_path + 'Aviro_Ssh/', name = 'Aviro_Ssh', variable='var', start='1993-01', end='2019-12')
+con = concat(cfg.tmp_path + 'Aviro_Ssh/', name = 'Aviro_Ssh_full', variable='var', start='1993-01', end='2019-12')
 
 
 #save lead correlation for cfg.lead_year
