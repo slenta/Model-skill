@@ -119,12 +119,13 @@ class concat(object):
 
         for i in range(len(paths)):
             print(i)
+            print(path[i])
 
             #remap to common grid
-            ofile=cfg.tmp_path + self.name
-            cdo.remapbil(cfg.tmp_path + 'template.nc', input=paths[i], output=ofile + str(i) + '.nc')
-            
-            path[i] = ofile + str(i) + '.nc'
+            ofile=cfg.tmp_path + self.name + str(i) + '.nc'
+            cdo.remapbil(cfg.tmp_path + 'template.nc', input=paths[i], output=ofile)  
+            path[i] = ofile
+
     
         ds = xr.merge([xr.load_dataset(path[i], decode_times=False) for i in range(len(paths))])
         print(ds[self.variable].shape)
