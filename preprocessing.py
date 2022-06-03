@@ -118,7 +118,6 @@ class concat(object):
         paths = self.get_paths()
 
         for i in range(len(paths)):
-            print(i)
 
             #remap to common grid
             ofile=cfg.tmp_path + self.name + '/' + self.name + str(i) + '.nc'

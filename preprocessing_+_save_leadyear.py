@@ -18,6 +18,7 @@ cfg.set_args()
 #concatenate and save aviro data
 #first concatenate daily data to monthly and save at tmp
 for i in range(1993, 2019):
+    print(i)
     for j in range(1, 12):
         month = str(j).zfill(2)
         con = concat(cfg.aviro_path + str(i) + '/' + month + '/', 'Aviro_Ssh', variable='adt', start=str(i) + '-' + month, end=str(i + 1) + '-' + month)
