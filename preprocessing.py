@@ -274,12 +274,8 @@ class get_variable(object):
 
             ds = xr.load_dataset(self.path, decode_times=False)
 
-            #decode times into day-month-year shape
-            time = ds.time
-            ds['time'] = nc.num2date(time[:],time.units)
-
             #select wanted timeframe
-            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+            ds = ds.sel(time=slice(str(self.start_year + 1) + '01', str(self.end_year) + '12'))
 
             var = ds[self.variable]
             var = np.array(var)
