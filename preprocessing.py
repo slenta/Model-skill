@@ -289,6 +289,8 @@ class get_variable(object):
             var = ds[self.variable]
             var = np.array(var)
 
+
+        print(ds.time)
         #get out all NaNs
         np.nan_to_num(var, copy=False, nan=0.1)
         
