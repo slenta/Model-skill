@@ -40,6 +40,6 @@ HadIsst = HadIsst.__getitem__()
 #bias_plot(Aviro_ssh, Assi_ssh, del_t=8, name_1='Aviro_ssh', name_2='Assimilation_ssh')
 
 #plot correlation between ocean heat content and ssts
-IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=196001.5, end_year=202012.5)
+IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=196001.5, end_year=202012.5, time_edit=False)
 IAP_Ohc = IAP_Ohc.__getitem__()
 correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='HadIsst', name_2='IAP_Ohc')
