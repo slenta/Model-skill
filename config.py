@@ -9,6 +9,7 @@ residual_path = None
 scenario_path = None
 assi_path = None
 aviro_path = None
+ohc_path = None
 start_year = None
 end_year = None
 hist_start_years = None
@@ -37,6 +38,7 @@ def set_args():
     arg_parser.add_argument('--scenario_path', type=str, default='/pool/data/CMIP6/data/ScenarioMIP/MIROC/MIROC6/ssp245/r')
     arg_parser.add_argument('--assi_path', type=str, default='/pool/data/CMIP6/data/DCPP/MIROC/MIROC6/dcppA-assim/r')
     arg_parser.add_argument('--aviro_path', type=str, default='/pool/data/ICDC/ocean/aviso_ssh/DATA/')
+    arg_parser.add_argument('--ohc_path', type=str, default='/work/uo1075/u241265/obs/ohc/IAP_ohc700m_mm_1960_2016.nc')
     arg_parser.add_argument('--hist_name', type=str, default='_historical_r')
     arg_parser.add_argument('--hind_name', type=str, default='_dcppA-hindcast_s')
     arg_parser.add_argument('--hind_mod', type=str, default='v20190821/')
@@ -66,6 +68,7 @@ def set_args():
     global scenario_path
     global assi_path
     global aviro_path
+    global ohc_path
     global start_year
     global end_year
     global hist_start_years
@@ -92,6 +95,7 @@ def set_args():
     scenario_path = args.scenario_path
     assi_path = args.assi_path
     aviro_path = args.aviro_path
+    ohc_path = args.ohc_path
     start_year = args.start_year
     end_year = args.end_year
     hist_start_years = args.hist_start_years
