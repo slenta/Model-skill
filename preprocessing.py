@@ -276,7 +276,7 @@ class get_variable(object):
 
             #decode times into day-month-year shape
             time = ds.time
-            print(time)
+
             if self.time_edit == True:
                 ds['time'] = nc.num2date(time[:],time.units)
 
@@ -284,7 +284,7 @@ class get_variable(object):
                 ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
 
             else:
-                ds = ds.sel(time=slice(str(self.start_year), str(self.end_year)))
+                ds = ds.sel(time=slice(self.start_year, self.end_year))
 
             var = ds[self.variable]
             var = np.array(var)
