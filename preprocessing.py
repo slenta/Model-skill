@@ -246,7 +246,7 @@ class ensemble_means(object):
 
 class get_variable(object):
 
-    def __init__(self, path, lead_year=None, name=None, ensemble_members=None, mod_year=None, start_year=None, end_year=None, start_month=None, start_year_file=None, end_year_file=None, variable='sst', ensemble=False, mode=None):
+    def __init__(self, path, lead_year=None, name=None, ensemble_members=None, mod_year=None, start_year=None, end_year=None, start_month=None, start_year_file=None, end_year_file=None, variable='sst', ensemble=False, time_edit=True):
         super(get_variable, self).__init__()
 
         self.path = path
@@ -261,7 +261,7 @@ class get_variable(object):
         self.variable = variable
         self.ensemble = ensemble
         self.lead_year = lead_year
-        self.mode = mode
+        self.time_edit = time_edit
 
     def __getitem__(self):
 
@@ -277,10 +277,14 @@ class get_variable(object):
             #decode times into day-month-year shape
             time = ds.time
             print(time)
-            ds['time'] = nc.num2date(time[:],time.units)
+            if self.time_edit == True:
+                ds['time'] = nc.num2date(time[:],time.units)
 
-            #select wanted timeframe
-            ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+                #select wanted timeframe
+                ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+
+            else:
+                ds = ds.sel(time=slice(str(self.start_year), str(self.end_year)))
 
             var = ds[self.variable]
             var = np.array(var)
