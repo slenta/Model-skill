@@ -29,7 +29,7 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
                 var1_mean = var_1[:, j, k]
                 var2_mean = var_2[:, j, k]
             
-            print(np.isnan(var1_mean), np.isnan(var2_mean), np.isnan(var_1), np.isnan(var_2)))
+            print(np.isnan(var1_mean), np.isnan(var2_mean), np.isnan(var_1), np.isnan(var_2))
             corr[j, k] = pearsonr(var1_mean, var2_mean)[0]
 
     
