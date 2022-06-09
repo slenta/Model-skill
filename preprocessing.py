@@ -183,7 +183,7 @@ class ensemble_means(object):
         ds['time'] = nc.num2date(time[:],time.units)
 
         #select wanted timeframe
-        ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
+        ds = ds.sel(time=slice(str(self.start_year) + str(self.start_month), str(self.end_year) + '-12'))
 
         #select wanted spatial frame
         ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
@@ -289,8 +289,6 @@ class get_variable(object):
             var = ds[self.variable]
             var = np.array(var)
 
-
-        print(ds.time)
         #get out all NaNs
         np.nan_to_num(var, copy=False, nan=0.1)
         
