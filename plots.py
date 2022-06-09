@@ -11,6 +11,8 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     n = var_1.shape
     corr = np.zeros((n[1], n[2]))
 
+    print(var_1.shape, var_2.shape)
+
     #calculate correlation between both variables
     for j in range(n[1]):
         for k in range(n[2]):
