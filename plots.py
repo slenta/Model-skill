@@ -22,14 +22,14 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
                 var1_mean = np.zeros(n[0] - (del_t - 1))
                 var2_mean = np.zeros(n[0] - (del_t - 1))
                 for i in range(len(var1_mean)):
-                    var1_mean[i] = np.mean(var_1[i:i+del_t])
-                    var2_mean[i] = np.mean(var_2[i:i+del_t])
+                    var1_mean[i] = np.mean(var_1[i:i+del_t, j, k])
+                    var2_mean[i] = np.mean(var_2[i:i+del_t, j, k])
 
             else:
                 var1_mean = var_1[:, j, k]
                 var2_mean = var_2[:, j, k]
 
-            corr[j, k] = pearsonr(var1_mean[:, j, k], var2_mean[:, j, k])[0]
+            corr[j, k] = pearsonr(var1_mean, var2_mean)[0]
 
     
 
