@@ -24,7 +24,7 @@ cfg.set_args()
 #plot decorrelation time for HadISSTs
 #define threshold for decorrelation mask
 #threshold = 1
-HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2020)
+HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2015)
 HadIsst = HadIsst.__getitem__()
 #decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold, name='HadIsst')
 #dc, mask = decor.__getitem__()
@@ -40,6 +40,6 @@ HadIsst = HadIsst.__getitem__()
 #bias_plot(Aviro_ssh, Assi_ssh, del_t=8, name_1='Aviro_ssh', name_2='Assimilation_ssh')
 
 #plot correlation between ocean heat content and ssts
-IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=196000, end_year=202000, variable='heatcontent', time_edit=False)
+IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=196100, end_year=201600, variable='heatcontent', time_edit=False)
 IAP_Ohc = IAP_Ohc.__getitem__()
 correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='HadIsst', name_2='IAP_Ohc')
