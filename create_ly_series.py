@@ -23,12 +23,12 @@ cfg.set_args()
 
 #plot decorrelation time for HadISSTs
 #define threshold for decorrelation mask
-threshold = 1
+#threshold = 1
 HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2021)
 HadIsst = HadIsst.__getitem__()
-decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold, name='HadIsst')
+#decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold, name='HadIsst')
 #dc, mask = decor.__getitem__()
-decor.plot()
+#decor.plot()
 
 
 #plot ssh bias and correlation
