@@ -48,6 +48,7 @@ def bias_plot(var_1, var_2, del_t, name_1, name_2):
 
     #calculate correlation between both variables
     for j in range(n[1]):
+        print(j)
         for k in range(n[2]):
             
             #calculate running mean, if necessary
