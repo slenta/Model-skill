@@ -32,12 +32,12 @@ HadIsst = HadIsst.__getitem__()
 
 
 #plot ssh bias and correlation
-Aviro_ssh = get_variable(path=cfg.tmp_path + 'Aviro_Ssh_full/Aviro_Ssh_full_2000-01_2019-12.nc', start_year=2000, end_year=2017, variable='var')
-Aviro_ssh = Aviro_ssh.__getitem__()
+Aviso_ssh = get_variable(path=cfg.tmp_path + 'Aviso_Ssh_full/Aviso_Ssh_full_2000-01_2019-12.nc', start_year=2000, end_year=2017, variable='var')
+Aviso_ssh = Aviso_ssh.__getitem__()
 Assi_ssh = get_variable(path=cfg.assi_path, ensemble_members=cfg.ensemble_member,start_year=2000, end_year=2017, start_month='01', start_year_file=1950, end_year_file=2017, variable='zos', ensemble=True)
 Assi_ssh = Assi_ssh.__getitem__()
-correlation_plot(Aviro_ssh, Assi_ssh, del_t=8, name_1='Aviro_ssh', name_2='Assimilation_ssh')
-bias_plot(Aviro_ssh, Assi_ssh, del_t=8, name_1='Aviro_ssh', name_2='Assimilation_ssh')
+correlation_plot(Aviso_ssh, Assi_ssh, del_t=8, name_1='Aviso_ssh', name_2='Assimilation_ssh')
+bias_plot(Aviso_ssh, Assi_ssh, del_t=8, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 
 #plot correlation between ocean heat content and ssts
 IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=196100, end_year=201600, variable='heatcontent', time_edit=False)
