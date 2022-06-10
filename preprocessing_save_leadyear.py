@@ -17,15 +17,15 @@ cfg.set_args()
 
 #concatenate and save aviro data
 #first concatenate daily data to monthly and save at tmp
-for i in range(2000, 2001):
+for i in range(2000, 2019):
     print(i)
     for j in range(1, 13):
         month = str(j).zfill(2)
         con = concat(cfg.aviro_path + str(i) + '/' + month + '/', 'Aviro_Ssh', variable='adt', start=str(i) + '-' + month, end=str(i + 1) + '-' + month)
         con.concat()
 #then: concatenate all monthly data over the whole timeframe
-con = concat(cfg.tmp_path + 'Aviro_Ssh/', name = 'Aviro_Ssh_full', variable='var', start='2000-01', end='2001-12')
-con.concat()
+#con = concat(cfg.tmp_path + 'Aviro_Ssh/', name = 'Aviro_Ssh_full', variable='var', start='2000-01', end='2001-12')
+#con.concat()
 
 
 #save lead correlation for cfg.lead_year
