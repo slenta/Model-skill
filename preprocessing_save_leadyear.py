@@ -21,7 +21,7 @@ for i in range(2000, 2001):
     print(i)
     for j in range(1, 13):
         month = str(j).zfill(2)
-        con = concat(cfg.aviro_path + str(i) + '/' + month + '/', 'Aviro_Ssh', variable='adt', start=str(i) + '-' + month, end=str(i) + '-' + str(j + 1).zfill(2))
+        con = concat(cfg.aviro_path + str(i) + '/' + month + '/', 'Aviro_Ssh', variable='adt', start=str(i) + '-' + month, end=str(i + 1) + '-' + month)
         con.concat()
 #then: concatenate all monthly data over the whole timeframe
 con = concat(cfg.tmp_path + 'Aviro_Ssh/', name = 'Aviro_Ssh_full', variable='var', start='2000-01', end='2001-12')
