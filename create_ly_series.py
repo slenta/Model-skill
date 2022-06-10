@@ -32,7 +32,7 @@ HadIsst = HadIsst.__getitem__()
 
 
 #plot ssh bias and correlation
-Aviro_ssh = get_variable(path=cfg.tmp_path + 'Aviro_Ssh/Aviro_Ssh_2000-01_2019-12.nc', start_year=2000, end_year=2017, variable='var')
+Aviro_ssh = get_variable(path=cfg.tmp_path + 'Aviro_Ssh_full/Aviro_Ssh_full_2000-01_2019-12.nc', start_year=2000, end_year=2017, variable='var')
 Aviro_ssh = Aviro_ssh.__getitem__()
 Assi_ssh = get_variable(path=cfg.assi_path, ensemble_members=cfg.ensemble_member,start_year=2000, end_year=2017, start_month='01', start_year_file=1950, end_year_file=2017, variable='zos', ensemble=True)
 Assi_ssh = Assi_ssh.__getitem__()
