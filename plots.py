@@ -36,6 +36,7 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
 
     plt.figure(figsize=(8, 5))
     plt.imshow(corr)
+    plt.colorbar()
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
     plt.title('Correlation between {} and {}'.format(str(name_1), str(name_2)))

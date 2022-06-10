@@ -41,5 +41,6 @@ HadIsst = HadIsst.__getitem__()
 
 #plot correlation between ocean heat content and ssts
 IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=196100, end_year=201600, variable='heatcontent', time_edit=False)
+IAP_Ohc = IAP_Ohc[:, ::-1, :]
 IAP_Ohc = IAP_Ohc.__getitem__()
 correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='HadIsst', name_2='IAP_Ohc')
