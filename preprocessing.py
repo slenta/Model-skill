@@ -132,7 +132,6 @@ class concat(object):
         ds = ds.sel(time=slice(self.start, self.end))
 
         print(ds.time)
-        print(ds.time.values)
         var = np.array(ds[self.variable])
         time = ds.time
 
