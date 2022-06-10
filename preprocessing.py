@@ -120,7 +120,7 @@ class concat(object):
         for i in range(len(paths)):
 
             #remap to common grid
-            ofile=cfg.tmp_path + self.name + '/' + self.name + str(i) + '.nc'
+            ofile=cfg.tmp_path + 'tmp' + self.name + str(i) + '.nc'
             cdo.remapbil(cfg.tmp_path + 'template.nc', input=paths[i], output=ofile)  
             paths[i] = ofile
 
