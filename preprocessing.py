@@ -127,7 +127,7 @@ class concat(object):
             paths[i] = ofile
 
     
-        ds = xr.merge([xr.load_dataset(paths[i], decode_times=False) for i in range(len(paths))])
+        ds = xr.merge([xr.load_dataset(paths[i], decode_times=False) for i in range(len(paths))], compat='override')
         
         time = ds.time
         ds['time'] = nc.num2date(time[:],time.units)
