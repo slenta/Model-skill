@@ -134,7 +134,7 @@ class concat(object):
         print(ds.time)
         print(ds.time.values)
         var = np.array(ds[self.variable])
-        time = ds.time.values
+        time = ds.time
 
         #get lon, lat values from template
         ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
