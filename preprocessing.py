@@ -128,7 +128,7 @@ class concat(object):
 
 
         for i in range(len(paths)):
-            ds = xr.load_dataset(path[i])
+            ds = xr.load_dataset(paths[i])
             print(ds.time, ds.lat, ds.lon)
         ds = xr.merge([xr.load_dataset(paths[i], decode_times=False) for i in range(len(paths))])
         
