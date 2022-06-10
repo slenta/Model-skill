@@ -116,6 +116,8 @@ class concat(object):
 
         #concatenate the different variables and save in a new file
         print(paths)
+        print(self.path)
+        
         paths = self.get_paths()
 
         for i in range(len(paths)):
