@@ -115,8 +115,6 @@ class concat(object):
     def concat(self):
 
         #concatenate the different variables and save in a new file
-        print(self.path)
-
         paths = self.get_paths()
 
         for i in range(len(paths)):
@@ -134,7 +132,7 @@ class concat(object):
         ds = ds.sel(time=slice(self.start, self.end))
 
         print(ds.time)
-        
+        print(ds.time.values)
         var = np.array(ds[self.variable])
         time = ds.time.values
 
