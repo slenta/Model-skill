@@ -132,6 +132,8 @@ class concat(object):
         time = ds.time
         ds['time'] = nc.num2date(time[:],time.units)
         ds = ds.sel(time=slice(self.start, self.end))
+
+        print(ds.time)
         
         var = np.array(ds[self.variable])
         time = ds.time.values
