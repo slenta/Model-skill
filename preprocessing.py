@@ -147,10 +147,10 @@ class concat(object):
 
         ds = xr.Dataset(data_vars=dict(var=(["time", "lat", "lon"], var)),
         coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
-        attrs=dict(description="Concatenated data " + self.name + self.start))
+        attrs=dict(description="Concatenated data " + self.name + '_' + self.start + '_' + self.end))
 
         #os.remove(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
-        ds.to_netcdf(cfg.tmp_path + str(self.name) + '/' + self.name + '_' + self.start + '_' + self.end + '.nc')
+        ds.to_netcdf(cfg.tmp_path + str(self.name) + '/' + self.name + '_' + self.start + '.nc')
 
 
 
