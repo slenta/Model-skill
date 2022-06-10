@@ -126,7 +126,10 @@ class concat(object):
             cdo.remapbil(cfg.tmp_path + 'template.nc', input=paths[i], output=ofile)  
             paths[i] = ofile
 
-    
+
+        for i in range(len(paths)):
+            ds = xr.load_dataset(path[i])
+            print(ds.time, ds.lat, ds.lon)
         ds = xr.merge([xr.load_dataset(paths[i], decode_times=False) for i in range(len(paths))])
         
         time = ds.time
