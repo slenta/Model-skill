@@ -38,13 +38,14 @@ class decorrelation_time(object):
 
                 else:
                     var_mean = var[:, i, j]
-                
+    
+
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))[1:]
 
 
-                #calculate decorrelation time for each 
-                decor[i, j] = (1 + 2*np.sum(autocor)) * 8
+                #calculate decorrelation time for each gridpoint
+                decor[i, j] = np.squeeze(np.where(autocor<1/np.e))[0]
 
         
         mask = np.where(decor <= self.threshold, np.nan, decor)
