@@ -42,7 +42,7 @@ class decorrelation_time(object):
 
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))
-                print(autocor.shape)
+                np.nan_to_num(autocor, nan=0)
 
                 #calculate decorrelation time for each gridpoint
                 print(np.shape(np.where(autocor<1/np.e)))
