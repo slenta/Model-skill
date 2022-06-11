@@ -34,7 +34,7 @@ decor.plot()
 #plot ssh bias and correlation
 Aviso_ssh = get_variable(path=cfg.tmp_path + 'Aviso_Ssh_full/Aviso_Ssh_full_2000_2018.nc', start_year=2000, end_year=2017, variable='var')
 Aviso_ssh = Aviso_ssh.__getitem__()
-Assi_ssh = get_variable(path=cfg.assi_path, ensemble_members=cfg.ensemble_member,start_year=2000, end_year=2017, start_month='01', start_year_file=1950, end_year_file=2017, variable='zos', ensemble=True)
+Assi_ssh = get_variable(path=cfg.assi_path, name='Assi_ssh', ensemble_members=cfg.ensemble_member, mod_year=cfg.ssh_mod, start_year=2000, end_year=2017,  start_month='01', start_year_file=1950, end_year_file=2017, variable='zos', ensemble=True)
 Assi_ssh = Assi_ssh.__getitem__()
 correlation_plot(Aviso_ssh, Assi_ssh, del_t=8, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 bias_plot(Aviso_ssh, Assi_ssh, del_t=8, name_1='Aviso_ssh', name_2='Assimilation_ssh')
