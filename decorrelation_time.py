@@ -67,9 +67,9 @@ class decorrelation_time(object):
         decor = np.array(decor)
         
         plt.figure(figsize=(8, 5))
-        plt.imshow(decor, cmap='coolwarm')
+        plt.imshow(decor, cmap='coolwarm', vmin=0, vmax=48)
         plt.xlabel('Longitudes')
         plt.ylabel('Latitudes')
         plt.title('Decorrelation time for ' + self.name)
-        plt.colorbar()
+        plt.colorbar(label='decorrelation time in months')
         plt.savefig(cfg.tmp_path + 'plots/decorrelation_time' + self.name + '.pdf')
