@@ -45,7 +45,6 @@ class decorrelation_time(object):
                 np.nan_to_num(autocor, nan=0)
 
                 #calculate decorrelation time for each gridpoint
-                print(np.shape(np.where(autocor<1/np.e)))
                 decor[i, j] = np.squeeze(np.where(autocor<1/np.e))[0]
 
         
