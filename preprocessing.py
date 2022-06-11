@@ -248,7 +248,7 @@ class ensemble_means(object):
 
 class get_variable(object):
 
-    def __init__(self, path, lead_year=None, name=None, ensemble_members=None, mod_year=None, start_year=None, end_year=None, start_month=None, start_year_file=None, end_year_file=None, variable='sst', ensemble=False, time_edit=True):
+    def __init__(self, path, lead_year=None, name=None, ensemble_members=None, mod_year=None, start_year=None, end_year=None, start_month=None, start_year_file=None, end_year_file=None, variable='sst', ensemble=False, time_edit=True, mode=None):
         super(get_variable, self).__init__()
 
         self.path = path
@@ -264,6 +264,7 @@ class get_variable(object):
         self.ensemble = ensemble
         self.lead_year = lead_year
         self.time_edit = time_edit
+        self.mode = mode
 
     def __getitem__(self):
 
