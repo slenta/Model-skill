@@ -16,10 +16,10 @@ for i in range(0, len(a) - 1):
     ac[i] = pearsonr(a, b[i])[0]
 
 ac_f = sm.tsa.acf(a)
-dc_m = np.squeeze(np.where(ac<1/np.e))[0]
+dc_m = np.array(np.where(ac<1/np.e))
 dc_f = np.squeeze(np.where(ac_f<1/np.e))[0]
 
-print(dc_m, dc_f)
+print(dc_m.shape, dc_f)
 
 
 print(ac[0])
