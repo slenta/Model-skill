@@ -234,7 +234,7 @@ class ensemble_means(object):
 
 
                     #create outputfiles for cdo
-                    path = cfg.tmp_path + self.name + str(self.lead_year) + '.nc'
+                    path = cfg.tmp_path + self.name + '/' + self.name + str(self.start_year) + str(k) + '.nc'
 
                     #remap grids to allow for correlation calculation
                     #fit each other to coarsest grids - template 1°x1° grid
