@@ -302,7 +302,7 @@ class get_variable(object):
                 ds = ds.sel(time=slice(self.start_year, self.end_year))
 
             if self.mean == 'monthly':
-                ds = ds.groupby(by=ds.index.month).mean()
+                ds = ds.resample(time='1M').mean()
 
 
             var = ds[self.variable]
