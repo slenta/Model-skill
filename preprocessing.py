@@ -234,6 +234,8 @@ class ensemble_means(object):
 
 
                     #create outputfiles for cdo
+                    if not os.path.exists(cfg.tmp_path + self.name + '/'):
+                        os.makedirs(cfg.tmp_path + self.name + '/')
                     path = cfg.tmp_path + self.name + '/' + self.name + str(self.start_year) + str(k) + '.nc'
 
                     #remap grids to allow for correlation calculation
