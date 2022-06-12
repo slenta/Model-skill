@@ -190,7 +190,7 @@ class ensemble_means(object):
         ds = ds.sel(time=slice(str(self.start_year) + str(self.start_month), str(self.end_year) + '-12'))
 
         if self.mean == 'monthly':
-            ds = ds.resample(freq = 'm', dim = 'time', how = 'mean')
+            ds = ds.resample(time='1M').mean()
 
 
         #select wanted spatial frame
@@ -236,6 +236,7 @@ class ensemble_means(object):
                     #create outputfiles for cdo
                     if not os.path.exists(cfg.tmp_path + self.name + '/'):
                         os.makedirs(cfg.tmp_path + self.name + '/')
+
                     path = cfg.tmp_path + self.name + '/' + self.name + str(self.start_year) + str(k) + '.nc'
 
                     #remap grids to allow for correlation calculation
