@@ -187,7 +187,7 @@ class ensemble_means(object):
         ds['time'] = nc.num2date(time[:],time.units)
 
         #select wanted timeframe
-        ds = ds.sel(time=slice(str(self.start_year) + str(self.start_month), str(self.end_year) + '-12'))
+        ds = ds.sel(time=slice(str(self.start_year + 1) + str(self.start_month), str(self.end_year) + '-12'))
 
         if self.mean == 'monthly':
             ds = ds.resample(time='1M').mean()
