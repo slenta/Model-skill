@@ -1,6 +1,7 @@
 #File to concatenate climate data and calculate ensemble means
 
 from importlib.resources import path
+from statistics import mean
 from tracemalloc import start
 from typing_extensions import Self
 from anyio import open_file
@@ -158,7 +159,7 @@ class concat(object):
 
 class ensemble_means(object):
 
-    def __init__(self, path, name, ensemble_members, mod_year, start_year, end_year, start_month, start_year_file, end_year_file, variable, lead_year, mode=None):
+    def __init__(self, path, name, ensemble_members, mod_year, start_year, end_year, start_month, start_year_file, end_year_file, variable, lead_year, mean, mode=None):
         super(ensemble_means, self).__init__()
 
         self.path = path
@@ -173,6 +174,7 @@ class ensemble_means(object):
         self.variable = variable
         self.mode = mode
         self.lead_year = lead_year
+        self.mean = mean
 
     def __getitem__(self, path):
 
@@ -186,6 +188,10 @@ class ensemble_means(object):
 
         #select wanted timeframe
         ds = ds.sel(time=slice(str(self.start_year) + str(self.start_month), str(self.end_year) + '-12'))
+
+        if self.mean == 'monthly':
+            ds = ds.groupby(by=ds.index.month).mean()
+
 
         #select wanted spatial frame
         ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
@@ -271,7 +277,7 @@ class get_variable(object):
 
         if self.ensemble == True:
 
-            var_mean = ensemble_means(self.path, self.name, self.ensemble_members, self.mod_year, self.start_year, self.end_year, self.start_month, self.start_year_file, self.end_year_file, self.variable, self.lead_year, self.mode)
+            var_mean = ensemble_means(self.path, self.name, self.ensemble_members, self.mod_year, self.start_year, self.end_year, self.start_month, self.start_year_file, self.end_year_file, self.variable, self.lead_year, self.mean, self.mode)
             var = var_mean.ensemble_mean()
 
         else:
@@ -290,12 +296,9 @@ class get_variable(object):
             else:
                 ds = ds.sel(time=slice(self.start_year, self.end_year))
 
-            print(self.mean)
-
             if self.mean == 'monthly':
                 ds = ds.groupby(by=ds.index.month).mean()
-                print(ds)
-                print('go')
+
 
             var = ds[self.variable]
             var = np.array(var)
