@@ -290,6 +290,8 @@ class get_variable(object):
             else:
                 ds = ds.sel(time=slice(self.start_year, self.end_year))
 
+            print(self.mean)
+
             if self.mean == 'monthly':
                 ds = ds.groupby(by=ds.index.month).mean()
                 print(ds)
