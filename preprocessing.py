@@ -289,6 +289,9 @@ class get_variable(object):
             else:
                 ds = ds.sel(time=slice(self.start_year, self.end_year))
 
+            if self.mean == 'monthly':
+                ds = ds.groupby('month').mean()
+
             var = ds[self.variable]
             var = np.array(var)
 
@@ -322,4 +325,4 @@ class get_variable(object):
         return time, lon, lat
 
 
-            
+
