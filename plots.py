@@ -43,7 +43,7 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     plt.savefig(cfg.tmp_path + 'plots/correlation_' + name_1 + '_' + name_2 + str(del_t) + '.pdf')
 
 #simple function to plot correlations between two variables
-def bias_plot(var_1, var_2, del_t, name_1, name_2):
+def bias_plot(var_1, var_2, name_1, name_2):
     
     n = var_1.shape
     bias = np.zeros((n[1], n[2]))
