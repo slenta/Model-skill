@@ -47,25 +47,15 @@ def bias_plot(var_1, var_2, del_t, name_1, name_2):
     
     n = var_1.shape
     bias = np.zeros((n[1], n[2]))
+    var_1 = np.mean(var_1, axis=0)
+    var_2 = np.mean(var_2, axis=0)
+
 
     #calculate correlation between both variables
     for j in range(n[1]):
         print(j)
         for k in range(n[2]):
-            
-            #calculate running mean, if necessary
-            if del_t != 1:
-                var1_mean = np.zeros(n[0] - (del_t - 1))
-                var2_mean = np.zeros(n[0] - (del_t - 1))
-                for i in range(len(var1_mean)):
-                    var1_mean[i] = np.mean(var_1[i:i+del_t, j, k])
-                    var2_mean[i] = np.mean(var_2[i:i+del_t, j, k])
-
-            else:
-                var1_mean = var_1[:, j, k]
-                var2_mean = var_2[:, j, k]
-
-            bias[j, k] = var1_mean - var2_mean
+            bias[j, k] = var_1 - var_2
 
     
 
@@ -74,6 +64,6 @@ def bias_plot(var_1, var_2, del_t, name_1, name_2):
     plt.colorbar()
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
-    plt.title('Correlation between {} and {}'.format(str(name_1), str(name_2)))
-    plt.savefig(cfg.tmp_path + 'plots/correlation_' + name_1 + '_' + name_2 + '.pdf')
+    plt.title('Bias: {} - {}'.format(str(name_1), str(name_2)))
+    plt.savefig(cfg.tmp_path + 'plots/bias_' + name_1 + '_' + name_2 + '.pdf')
 

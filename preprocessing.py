@@ -200,8 +200,6 @@ class ensemble_means(object):
         #load sst values, reverse longitude dimension
         var = ds[self.variable][:, ::-1, :]
 
-        print(var.shape)
-
         #get out all NaNs
         np.nan_to_num(var, copy=False, nan=0.1)
 
