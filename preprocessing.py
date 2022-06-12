@@ -292,6 +292,7 @@ class get_variable(object):
 
             if self.mean == 'monthly':
                 ds = ds.groupby(by=ds.index.month).mean()
+                print(ds)
 
             var = ds[self.variable]
             var = np.array(var)
