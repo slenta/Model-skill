@@ -190,7 +190,7 @@ class ensemble_means(object):
         ds = ds.sel(time=slice(str(self.start_year) + str(self.start_month), str(self.end_year) + '-12'))
 
         if self.mean == 'monthly':
-            ds = ds.groupby('time.month').mean('time')
+            ds = ds.resample(freq = 'm', dim = 'time', how = 'mean')
 
 
         #select wanted spatial frame
