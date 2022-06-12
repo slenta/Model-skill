@@ -30,7 +30,6 @@ decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold, name='HadIsst'
 #dc, mask = decor.__getitem__()
 decor.plot()
 
-
 #plot ssh bias and correlation
 Aviso_ssh = get_variable(path=cfg.tmp_path + 'Aviso_Ssh_full/Aviso_Ssh_full_2000_2018.nc', start_year=2000, end_year=2017, variable='var')
 Aviso_ssh = Aviso_ssh.__getitem__()

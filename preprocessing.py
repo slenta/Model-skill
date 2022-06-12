@@ -291,7 +291,7 @@ class get_variable(object):
                 ds = ds.sel(time=slice(self.start_year, self.end_year))
 
             if self.mean == 'monthly':
-                ds = ds.groupby('month').mean()
+                ds = ds.groupby(by=ds.index.month).mean()
 
             var = ds[self.variable]
             var = np.array(var)
