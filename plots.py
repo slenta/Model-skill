@@ -60,7 +60,7 @@ def bias_plot(var_1, var_2, name_1, name_2):
     
 
     plt.figure(figsize=(8, 5))
-    plt.imshow(bias, cmap='coolwarm')
+    plt.imshow(bias, cmap='coolwarm', vmin=-2, vmax = 2)
     plt.colorbar()
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
