@@ -21,7 +21,7 @@ cfg.set_args()
 class concat_hist(object):
 
     def __init__(self, start_years, end_years, ensemble_members, scenario_path, scenario):
-        super(concat, self).__init__()
+        super(concat_hist, self).__init__()
 
         self.start_years = start_years
         self.ensemble_members = ensemble_members
