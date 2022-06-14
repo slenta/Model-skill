@@ -47,7 +47,7 @@ def set_args():
     arg_parser.add_argument('--hist_end_years', type=list, default=[1949, 2014, 2100])
     arg_parser.add_argument('--start_year', type=int, default=1960)
     arg_parser.add_argument('--end_year', type=int, default=2011)
-    arg_parser.add_argument('--start_month_hind', type=int, default='11')
+    arg_parser.add_argument('--start_month_hind', type=str, default='11')
     arg_parser.add_argument('--ensemble_member', type=list, default=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     arg_parser.add_argument('--model_specifics', type=str, default='_Omon_MIROC6')
     arg_parser.add_argument('--tmp_path', type=str, default='./tmp/')
