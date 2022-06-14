@@ -8,7 +8,6 @@ from decorrelation_time import decorrelation_time
 from plots import correlation_plot
 from plots import bias_plot
 import matplotlib
-from preprocessing import concat
 
 matplotlib.use('Agg')
 cfg.set_args()
