@@ -321,7 +321,7 @@ class get_variable(object):
 
     def get_coords(self):
         
-        ofile = cfg.tmp_path + self.name + '/' + self.name + cfg.ensemble_member[0] + str(self.start_year) + '_' + str(self.lead_year) + '.nc'
+        ofile = cfg.tmp_path + self.name + '/' + self.name + str(cfg.ensemble_member[0]) + str(self.start_year) + '_' + str(self.lead_year) + '.nc'
         
         ds = xr.load_dataset(ofile, decode_times=False)
         time = ds.time
