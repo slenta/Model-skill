@@ -297,7 +297,7 @@ class get_variable(object):
                 ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
 
             else:
-                ds = ds.sel(time=slice(self.start_year, self.end_year))
+                ds = ds.sel(time=slice(self.start_year + 1, self.end_year))
 
             if self.mean == 'monthly':
                 ds = ds.resample(time='1M').mean()
