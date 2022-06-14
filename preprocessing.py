@@ -197,7 +197,7 @@ class ensemble_means(object):
         ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
         ds = ds.sel(lat = slice(cfg.lonlats[2], cfg.lonlats[3]))
 
-        #load sst values, reverse longitude dimension
+        #load sst values, reverse latitude dimension
         var = ds[self.variable]
 
         #get out all NaNs
@@ -243,7 +243,7 @@ class ensemble_means(object):
                     cdo.remapbil(cfg.tmp_path + 'template.nc', input=ifile, output=path)
 
 
-                    indv = self.__getitem__(path)
+                    indv = self.__getitem__(path)[:, ::-1, :]
 
                 member.append(indv)
 
