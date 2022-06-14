@@ -224,7 +224,7 @@ class ensemble_means(object):
                 if self.mode=='hist':
                     path = cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc'
 
-                    indv = self.__getitem__(path)[:, :, ::-1]
+                    indv = self.__getitem__(path)
 
                 
                 else:
@@ -249,7 +249,7 @@ class ensemble_means(object):
 
         
         mean = np.mean(member, axis=0)
-        mean = np.array(mean)[:, ::-1, :]
+        mean = np.array(mean)
   
         return mean
 
@@ -311,12 +311,12 @@ class get_variable(object):
         
         return var
 
-    def plot(self, name):
+    def plot(self):
 
         var = self.__getitem__()
 
         plt.imshow(var[0])
-        plt.savefig(cfg.tmp_path + name + '.pdf')
+        plt.savefig(cfg.tmp_path + 'plots/' + self.name + '.pdf')
         plt.show()
 
     def get_coords(self):
