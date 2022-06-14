@@ -300,6 +300,8 @@ class get_variable(object):
             if self.mean == 'monthly':
                 ds = ds.resample(time='1M').mean()
 
+            if self.mean == 'annual':
+                ds = ds.resample(time='1Y').mean()
 
             var = ds[self.variable]
             var = np.array(var)
