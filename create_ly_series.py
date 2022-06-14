@@ -27,6 +27,8 @@ threshold = 1
 HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2015)
 HadIsst = HadIsst.__getitem__()
 decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold, name='HadIsst')
+decor = decorrelation_time(HadIsst, del_t=4, threshold=threshold, name='HadIsst')
+decor = decorrelation_time(HadIsst, del_t=1, threshold=threshold, name='HadIsst')
 #dc, mask = decor.__getitem__()
 decor.plot()
 
@@ -38,6 +40,8 @@ Assi_ssh = Assi_ssh.__getitem__()
 Aviso_ssh = Aviso_ssh[:, ::-1, :]
 
 correlation_plot(Aviso_ssh, Assi_ssh, del_t=8, name_1='Aviso_ssh', name_2='Assimilation_ssh')
+correlation_plot(Aviso_ssh, Assi_ssh, del_t=4, name_1='Aviso_ssh', name_2='Assimilation_ssh')
+correlation_plot(Aviso_ssh, Assi_ssh, del_t=1, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 bias_plot(Aviso_ssh, Assi_ssh, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 
 #plot correlation between ocean heat content and ssts
@@ -45,3 +49,6 @@ IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=196100, end_year=201600, 
 IAP_Ohc = IAP_Ohc.__getitem__()
 IAP_Ohc = IAP_Ohc[:, ::-1, :]
 correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='HadIsst', name_2='IAP_Ohc')
+correlation_plot(HadIsst, IAP_Ohc, del_t=4, name_1='HadIsst', name_2='IAP_Ohc')
+correlation_plot(HadIsst, IAP_Ohc, del_t=1, name_1='HadIsst', name_2='IAP_Ohc')
+

@@ -278,8 +278,6 @@ class get_variable(object):
     def __getitem__(self):
 
         if self.ensemble == True:
-            
-            print(self.mean)
             var_mean = ensemble_means(self.path, self.name, self.ensemble_members, self.mod_year, self.start_year, self.end_year, self.start_month, self.start_year_file, self.end_year_file, self.variable, self.lead_year, self.mean, self.mode)
             var = var_mean.ensemble_mean()
 
