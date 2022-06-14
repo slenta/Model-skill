@@ -224,7 +224,7 @@ class ensemble_means(object):
                 if self.mode=='hist':
                     path = cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc'
 
-                    indv = self.__getitem__(path)
+                    indv = self.__getitem__(path)[:, :, ::-1]
 
                 
                 else:
@@ -243,13 +243,13 @@ class ensemble_means(object):
                     cdo.remapbil(cfg.tmp_path + 'template.nc', input=ifile, output=path)
 
 
-                    indv = self.__getitem__(path)[:, ::-1, :]
+                    indv = self.__getitem__(path)
 
                 member.append(indv)
 
         
         mean = np.mean(member, axis=0)
-        mean = np.array(mean)
+        mean = np.array(mean)[:, ::-1, :]
   
         return mean
 
