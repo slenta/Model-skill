@@ -314,7 +314,7 @@ class get_variable(object):
     def plot(self):
 
         var = self.__getitem__()
-
+        plt.figure()
         plt.imshow(var[0])
         plt.savefig(cfg.tmp_path + 'plots/' + self.name + '.pdf')
         plt.show()
