@@ -242,7 +242,6 @@ class ensemble_means(object):
 
                     cdo.remapbil(cfg.tmp_path + 'template.nc', input=ifile, output=path)
 
-
                     indv = self.__getitem__(path)
 
                 member.append(indv)
@@ -282,8 +281,11 @@ class get_variable(object):
             var = var_mean.ensemble_mean()
 
         else:
+            
+            ofile = cfg.tmp_path + self.name + '.nc'
 
-            ds = xr.load_dataset(self.path, decode_times=False)
+            cdo.remapbil(cfg.tmp_path + 'template.nc', input=self.path, output=ofile)
+            ds = xr.load_dataset(ofile, decode_times=False)
 
             #decode times into day-month-year shape
             time = ds.time
