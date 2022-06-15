@@ -281,8 +281,11 @@ class get_variable(object):
             var = var_mean.ensemble_mean()
 
         else:
-            
-            ofile = cfg.tmp_path + self.name + self.start_year+ '.nc'
+
+            if self.lead_year:            
+                ofile = cfg.tmp_path + 'tmp/' + self.name + self.start_year + self.lead_year + '.nc'
+            else:
+                ofile = cfg.tmp_path + 'tmp/' + self.name + self.start_year + '.nc'
 
             cdo.remapbil(cfg.tmp_path + 'template.nc', input=self.path, output=ofile)
             ds = xr.load_dataset(ofile, decode_times=False)
