@@ -20,7 +20,6 @@ class residual(object):
         
         n = hind.shape
         acc = np.zeros((n[1], n[2]))
-        print(his.shape, hind.shape)
 
         #first step: calculate correlation between hindcast and historical
         for j in range(n[1]):
@@ -45,9 +44,6 @@ class residual(object):
         return res_hind
 
     def obs_res(self, obs, his):
-
-        print(his.shape, obs.shape)
-
 
         n = obs.shape
         acc = np.zeros((n[1], n[2]))
