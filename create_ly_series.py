@@ -32,25 +32,25 @@ HadIsst_annual = HadIsst_annual[:, ::-1, :]
 
 
 decor = decorrelation_time(HadIsst_annual, del_t=8, threshold=threshold, name='HadIsst_annual')
-#dc, mask = decor.__getitem__()
+dc, mask = decor.__getitem__()
 decor.plot()
 decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=threshold, name='HadIsst_annual')
-#dc, mask = decor.__getitem__()
+dc, mask = decor.__getitem__()
 decor.plot()
 decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
-#dc, mask = decor.__getitem__()
+dc, mask = decor.__getitem__()
 decor.plot()
 
 
 
 decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold, name='HadIsst')
-#dc, mask = decor.__getitem__()
+dc, mask = decor.__getitem__()
 decor.plot()
 decor = decorrelation_time(HadIsst, del_t=4, threshold=threshold, name='HadIsst')
-#dc, mask = decor.__getitem__()
+dc, mask = decor.__getitem__()
 decor.plot()
 decor = decorrelation_time(HadIsst, del_t=1, threshold=threshold, name='HadIsst')
-#dc, mask = decor.__getitem__()
+dc, mask = decor.__getitem__()
 decor.plot()
 
 #plot ssh bias and correlation
