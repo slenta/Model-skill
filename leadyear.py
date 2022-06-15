@@ -37,7 +37,7 @@ class calculate_leadyear(object):
 
 
         #process variables to create residual dataset, if required choose scenario path instead of hist path
-        obs = get_variable(cfg.observation_path, lead_year=lead_year, start_year=start_year, end_year=end_year)
+        obs = get_variable(cfg.observation_path, lead_year=lead_year, name='HadIobs', start_year=start_year, end_year=end_year)
         obs.plot()
         obs = obs.__getitem__()
 
