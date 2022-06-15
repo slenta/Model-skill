@@ -23,10 +23,10 @@ ly.ly_series()
 #plot decorrelation time for HadISSTs
 #define threshold for decorrelation mask
 threshold = 1
-HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2015)
+HadIsst = get_variable(path = cfg.observation_path, name='HadIsst', start_year = 1960, end_year = 2015)
 HadIsst = HadIsst.__getitem__()
 HadIsst = HadIsst[:, ::-1, :]
-HadIsst_annual = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2015, mean='annual')
+HadIsst_annual = get_variable(path = cfg.observation_path, name = 'HadI_annual', start_year = 1960, end_year = 2015, mean='annual')
 HadIsst_annual = HadIsst_annual.__getitem__()
 HadIsst_annual = HadIsst_annual[:, ::-1, :]
 
@@ -54,9 +54,9 @@ decor = decorrelation_time(HadIsst, del_t=1, threshold=threshold, name='HadIsst'
 decor.plot()
 
 #plot ssh bias and correlation
-Aviso_ssh = get_variable(path=cfg.tmp_path + 'Aviso_Ssh_full/Aviso_Ssh_full_2000_2018.nc', start_year=2000, end_year=2017, variable='var', mean='monthly')
+Aviso_ssh = get_variable(path=cfg.tmp_path + 'Aviso_Ssh_full/Aviso_Ssh_full_2000_2018.nc', name='Aviso_ssh', start_year=2000, end_year=2017, variable='var', mean='monthly')
 Aviso_ssh = Aviso_ssh.__getitem__()
-Assi_ssh = get_variable(path=cfg.assi_path, name='_dcppA-assim_r', ensemble_members=cfg.ensemble_member, mod_year=cfg.ssh_mod, start_year=2000, end_year=2017,  start_month='01', start_year_file=1950, end_year_file=2017, variable='zos', ensemble=True, time_edit=True, mean='monthly')
+Assi_ssh = get_variable(path=cfg.assi_path, name='_dcppA-assim_r', name='Assi_ssh', ensemble_members=cfg.ensemble_member, mod_year=cfg.ssh_mod, start_year=2000, end_year=2017,  start_month='01', start_year_file=1950, end_year_file=2017, variable='zos', ensemble=True, time_edit=True, mean='monthly')
 Assi_ssh = Assi_ssh.__getitem__()
 Aviso_ssh = Aviso_ssh[:, ::-1, :]
 Assi_ssh = Assi_ssh[:, ::-1, :]
@@ -67,7 +67,7 @@ correlation_plot(Aviso_ssh, Assi_ssh, del_t=1, name_1='Aviso_ssh', name_2='Assim
 bias_plot(Aviso_ssh, Assi_ssh, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 
 #plot correlation between ocean heat content and ssts
-IAP_Ohc = get_variable(path = cfg.ohc_path, start_year=196100, end_year=201600, variable='heatcontent', time_edit=False)
+IAP_Ohc = get_variable(path = cfg.ohc_path, name='IAP_Ohc', start_year=196100, end_year=201600, variable='heatcontent', time_edit=False)
 IAP_Ohc = IAP_Ohc.__getitem__()
 IAP_Ohc = IAP_Ohc[:, ::-1, :]
 correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='HadIsst', name_2='IAP_Ohc')
