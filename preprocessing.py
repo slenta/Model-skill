@@ -283,9 +283,9 @@ class get_variable(object):
         else:
 
             if self.lead_year:            
-                ofile = cfg.tmp_path + 'tmp/' + self.name + self.start_year + self.lead_year + '.nc'
+                ofile = cfg.tmp_path + 'tmp/' + self.name + str(self.start_year) + str(self.lead_year) + '.nc'
             else:
-                ofile = cfg.tmp_path + 'tmp/' + self.name + self.start_year + '.nc'
+                ofile = cfg.tmp_path + 'tmp/' + self.name + str(self.start_year) + '.nc'
 
             cdo.remapbil(cfg.tmp_path + 'template.nc', input=self.path, output=ofile)
             ds = xr.load_dataset(ofile, decode_times=False)
