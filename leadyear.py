@@ -38,24 +38,21 @@ class calculate_leadyear(object):
 
         #process variables to create residual dataset, if required choose scenario path instead of hist path
         obs = get_variable(cfg.observation_path, lead_year=lead_year, name='HadIobs', start_year=start_year, end_year=end_year)
-        obs.plot()
         obs = obs.__getitem__()
 
         hist = get_variable(cfg.historical_path, lead_year=lead_year, name=cfg.hist_name, ensemble_members=cfg.ensemble_member, start_year=start_year,
             end_year=end_year, start_month='01', variable='tos', ensemble=True, mode='hist')
-        hist.plot()
         hist = hist.__getitem__()
 
         hin = get_variable(cfg.hindcast_path, lead_year=lead_year, name=cfg.hind_name + str(start_year) + '-r', ensemble_members=cfg.ensemble_member, mod_year=cfg.hind_mod, start_year=start_year,
             end_year=end_year, start_month=cfg.start_month_hind, start_year_file=start_year, end_year_file=start_year + 10, variable='tos', ensemble=True)
         hind = hin.__getitem__()
-        hin.plot()
         time, lon, lat = hin.get_coords()    
 
         hist = hist[:, ::-1, :]
         hind = hind[:, ::-1, :]
         obs = obs[:, :, ::-1]
-        
+
         residual_dataset = residual(lead_year, start_year)
         residual_dataset.save_data(obs, hist, hind, time, lon, lat)
 
