@@ -25,6 +25,7 @@ ly.ly_series()
 threshold = 1
 HadIsst = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2015)
 HadIsst = HadIsst.__getitem__()
+HadIsst = HadIsst[:, ::-1, :]
 HadIsst_annual = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2015, mean='annual')
 HadIsst_annual = HadIsst_annual.__getitem__()
 
