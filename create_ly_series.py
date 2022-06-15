@@ -28,6 +28,8 @@ HadIsst = HadIsst.__getitem__()
 HadIsst = HadIsst[:, ::-1, :]
 HadIsst_annual = get_variable(path = cfg.observation_path, start_year = 1960, end_year = 2015, mean='annual')
 HadIsst_annual = HadIsst_annual.__getitem__()
+HadIsst_annual = HadIsst_annual[:, ::-1, :]
+
 
 decor = decorrelation_time(HadIsst_annual, del_t=8, threshold=threshold, name='HadIsst_annual')
 #dc, mask = decor.__getitem__()
@@ -57,6 +59,7 @@ Aviso_ssh = Aviso_ssh.__getitem__()
 Assi_ssh = get_variable(path=cfg.assi_path, name='_dcppA-assim_r', ensemble_members=cfg.ensemble_member, mod_year=cfg.ssh_mod, start_year=2000, end_year=2017,  start_month='01', start_year_file=1950, end_year_file=2017, variable='zos', ensemble=True, time_edit=True, mean='monthly')
 Assi_ssh = Assi_ssh.__getitem__()
 Aviso_ssh = Aviso_ssh[:, ::-1, :]
+Assi_ssh = Assi_ssh[:, ::-1, :]
 
 correlation_plot(Aviso_ssh, Assi_ssh, del_t=8, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 correlation_plot(Aviso_ssh, Assi_ssh, del_t=4, name_1='Aviso_ssh', name_2='Assimilation_ssh')
