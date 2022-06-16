@@ -67,7 +67,7 @@ class decorrelation_time(object):
         decor = np.array(decor)
         
         plt.figure(figsize=(8, 5))
-        plt.imshow(decor, cmap='coolwarm', vmin=0, vmax=10)
+        plt.imshow(decor, cmap='coolwarm', vmin=0, vmax=15)
         plt.xlabel('Longitudes')
         plt.ylabel('Latitudes')
         plt.title('Decorrelation time for ' + self.name)
