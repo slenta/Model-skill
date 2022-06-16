@@ -35,7 +35,7 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     
 
     plt.figure(figsize=(10, 5))
-    plt.imshow(corr, cmap='coolwarm')
+    plt.imshow(corr, cmap='coolwarm', vmin=-1, vmax=1)
     plt.colorbar()
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
