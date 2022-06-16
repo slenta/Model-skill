@@ -34,12 +34,12 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
 
     
 
-    plt.figure(figsize=(8, 5))
+    plt.figure(figsize=(10, 5))
     plt.imshow(corr, cmap='coolwarm')
     plt.colorbar()
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
-    plt.title('Correlation between {} and {}'.format(str(name_1), str(name_2)))
+    plt.title('Correlation between {} and {}: {} year mean'.format(str(name_1), str(name_2), str(del_t)))
     plt.savefig(cfg.tmp_path + 'plots/correlation_' + name_1 + '_' + name_2 + str(del_t) + '.pdf')
 
 #simple function to plot correlations between two variables

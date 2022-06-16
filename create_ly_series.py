@@ -8,6 +8,7 @@ from decorrelation_time import decorrelation_time
 from plots import correlation_plot
 from plots import bias_plot
 import matplotlib
+from corr_2d_ttest import corr_2d_ttest
 
 matplotlib.use('Agg')
 cfg.set_args()
@@ -37,19 +38,7 @@ decor.plot()
 decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=threshold, name='HadIsst_annual')
 dc, mask = decor.__getitem__()
 decor.plot()
-#decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
-#dc, mask = decor.__getitem__()
-#decor.plot()
-
-
-
-decor = decorrelation_time(HadIsst, del_t=8, threshold=threshold, name='HadIsst')
-dc, mask = decor.__getitem__()
-decor.plot()
-decor = decorrelation_time(HadIsst, del_t=4, threshold=threshold, name='HadIsst')
-dc, mask = decor.__getitem__()
-decor.plot()
-decor = decorrelation_time(HadIsst, del_t=1, threshold=threshold, name='HadIsst')
+decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
 dc, mask = decor.__getitem__()
 decor.plot()
 
