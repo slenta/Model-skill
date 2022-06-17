@@ -74,7 +74,7 @@ class decorrelation_time(object):
         decor = np.array(decor)
         significance = f.get('decor_mask')
         significance = np.array(significance)
-        print(significance)
+        print(significance, np.where(significance!=np.nan))
 
         plt.figure(figsize=(8, 5))
         plt.scatter(significance[0], significance[1], c='black', s=40, marker='o')
