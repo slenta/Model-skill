@@ -84,7 +84,7 @@ class decorrelation_time(object):
         fig, ax = plt.subplots()
         im = ax.imshow(decor, cmap='coolwarm', vmin=0, vmax=15)
         ax.scatter(significance[0], significance[1], color='black', marker='o', s=100, alpha=1)
-        ax.scatter(np.where(significance!=np.nan)[0], np.where(significance!=np.nan)[1], color='black', marker='o', s=100, alpha=1)
+        ax.scatter(np.where(significance!=np.nan)[1], np.where(significance!=np.nan)[0], color='black', marker='.', s=40, alpha=0.5)
         ax.set_xlabel('Longitudes')
         ax.set_ylabel('Latitudes')
         ax.set_title('Decorrelation time for ' + self.name)
