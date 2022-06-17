@@ -77,9 +77,6 @@ class decorrelation_time(object):
         decor = np.array(decor)
         significance = f.get('decor_mask')
         significance = np.array(significance)
-        print(significance, np.where(significance!=np.nan))
-        print(significance[0], significance[1])
-        test = np.ones_like(significance)
 
         fig, ax = plt.subplots()
         im = ax.imshow(decor, cmap='coolwarm', vmin=0, vmax=15)
