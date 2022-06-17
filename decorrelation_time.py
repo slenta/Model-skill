@@ -27,6 +27,9 @@ class decorrelation_time(object):
         #decorrelation time for each point in space
         decor = np.zeros((n[1], n[2]))
         significance = np.zeros((n[1], n[2]))
+
+        plt.imshow(var)
+        plt.show()
                 
         for i in range(n[1]):
             print(i)
