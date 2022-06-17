@@ -9,7 +9,7 @@ from plots import correlation_plot
 from plots import bias_plot
 import matplotlib
 
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 cfg.set_args()
 
 #plot correlation for a specific lead year
