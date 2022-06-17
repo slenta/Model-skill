@@ -80,7 +80,7 @@ class decorrelation_time(object):
         print(significance, np.where(significance!=np.nan))
 
         plt.figure(figsize=(8, 5))
-        plt.scatter(significance[0], significance[1], color='black', s=40, marker='o')
+        plt.plot(significance[0], significance[1], color='black', s=80, marker='o')
         plt.imshow(decor, cmap='coolwarm', vmin=0, vmax=15)
         plt.xlabel('Longitudes')
         plt.ylabel('Latitudes')
