@@ -1,3 +1,4 @@
+from signal import siginterrupt
 from rsa import sign
 from preprocessing import get_variable
 import numpy as np
@@ -73,6 +74,7 @@ class decorrelation_time(object):
         decor = np.array(decor)
         significance = f.get('decor_mask')
         significance = np.array(significance)
+        print(significance)
 
         plt.figure(figsize=(8, 5))
         plt.scatter(significance[0], significance[1], 'o', c='black', s=40)
