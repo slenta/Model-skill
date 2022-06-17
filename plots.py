@@ -32,11 +32,11 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     #        corr[j, k] = pearsonr(var1_mean, var2_mean)[0]
 
     corr, significance = corr_2d_ttest(var_1, var_2, options='ttest', nd=3)
-       
+    sig = np.where(significance==True)
 
     plt.figure(figsize=(10, 5))
     plt.imshow(corr, cmap='coolwarm', vmin=-1, vmax=1)
-    plt.scatter(significance, c='black', size=40)
+    plt.scatter(sig[1], sig[0], c='black', size=5, marker='.', alpha=0.4)
     plt.colorbar()
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
