@@ -54,7 +54,7 @@ class decorrelation_time(object):
                 dc_criteria = autocor[1]/np.e
                 print(dc_criteria, autocor)
                 
-                if dc_criteria == 0:
+                if dc_criteria == 0.0:
                     significance[i, j] = 2
                 
                 else:
