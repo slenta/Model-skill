@@ -22,7 +22,7 @@ cfg.set_args()
 
 #plot decorrelation time for HadISSTs
 #define threshold for decorrelation mask
-threshold = 3.5
+threshold = 2.5
 HadIsst = get_variable(path = cfg.observation_path, name='HadIsst', start_year = 1960, end_year = 2015)
 HadIsst = HadIsst.__getitem__()
 HadIsst = HadIsst[:, ::-1, :]
