@@ -1,3 +1,4 @@
+from rsa import sign
 from preprocessing import get_variable
 import numpy as np
 import matplotlib.pyplot as plt
@@ -25,6 +26,7 @@ class decorrelation_time(object):
                     
         #decorrelation time for each point in space
         decor = np.zeros((n[1], n[2]))
+        significance = np.zeros((n[1], n[2]))
                 
         for i in range(n[1]):
             print(i)
@@ -38,21 +40,20 @@ class decorrelation_time(object):
 
                 else:
                     var_mean = var[:, i, j]
-    
 
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))
                 autocor = np.nan_to_num(autocor, nan=0)
 
-
-
                 #calculate decorrelation time for each gridpoint
                 dc_criteria = autocor[1]/np.e
                 decor[i, j] = np.squeeze(np.where(autocor<dc_criteria))[0]
+                
+                #calculate durban watson significance ~ 2*(1-ac)
+                significance[i, j] = 2*(1 - autocor[decor[i, j]])
 
         
-        mask = np.where(decor <= self.threshold, np.nan, decor)
-        mask = np.where(mask > self.threshold, 1, mask)
+        mask = np.where(significance <= self.threshold, np.nan, 1)
         
         f = h5.File(cfg.tmp_path + 'decorrelation/decorrelation_time_' + self.name + '.hdf5', 'w')
         f.create_dataset('decorrelation_time', decor.shape, dtype = 'float32',data = decor)
