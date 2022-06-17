@@ -56,6 +56,9 @@ class decorrelation_time(object):
                     
                     #calculate durban watson significance ~ 2*(1-ac)
                     significance[i, j] = 2*(1 - autocor[int(decor[i, j])])
+                    
+                    if significance[i, j] >= self.threshold:
+                        print('True')
 
         
         mask = np.where(significance <= self.threshold, np.nan, 1)
@@ -77,8 +80,8 @@ class decorrelation_time(object):
         print(significance, np.where(significance!=np.nan))
 
         plt.figure(figsize=(8, 5))
+        plt.scatter(significance[0], significance[1], color='black', s=40, marker='o')
         plt.imshow(decor, cmap='coolwarm', vmin=0, vmax=15)
-        plt.scatter(significance[0], significance[1], c='black', s=40, marker='o')
         plt.xlabel('Longitudes')
         plt.ylabel('Latitudes')
         plt.title('Decorrelation time for ' + self.name)
