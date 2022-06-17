@@ -47,6 +47,7 @@ class decorrelation_time(object):
 
                 #calculate decorrelation time for each gridpoint
                 dc_criteria = autocor[1]/np.e
+                print(dc_criteria, autocor)
                 decor[i, j] = np.squeeze(np.where(autocor<dc_criteria))[0]
                 
                 #calculate durban watson significance ~ 2*(1-ac)
