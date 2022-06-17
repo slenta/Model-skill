@@ -27,9 +27,6 @@ class decorrelation_time(object):
         #decorrelation time for each point in space
         decor = np.zeros((n[1], n[2]))
         significance = np.zeros((n[1], n[2]))
-
-        plt.imshow(var[0])
-        plt.show()
                 
         for i in range(n[1]):
             print(i)
@@ -44,22 +41,17 @@ class decorrelation_time(object):
                 else:
                     var_mean = var[:, i, j]
 
-                print(var_mean)
-
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))
                 autocor = np.nan_to_num(autocor, nan=0)
 
                 #calculate decorrelation time for each gridpoint
                 dc_criteria = autocor[1]/np.e
-                print(dc_criteria, autocor)
                 
                 if dc_criteria == 0.0:
                     significance[i, j] = 2
-                
                 else:
                     decor[i, j] = np.squeeze(np.where(autocor<dc_criteria))[0]
-                    print(decor[i, j])
                     
                     #calculate durban watson significance ~ 2*(1-ac)
                     significance[i, j] = 2*(1 - autocor[int(decor[i, j])])
@@ -83,7 +75,7 @@ class decorrelation_time(object):
         significance = np.array(significance)
 
         plt.figure(figsize=(8, 5))
-        plt.scatter(significance, c='black', size=40)
+        plt.scatter(significance[0], significance[1], c='black', size=40)
         plt.imshow(decor, cmap='coolwarm', vmin=0, vmax=15)
         plt.xlabel('Longitudes')
         plt.ylabel('Latitudes')
