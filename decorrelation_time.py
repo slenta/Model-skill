@@ -49,6 +49,7 @@ class decorrelation_time(object):
                 dc_criteria = autocor[1]/np.e
                 print(dc_criteria, autocor)
                 decor[i, j] = np.squeeze(np.where(autocor<dc_criteria))[0]
+                print(decor[i, j])
                 
                 #calculate durban watson significance ~ 2*(1-ac)
                 significance[i, j] = 2*(1 - autocor[decor[i, j]])
