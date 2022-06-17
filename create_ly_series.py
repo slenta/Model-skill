@@ -34,12 +34,12 @@ HadIsst_annual = HadIsst_annual[:, ::-1, :]
 decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
 dc, mask = decor.__getitem__()
 decor.plot()
-#decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=threshold, name='HadIsst_annual')
-#dc, mask = decor.__getitem__()
-#decor.plot()
-#decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
-#dc, mask = decor.__getitem__()
-#decor.plot()
+decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=threshold, name='HadIsst_annual')
+dc, mask = decor.__getitem__()
+decor.plot()
+decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
+dc, mask = decor.__getitem__()
+decor.plot()
 
 #plot ssh bias and correlation
 Aviso_ssh = get_variable(path=cfg.tmp_path + 'Aviso_Ssh_full/Aviso_Ssh_full_2000_2018.nc', name='Aviso_ssh', start_year=2000, end_year=2017, variable='var', mean='monthly')
@@ -51,14 +51,14 @@ Assi_ssh = Assi_ssh[:, ::-1, :]
 
 correlation_plot(Aviso_ssh, Assi_ssh, del_t=8, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 correlation_plot(Aviso_ssh, Assi_ssh, del_t=4, name_1='Aviso_ssh', name_2='Assimilation_ssh')
-#correlation_plot(Aviso_ssh, Assi_ssh, del_t=1, name_1='Aviso_ssh', name_2='Assimilation_ssh')
-#bias_plot(Aviso_ssh, Assi_ssh, name_1='Aviso_ssh', name_2='Assimilation_ssh')
+correlation_plot(Aviso_ssh, Assi_ssh, del_t=1, name_1='Aviso_ssh', name_2='Assimilation_ssh')
+bias_plot(Aviso_ssh, Assi_ssh, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 
 #plot correlation between ocean heat content and ssts
-#IAP_Ohc = get_variable(path = cfg.ohc_path, name='IAP_Ohc', start_year=196100, end_year=201600, variable='heatcontent', time_edit=False)
-#IAP_Ohc = IAP_Ohc.__getitem__()
-#IAP_Ohc = IAP_Ohc[:, ::-1, :]
-#correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='HadIsst', name_2='IAP_Ohc')
-#correlation_plot(HadIsst, IAP_Ohc, del_t=4, name_1='HadIsst', name_2='IAP_Ohc')
-#correlation_plot(HadIsst, IAP_Ohc, del_t=1, name_1='HadIsst', name_2='IAP_Ohc')
+IAP_Ohc = get_variable(path = cfg.ohc_path, name='IAP_Ohc', start_year=196100, end_year=201600, variable='heatcontent', time_edit=False)
+IAP_Ohc = IAP_Ohc.__getitem__()
+IAP_Ohc = IAP_Ohc[:, ::-1, :]
+correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='HadIsst', name_2='IAP_Ohc')
+correlation_plot(HadIsst, IAP_Ohc, del_t=4, name_1='HadIsst', name_2='IAP_Ohc')
+correlation_plot(HadIsst, IAP_Ohc, del_t=1, name_1='HadIsst', name_2='IAP_Ohc')
 
