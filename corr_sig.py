@@ -8,7 +8,7 @@ from collections import namedtuple
 from scipy.stats import t as stu
 from scipy.stats import gaussian_kde
 import statsmodels.api as sm
-#  from statsmodels.tsa.stattools import acf
+from statsmodels.tsa.stattools import acf
 from sklearn import preprocessing
 
 SET = namedtuple("SET", "nsim method alpha")
@@ -74,12 +74,9 @@ def corr_ttest(x, y, alpha=0.05):
     """
     r = pearsonr(x, y)[0]
 
-    g1 = ar1_fit(x)
-    g2 = ar1_fit(y)
-
     # Have tested the acf function in statsmodels.tsa.stattools, the result is very close to the return from ARMA fit.
-    #  g1_acf = acf(x)[1]
-    #  g2_acf = acf(y)[1]
+    g1 = sm.tsa.acf(x)[1]
+    g2 = sm.tsa.acf(y)[1]
 
     N = np.size(x)
 

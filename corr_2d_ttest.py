@@ -1,14 +1,11 @@
 import numpy as np
-import copy
-import xarray as xr
-import pandas as pd
 from corr_sig import *
-from scipy import special
-from rpy2.robjects import FloatVector
-import rpy2.robjects as robjects
-r = robjects.r
 
-def corr_2d_ttest(field1,field2,lat,lon,options,nd):
+#from rpy2.robjects import FloatVector
+#import rpy2.robjects as robjects
+#r = robjects.r
+
+def corr_2d_ttest(field1,field2,options,nd):
     '''Calculate correlations over the time dimension for
        field1(time,lat,lon) and field2(time,lat,lon).
        The significant test considers autocorrelation and multiple test problem.
@@ -27,11 +24,16 @@ def corr_2d_ttest(field1,field2,lat,lon,options,nd):
         lonmedian: longitudes of gridcells which do not pass the significant test
         latmedian and lonmedian are correspondent with each other.'''
 
-    latt,lont=[],[]
-    latna,lonna=[],[]
-    nlat=lat.shape[0]
-    nlon=lon.shape[0]
+    #latt,lont=[],[]
+    #latna,lonna=[],[]
+    #nlat=lat.shape[0]
+    #nlon=lon.shape[0]
+    
+    nlat = field1.shape[1]
+    nlon = field1.shape[2]
+
     corr = np.zeros((nlat,nlon))
+    sign = np.zeros((nlat, nlon))
     corr[:]=np.NAN
     pval_med=[]
 
@@ -53,31 +55,24 @@ def corr_2d_ttest(field1,field2,lat,lon,options,nd):
                 corr[ilat,ilon] = rcorr
 
                 pval_med.append(pval)
-                latt.append(lat[ilat])
-                lont.append(lon[ilon])
-
-                if np.isnan(pval):
-                    latna.append(lat[ilat])
-                    lonna.append(lon[ilon])
+                
+                sign[ilat, ilon] = signif
+               
             else:
-                latna.append(lat[ilat])
-                lonna.append(lon[ilon])
+                sign[ilat, ilon] = False
 
     #start FDR procedure
-    pvalr_med = FloatVector(pval_med)
-    r.source("fdr.R")
-    sig_med = r.fdr(pvalr_med,method="original")
-    latmedian=latt[:]
-    lonmedian=lont[:]
+    #pvalr_med = FloatVector(pval_med)
+    #r.source("fdr.R")
+    #sig_med = r.fdr(pvalr_med,method="original")
+    #latmedian=latt[:]
+    #lonmedian=lont[:]
 
     #delete grids which are significant
-    if sig_med:
-        for isig in sorted(sig_med,reverse=True):
-            del latmedian[isig-1]
-            del lonmedian[isig-1]
+    #if sig_med:
+    #    for isig in sorted(sig_med,reverse=True):
+    #        del latmedian[isig-1]
+    #        del lonmedian[isig-1]
 
-    latmedian.extend(latna)
-    lonmedian.extend(lonna)
 
-    return corr,latmedian,lonmedian
-
+    return corr, sign

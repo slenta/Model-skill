@@ -4,38 +4,39 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import pearsonr
 import config as cfg
+from corr_2d_ttest import corr_2d_ttest
 
 #simple function to plot correlations between two variables
 def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     
-    n = var_1.shape
-    corr = np.zeros((n[1], n[2]))
-
-    print(var_1.shape, var_2.shape)
-
+    #n = var_1.shape
+    #corr = np.zeros((n[1], n[2]))
+    #
     #calculate correlation between both variables
-    for j in range(n[1]):
-        print(j)
-        for k in range(n[2]):
-            
-            #calculate running mean, if necessary
-            if del_t != 1:
-                var1_mean = np.zeros(n[0] - (del_t - 1))
-                var2_mean = np.zeros(n[0] - (del_t - 1))
-                for i in range(len(var1_mean)):
-                    var1_mean[i] = np.mean(var_1[i:i+del_t, j, k])
-                    var2_mean[i] = np.mean(var_2[i:i+del_t, j, k])
+    #for j in range(n[1]):
+    #    print(j)
+    #    for k in range(n[2]):
+    #        
+    #        #calculate running mean, if necessary
+    #        if del_t != 1:
+    #            var1_mean = np.zeros(n[0] - (del_t - 1))
+    #            var2_mean = np.zeros(n[0] - (del_t - 1))
+    #            for i in range(len(var1_mean)):
+    #                var1_mean[i] = np.mean(var_1[i:i+del_t, j, k])
+    #                var2_mean[i] = np.mean(var_2[i:i+del_t, j, k])
+    #
+    #        else:
+    #            var1_mean = var_1[:, j, k]
+    #            var2_mean = var_2[:, j, k]
+    #        
+    #        corr[j, k] = pearsonr(var1_mean, var2_mean)[0]
 
-            else:
-                var1_mean = var_1[:, j, k]
-                var2_mean = var_2[:, j, k]
-            
-            corr[j, k] = pearsonr(var1_mean, var2_mean)[0]
-
-    
+    corr, significance = corr_2d_ttest(var_1, var_2, options='ttest', nd=3)
+       
 
     plt.figure(figsize=(10, 5))
     plt.imshow(corr, cmap='coolwarm', vmin=-1, vmax=1)
+    plt.scatter(significance, c='black', size=40)
     plt.colorbar()
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
