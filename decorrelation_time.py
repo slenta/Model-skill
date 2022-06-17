@@ -41,6 +41,8 @@ class decorrelation_time(object):
                 else:
                     var_mean = var[:, i, j]
 
+                print(var_mean)
+
                 #calculate autocorrelation: autocorrelation[k] is correlation at lag k, throw out lag 0
                 autocor = sm.tsa.acf(var_mean, nlags=len(var_mean))
                 autocor = np.nan_to_num(autocor, nan=0)
