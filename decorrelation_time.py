@@ -68,11 +68,15 @@ class decorrelation_time(object):
         f = h5.File(cfg.tmp_path + 'decorrelation/decorrelation_time_' + self.name + '.hdf5', 'r')
         decor = f.get('decorrelation_time')
         decor = np.array(decor)
-        
+        significance = f.get('decor_mask')
+        significance = np.array(significance)
+
         plt.figure(figsize=(8, 5))
+        plt.scatter(significance, c='black', size=40)
         plt.imshow(decor, cmap='coolwarm', vmin=0, vmax=15)
         plt.xlabel('Longitudes')
         plt.ylabel('Latitudes')
         plt.title('Decorrelation time for ' + self.name)
         plt.colorbar(label='decorrelation time in years')
         plt.savefig(cfg.tmp_path + 'plots/decorrelation_time' + self.name + '.pdf')
+        plt.show()
