@@ -56,10 +56,6 @@ class decorrelation_time(object):
                     
                     #calculate durban watson significance ~ 2*(1-ac)
                     significance[i, j] = 2*(1 - autocor[int(decor[i, j])])
-                    
-                    if significance[i, j] >= self.threshold:
-                        print('True')
-
         
         mask = np.where(significance <= self.threshold, np.nan, 1)
         
