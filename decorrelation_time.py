@@ -79,9 +79,9 @@ class decorrelation_time(object):
         significance = np.array(significance)
         print(significance, np.where(significance!=np.nan))
 
-        plt.figure(figsize=(8, 5))
-        plt.scatter(significance[0], significance[1], color='black', marker='o', s=100)
-        plt.imshow(decor, cmap='coolwarm', vmin=0, vmax=15)
+        fig, ax = plt.subplots()
+        im = ax.imshow(decor, cmap='coolwarm', vmin=0, vmax=15)
+        ax.scatter(significance[0], significance[1], color='black', marker='o', s=100)
         plt.xlabel('Longitudes')
         plt.ylabel('Latitudes')
         plt.title('Decorrelation time for ' + self.name)
