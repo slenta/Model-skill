@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """A Python 3 version of corr_sig.m """
 
+from cmath import nan
 import numpy as np
 from scipy.stats import pearsonr
 from scipy.stats.mstats import gmean
@@ -85,16 +86,18 @@ def corr_ttest(x, y, alpha=0.05):
 
     Ne = gmean([Nex+Ney])
 
-    print(r, x, y, Ne)
+    if Ne != nan:
+        assert Ne >= 10, 'Too few effective d.o.f. to apply this method!'
 
-    assert Ne >= 10, 'Too few effective d.o.f. to apply this method!'
+        df = Ne - 2
+        t = np.abs(r) * np.sqrt(df/(1-r**2))
 
-    df = Ne - 2
-    t = np.abs(r) * np.sqrt(df/(1-r**2))
+        pval = 2 * stu.cdf(-np.abs(t), df)
 
-    pval = 2 * stu.cdf(-np.abs(t), df)
+        signif = pval <= alpha
 
-    signif = pval <= alpha
+    else:
+        signif = False
 
     if debug:
         print(r)
