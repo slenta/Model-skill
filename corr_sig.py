@@ -87,9 +87,9 @@ def corr_ttest(x, y, alpha=0.05):
     Ne = gmean([Nex+Ney])
 
     if Ne != nan:
-        
+
         print(Ne)
-        assert Ne >= 10, 'Too few effective d.o.f. to apply this method!'
+        #assert Ne >= 10, 'Too few effective d.o.f. to apply this method!'
 
         df = Ne - 2
         t = np.abs(r) * np.sqrt(df/(1-r**2))
