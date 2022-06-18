@@ -31,15 +31,15 @@ HadIsst_annual = HadIsst_annual.__getitem__()
 HadIsst_annual = HadIsst_annual[:, ::-1, :]
 
 
-decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
-dc, mask = decor.__getitem__()
-decor.plot()
-decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=threshold, name='HadIsst_annual')
-dc, mask = decor.__getitem__()
-decor.plot()
-decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
-dc, mask = decor.__getitem__()
-decor.plot()
+#decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
+#dc, mask = decor.__getitem__()
+#decor.plot()
+#decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=threshold, name='HadIsst_annual')
+#dc, mask = decor.__getitem__()
+#decor.plot()
+#decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
+#dc, mask = decor.__getitem__()
+#decor.plot()
 
 #plot ssh bias and correlation
 Aviso_ssh = get_variable(path=cfg.tmp_path + 'Aviso_Ssh_full/Aviso_Ssh_full_2000_2018.nc', name='Aviso_ssh', start_year=2000, end_year=2017, variable='var', mean='monthly')
