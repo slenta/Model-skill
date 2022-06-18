@@ -89,7 +89,6 @@ def corr_ttest(x, y, alpha=0.05):
         Ney = N * (1-g2) / (1+g2)
 
         Ne = gmean([Nex+Ney])
-        print(Ne)
         #assert Ne >= 10, 'Too few effective d.o.f. to apply this method!'
 
         df = Ne - 2
