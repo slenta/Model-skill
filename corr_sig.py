@@ -45,11 +45,11 @@ def corr_sig(x, y, options=options):
 
     assert np.size(x) == np.size(y), 'The size of X and the size of Y should be the same!'
 
-    if options == 'ttest':
+    if options.method == 'ttest':
         (r, signif, p) = corr_ttest(x, y, alpha=options.alpha)
-    elif options == 'isopersistent':
+    elif options.method == 'isopersistent':
         (r, signif, p) = corr_isopersist(x, y, alpha=options.alpha, nsim=options.nsim)
-    elif options == 'isospectral':
+    elif options.method == 'isospectral':
         (r, signif, p) = corr_isospec(x, y, alpha=options.alpha, nsim=options.nsim)
 
     return r, signif, p

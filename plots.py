@@ -5,6 +5,8 @@ import numpy as np
 from scipy.stats import pearsonr
 import config as cfg
 from corr_2d_ttest import corr_2d_ttest
+from collections import namedtuple
+
 
 #simple function to plot correlations between two variables
 def correlation_plot(var_1, var_2, del_t, name_1, name_2):
@@ -29,9 +31,10 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     #            var1_mean = var_1[:, j, k]
     #            var2_mean = var_2[:, j, k]
     #        
-    #        corr[j, k] = pearsonr(var1_mean, var2_mean)[0]
+    #        corr[j, k] = pearsonr(var1_mean, var2_mean)[0] 
 
-    corr, significance = corr_2d_ttest(var_1, var_2, options='ttest', nd=3)
+    SET = namedtuple("SET", "nsim method alpha")
+    corr, significance = corr_2d_ttest(var_1, var_2, options = SET(nsim=1000, method='ttest', alpha=0.05), nd=3)
     sig = np.where(significance==True)
 
     plt.figure(figsize=(10, 5))
