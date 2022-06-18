@@ -79,15 +79,16 @@ def corr_ttest(x, y, alpha=0.05):
     g1 = sm.tsa.acf(x)[1]
     g2 = sm.tsa.acf(y)[1]
 
-    N = np.size(x)
+    if np.logical_or(g1==nan, g2==nan):
+        signif = False
 
-    Nex = N * (1-g1) / (1+g1)
-    Ney = N * (1-g2) / (1+g2)
+    else:
+        N = np.size(x)
 
-    Ne = gmean([Nex+Ney])
+        Nex = N * (1-g1) / (1+g1)
+        Ney = N * (1-g2) / (1+g2)
 
-    if Ne != nan:
-
+        Ne = gmean([Nex+Ney])
         print(Ne)
         #assert Ne >= 10, 'Too few effective d.o.f. to apply this method!'
 
@@ -97,9 +98,6 @@ def corr_ttest(x, y, alpha=0.05):
         pval = 2 * stu.cdf(-np.abs(t), df)
 
         signif = pval <= alpha
-
-    else:
-        signif = False
 
     if debug:
         print(r)
