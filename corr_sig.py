@@ -85,8 +85,7 @@ def corr_ttest(x, y, alpha=0.05):
 
     Ne = gmean([Nex+Ney])
 
-    if Ne == np.NaN:
-        print(r, x, y)
+    print(r, x, y)
 
     assert Ne >= 10, 'Too few effective d.o.f. to apply this method!'
 
