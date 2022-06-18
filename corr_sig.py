@@ -85,7 +85,7 @@ def corr_ttest(x, y, alpha=0.05):
 
     Ne = gmean([Nex+Ney])
 
-    if Ne == np.nan:
+    if Ne == np.NaN:
         print(r, x, y)
 
     assert Ne >= 10, 'Too few effective d.o.f. to apply this method!'
@@ -96,7 +96,6 @@ def corr_ttest(x, y, alpha=0.05):
     pval = 2 * stu.cdf(-np.abs(t), df)
 
     signif = pval <= alpha
-    print(signif)
 
     if debug:
         print(r)
