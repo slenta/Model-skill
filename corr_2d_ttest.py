@@ -55,9 +55,11 @@ def corr_2d_ttest(field1,field2,options,nd):
                 corr[ilat,ilon] = rcorr
 
                 pval_med.append(pval)
-                
                 sign[ilat, ilon] = signif
-               
+
+                if signif == np.nan:
+                    sign[ilat, ilon] = False 
+
             else:
                 sign[ilat, ilon] = False
 
