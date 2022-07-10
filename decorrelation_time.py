@@ -50,14 +50,14 @@ class decorrelation_time(object):
                 dc_criteria = autocor[1]/np.e
                 
                 if dc_criteria == 0.0:
-                    significance[i, j] = 2
+                    significance[i, j] = 0
                 else:
                     decor[i, j] = np.squeeze(np.where(autocor<dc_criteria))[0]
                     
                     #calculate durban watson significance ~ 2*(1-ac)
-                    significance[i, j] = 2*(1 - autocor[int(decor[i, j])])
+                    significance[i, j] = decor[i, j]
         
-        mask = np.where(significance <= self.threshold, np.nan, 1)
+        mask = np.where(significance >= self.threshold, np.nan, 1)
         
         f = h5.File(cfg.tmp_path + 'decorrelation/decorrelation_time_' + self.name + '.hdf5', 'w')
         f.create_dataset('decorrelation_time', decor.shape, dtype = 'float32',data = decor)
