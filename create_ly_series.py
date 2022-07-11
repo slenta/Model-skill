@@ -27,7 +27,7 @@ cfg.set_args()
 #define start and end years, threshold for decorrelation mask
 start_year = 1960
 end_year = 2015
-threshold = 2
+threshold = 3
 
 #normal monthly hadissts
 HadIsst = get_variable(cfg.observation_path, name='HadIsst', start_year=start_year, end_year=end_year)
