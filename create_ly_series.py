@@ -57,13 +57,13 @@ decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='H
 dc, mask = decor.__getitem__()
 decor.plot()
 
-decor = decorrelation_time(HadIsst_res, del_t=1, threshold=threshold, name='HadIsst_annual')
+decor = decorrelation_time(HadIsst_res, del_t=1, threshold=threshold, name='HadIsst_annual_res')
 dc, mask_decor_1 = decor.__getitem__()
 decor.plot()
-decor = decorrelation_time(HadIsst_res, del_t=4, threshold=threshold, name='HadIsst_annual')
+decor = decorrelation_time(HadIsst_res, del_t=4, threshold=threshold, name='HadIsst_annual_res')
 dc, mask_decor_4 = decor.__getitem__()
 decor.plot()
-decor = decorrelation_time(HadIsst_res, del_t=1, threshold=threshold, name='HadIsst_annual')
+decor = decorrelation_time(HadIsst_res, del_t=1, threshold=threshold, name='HadIsst_annual_res')
 dc, mask_decor_8 = decor.__getitem__()
 decor.plot()
 
