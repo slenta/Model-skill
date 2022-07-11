@@ -191,7 +191,8 @@ class ensemble_means(object):
 
         if self.mean == 'monthly':
             ds = ds.resample(time='1M').mean()
-
+        elif self.mean == 'annual':
+            ds = ds.resample(time='1Y').mean()
 
         #select wanted spatial frame
         ds = ds.sel(lon = slice(cfg.lonlats[0], cfg.lonlats[1]))
@@ -308,8 +309,8 @@ class get_variable(object):
             if self.mean == 'annual':
                 ds = ds.resample(time='1Y').mean()
 
-            var = ds[self.variable]
-            var = np.array(var)
+        var = ds[self.variable]
+        var = np.array(var)
 
         #get out all NaNs
         np.nan_to_num(var, copy=False, nan=0.1)

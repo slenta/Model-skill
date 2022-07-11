@@ -44,7 +44,6 @@ HadIsst_annual = HadIsst_annual.__getitem__()
 
 #create residual observation timeseries
 residual_dataset = residual(lead_year=1, start_year=start_year)
-print(len(HadIsst), len(hist))
 HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist)
 
 #plot residual and normal annual decorrelation times
