@@ -51,6 +51,8 @@ class decorrelation_time(object):
                 
                 if dc_criteria == 0.0:
                     decor[i, j] = 0
+                elif dc_criteria == np.nan:
+                    decor[i, j] = 0
                 else:
                     decor[i, j] = np.squeeze(np.where(autocor<dc_criteria))[0]
                     
