@@ -16,12 +16,12 @@ matplotlib.use('Agg')
 cfg.set_args()
 
 #plot correlation for a specific lead year
-lys = calculate_leadyear(cfg.start_year, cfg.end_year, lead_year='2 9')
-lys.plot()
+#lys = calculate_leadyear(cfg.start_year, cfg.end_year, lead_year='2 9')
+#lys.plot()
 
 #plot leadyear correlation for all lead years
-ly = ly_series(cfg.start_year, cfg.end_year)
-ly.ly_series()
+#ly = ly_series(cfg.start_year, cfg.end_year)
+#ly.ly_series()
 
 #plot decorrelation time for HadISSTs
 #define start and end years, threshold for decorrelation mask
@@ -44,6 +44,7 @@ HadIsst_annual = HadIsst_annual.__getitem__()
 
 #create residual observation timeseries
 residual_dataset = residual(lead_year=1, start_year=start_year)
+print(len(HadIsst), len(hist))
 HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist)
 
 #plot residual and normal annual decorrelation times
