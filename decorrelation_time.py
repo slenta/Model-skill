@@ -81,5 +81,5 @@ class decorrelation_time(object):
         ax.set_ylabel('Latitudes')
         ax.set_title('Decorrelation time for ' + self.name)
         plt.colorbar(im, label='decorrelation time in years')
-        plt.savefig(cfg.tmp_path + 'plots/decorrelation_time' + self.name + '.pdf')
+        plt.savefig(cfg.tmp_path + 'plots/decorrelation_time_' + self.name + '.pdf')
         plt.show()
