@@ -13,7 +13,7 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     
     SET = namedtuple("SET", "nsim method alpha")
     corr, significance = corr_2d_ttest(var_1, var_2, options = SET(nsim=1000, method='ttest', alpha=0.01), nd=3)
-    sig = np.where(significance==True)
+    sig = np.where(significance==True, 1, np.nan)
 
     plt.figure(figsize=(10, 5))
     plt.scatter(sig[1], sig[0], c='black', s=5, marker='.', alpha=0.4)

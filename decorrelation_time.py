@@ -57,7 +57,7 @@ class decorrelation_time(object):
                     #calculate durban watson significance ~ 2*(1-ac)
                     significance[i, j] = decor[i, j]
         
-        mask = np.where(significance >= self.threshold, np.nan, 1)
+        mask = np.where(significance >= self.threshold, 1, np.nan)
         
         f = h5.File(cfg.tmp_path + 'decorrelation/decorrelation_time_' + self.name + '.hdf5', 'w')
         f.create_dataset('decorrelation_time', decor.shape, dtype = 'float32',data = decor)
