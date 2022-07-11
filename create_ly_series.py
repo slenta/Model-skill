@@ -48,23 +48,23 @@ HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist)
 
 #plot residual and normal annual decorrelation times
 decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
-dc, mask = decor.__getitem__()
+dc, mask_decor_1 = decor.__getitem__()
 decor.plot()
 decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=threshold, name='HadIsst_annual')
-dc, mask = decor.__getitem__()
+dc, mask_decor_4 = decor.__getitem__()
 decor.plot()
 decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
-dc, mask = decor.__getitem__()
+dc, mask_decor_8 = decor.__getitem__()
 decor.plot()
 
 decor = decorrelation_time(HadIsst_res, del_t=1, threshold=threshold, name='HadIsst_annual_res')
-dc, mask_decor_1 = decor.__getitem__()
+dc, mask_decor_1_res = decor.__getitem__()
 decor.plot()
 decor = decorrelation_time(HadIsst_res, del_t=4, threshold=threshold, name='HadIsst_annual_res')
-dc, mask_decor_4 = decor.__getitem__()
+dc, mask_decor_4_res = decor.__getitem__()
 decor.plot()
 decor = decorrelation_time(HadIsst_res, del_t=1, threshold=threshold, name='HadIsst_annual_res')
-dc, mask_decor_8 = decor.__getitem__()
+dc, mask_decor_8_res = decor.__getitem__()
 decor.plot()
 
 
@@ -90,11 +90,18 @@ final_mask_8 = mask_decor_8 * mask_ohc_8 * mask_ssh_8
 final_mask_4 = mask_decor_4 * mask_ohc_4 * mask_ssh_4
 final_mask_1 = mask_decor_1 * mask_ohc_1 * mask_ssh_1
 
+final_mask_8_res = mask_decor_8_res * mask_ohc_8 * mask_ssh_8
+final_mask_4_res = mask_decor_4_res * mask_ohc_4 * mask_ssh_4
+final_mask_1_res = mask_decor_1_res * mask_ohc_1 * mask_ssh_1
+
 f4 = h5.File(cfg.tmp_path + 'correlation/correlation' + str(cfg.start_year) + '_' + str(cfg.end_year) + '_' + str(12) + '.hdf5', 'r')
 f8 = h5.File(cfg.tmp_path + 'correlation/correlation' + str(cfg.start_year) + '_' + str(cfg.end_year) + '_' + str(20) + '.hdf5', 'r')
 res_hind_4 = f4.get('res_hind_corr')
 res_hind_8 = f8.get('res_hind_corr')
 
+
+plot_variable_mask(res_hind_4, final_mask_4_res, 'Residual_res_hindcast_leadyear_2-5')
+plot_variable_mask(res_hind_8, final_mask_8_res, 'Residual_res_hindcast_leadyear_2-9')
 
 plot_variable_mask(res_hind_4, final_mask_4, 'Residual_hindcast_leadyear_2-5')
 plot_variable_mask(res_hind_8, final_mask_8, 'Residual_hindcast_leadyear_2-9')
