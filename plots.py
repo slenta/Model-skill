@@ -13,10 +13,12 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     
     SET = namedtuple("SET", "nsim method alpha")
     corr, significance = corr_2d_ttest(var_1, var_2, options = SET(nsim=1000, method='ttest', alpha=0.01), nd=3)
-    sig = np.where(significance==True, 1, np.nan)
+    sig = np.where(significance==True)
+
+    print(sig)
 
     plt.figure(figsize=(10, 5))
-    plt.scatter(sig[1], sig[0], c='black', s=5, marker='.', alpha=0.4)
+    plt.scatter(sig[1], sig[0], c='black', s=0.9, marker='.', alpha=0.2)
     plt.imshow(corr, cmap='coolwarm', vmin=-1, vmax=1)
     plt.colorbar()
     plt.xlabel('Longitudes')
@@ -58,7 +60,7 @@ def plot_variable_mask(var, mask, name):
     sig = np.where(mask==True)
 
     plt.figure(figsize=(10, 5))
-    plt.scatter(sig[1], sig[0], c='black', s=3, marker='.', alpha=0.2)
+    plt.scatter(sig[1], sig[0], c='black', s=0.9, marker='.', alpha=0.2)
     plt.imshow(var, cmap='coolwarm', vmin=-1, vmax=1)
     plt.colorbar()
     plt.xlabel('Longitudes')

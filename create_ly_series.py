@@ -11,6 +11,8 @@ from plots import bias_plot
 from residuals import residual
 import matplotlib
 import h5py as h5
+import numpy as np
+import matplotlib.pyplot as plt
 
 matplotlib.use('Agg')
 cfg.set_args()
@@ -32,6 +34,12 @@ end_year = 2015
 HadIsst = get_variable(cfg.observation_path, name='HadIsst', start_year=start_year, end_year=end_year)
 HadIsst = HadIsst.__getitem__()
 
+#save continent mask
+continent_mask = np.where(HadIsst[0]==0.1, np.nan, 1)
+f = h5.File('tmp/continent_mask.hdf5', 'w')
+f.create_dataset('contintent_mask', continent_mask.shape, dtype = 'float32',data = continent_mask)
+f.close()
+
 #historical model run, annual mean
 hist = get_variable(cfg.historical_path, name=cfg.hist_name, ensemble_members=cfg.ensemble_member, start_year=start_year,
     end_year=end_year, start_month='01', variable='tos', ensemble=True, mean='annual', mode='hist')
@@ -43,7 +51,8 @@ HadIsst_annual = HadIsst_annual.__getitem__()
 
 #create residual observation timeseries
 residual_dataset = residual(lead_year=1, start_year=start_year)
-HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist)
+HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist) * continent_mask
+
 
 #plot residual and normal annual decorrelation times
 decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=2, name='HadIsst_annual')
@@ -102,8 +111,8 @@ res_hind_1 = f1.get('res_hind_corr')
 
 plot_variable_mask(res_hind_1, final_mask_1_res, 'Residual_res_hindcast_leadyear_1')
 plot_variable_mask(res_hind_4, final_mask_4_res, 'Residual_res_hindcast_leadyear_2-5')
-plot_variable_mask(res_hind_8, final_mask_8_res, 'Residual_res_hindcast_leadyear_2-9')
+#plot_variable_mask(res_hind_8, final_mask_8_res, 'Residual_res_hindcast_leadyear_2-9')
 
-plot_variable_mask(res_hind_1, final_mask_1, 'Residual_res_hindcast_leadyear_1')
+plot_variable_mask(res_hind_1, final_mask_1, 'Residual_hindcast_leadyear_1')
 plot_variable_mask(res_hind_4, final_mask_4, 'Residual_hindcast_leadyear_2-5')
-plot_variable_mask(res_hind_8, final_mask_8, 'Residual_hindcast_leadyear_2-9')
+#plot_variable_mask(res_hind_8, final_mask_8, 'Residual_hindcast_leadyear_2-9')
