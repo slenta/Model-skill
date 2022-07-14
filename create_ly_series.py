@@ -102,8 +102,8 @@ res_hind_1 = f1.get('res_hind_corr')
 
 plot_variable_mask(res_hind_1, final_mask_1_res, 'Residual_res_hindcast_leadyear_1')
 plot_variable_mask(res_hind_4, final_mask_4_res, 'Residual_res_hindcast_leadyear_2-5')
-#plot_variable_mask(res_hind_8, final_mask_8_res, 'Residual_res_hindcast_leadyear_2-9')
+plot_variable_mask(res_hind_8, final_mask_8_res, 'Residual_res_hindcast_leadyear_2-9')
 
 plot_variable_mask(res_hind_1, final_mask_1, 'Residual_res_hindcast_leadyear_1')
 plot_variable_mask(res_hind_4, final_mask_4, 'Residual_hindcast_leadyear_2-5')
-#plot_variable_mask(res_hind_8, final_mask_8, 'Residual_hindcast_leadyear_2-9')
+plot_variable_mask(res_hind_8, final_mask_8, 'Residual_hindcast_leadyear_2-9')
