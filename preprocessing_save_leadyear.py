@@ -12,8 +12,8 @@ tempfile.tempdir ='/mnt/lustre02/work/uo1075/u301617/tmp'
 cfg.set_args()
 
 #concatenate and save historical simulations in a single file
-#concate = concat_hist(cfg.hist_start_years, cfg.hist_end_years, cfg.ensemble_member, cfg.scenario_path, cfg.scenario)
-#concate.concat()
+concate = concat_hist(cfg.hist_start_years, cfg.hist_end_years, cfg.ensemble_member, cfg.scenario_path, cfg.scenario)
+concate.concat()
 
 #concatenate and save aviro data
 #first concatenate daily data to monthly and save at tmp

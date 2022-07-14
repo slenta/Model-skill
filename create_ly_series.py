@@ -27,7 +27,6 @@ cfg.set_args()
 #define start and end years, threshold for decorrelation mask
 start_year = 1960
 end_year = 2015
-threshold = 3
 
 #normal monthly hadissts
 HadIsst = get_variable(cfg.observation_path, name='HadIsst', start_year=start_year, end_year=end_year)
@@ -47,25 +46,25 @@ residual_dataset = residual(lead_year=1, start_year=start_year)
 HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist)
 
 #plot residual and normal annual decorrelation times
-decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=threshold, name='HadIsst_annual')
+decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=2, name='HadIsst_annual')
 dc, mask_decor_1 = decor.__getitem__()
 decor.plot()
-decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=threshold, name='HadIsst_annual')
+decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=4, name='HadIsst_annual')
 dc, mask_decor_4 = decor.__getitem__()
 decor.plot()
-decor = decorrelation_time(HadIsst_annual, del_t=8, threshold=threshold, name='HadIsst_annual')
-dc, mask_decor_8 = decor.__getitem__()
-decor.plot()
+#decor = decorrelation_time(HadIsst_annual, del_t=8, threshold=threshold, name='HadIsst_annual')
+#dc, mask_decor_8 = decor.__getitem__()
+#decor.plot()
 
-decor = decorrelation_time(HadIsst_res, del_t=1, threshold=threshold, name='HadIsst_annual_res')
+decor = decorrelation_time(HadIsst_res, del_t=1, threshold=2, name='HadIsst_annual_res')
 dc, mask_decor_1_res = decor.__getitem__()
 decor.plot()
-decor = decorrelation_time(HadIsst_res, del_t=4, threshold=threshold, name='HadIsst_annual_res')
+decor = decorrelation_time(HadIsst_res, del_t=4, threshold=4, name='HadIsst_annual_res')
 dc, mask_decor_4_res = decor.__getitem__()
 decor.plot()
-decor = decorrelation_time(HadIsst_res, del_t=8, threshold=threshold, name='HadIsst_annual_res')
-dc, mask_decor_8_res = decor.__getitem__()
-decor.plot()
+#decor = decorrelation_time(HadIsst_res, del_t=8, threshold=threshold, name='HadIsst_annual_res')
+#dc, mask_decor_8_res = decor.__getitem__()
+#decor.plot()
 
 
 #plot ssh bias and correlation
@@ -86,22 +85,25 @@ mask_ohc_8 = correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='Residual_HadIss
 mask_ohc_4 = correlation_plot(HadIsst, IAP_Ohc, del_t=4, name_1='Residual_HadIsst', name_2='IAP_Ohc')
 mask_ohc_1 = correlation_plot(HadIsst, IAP_Ohc, del_t=1, name_1='Residual_HadIsst', name_2='IAP_Ohc')
 
-final_mask_8 = mask_decor_8 * mask_ohc_8 * mask_ssh_8
+#final_mask_8 = mask_decor_8 * mask_ohc_8 * mask_ssh_8
 final_mask_4 = mask_decor_4 * mask_ohc_4 * mask_ssh_4
 final_mask_1 = mask_decor_1 * mask_ohc_1 * mask_ssh_1
 
-final_mask_8_res = mask_decor_8_res * mask_ohc_8 * mask_ssh_8
+#final_mask_8_res = mask_decor_8_res * mask_ohc_8 * mask_ssh_8
 final_mask_4_res = mask_decor_4_res * mask_ohc_4 * mask_ssh_4
 final_mask_1_res = mask_decor_1_res * mask_ohc_1 * mask_ssh_1
 
 f4 = h5.File(cfg.tmp_path + 'correlation/correlation' + str(cfg.start_year) + '_' + str(cfg.end_year) + '_' + str(12) + '.hdf5', 'r')
 f8 = h5.File(cfg.tmp_path + 'correlation/correlation' + str(cfg.start_year) + '_' + str(cfg.end_year) + '_' + str(20) + '.hdf5', 'r')
+f1 = h5.File(cfg.tmp_path + 'correlation/correlation' + str(cfg.start_year) + '_' + str(cfg.end_year) + '_' + str(1) + '.hdf5', 'r')
 res_hind_4 = f4.get('res_hind_corr')
 res_hind_8 = f8.get('res_hind_corr')
+res_hind_1 = f1.get('res_hind_corr')
 
-
+plot_variable_mask(res_hind_1, final_mask_1_res, 'Residual_res_hindcast_leadyear_1')
 plot_variable_mask(res_hind_4, final_mask_4_res, 'Residual_res_hindcast_leadyear_2-5')
-plot_variable_mask(res_hind_8, final_mask_8_res, 'Residual_res_hindcast_leadyear_2-9')
+#plot_variable_mask(res_hind_8, final_mask_8_res, 'Residual_res_hindcast_leadyear_2-9')
 
+plot_variable_mask(res_hind_1, final_mask_1, 'Residual_res_hindcast_leadyear_1')
 plot_variable_mask(res_hind_4, final_mask_4, 'Residual_hindcast_leadyear_2-5')
-plot_variable_mask(res_hind_8, final_mask_8, 'Residual_hindcast_leadyear_2-9')
+#plot_variable_mask(res_hind_8, final_mask_8, 'Residual_hindcast_leadyear_2-9')

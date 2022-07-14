@@ -57,7 +57,7 @@ class decorrelation_time(object):
                     decor[i, j] = np.squeeze(np.where(autocor<dc_criteria))[0]
                     
                     #calculate durban watson significance ~ 2*(1-ac)
-                    #significance[i, j] = decor[i, j]
+                    #significance[i, j] = 2 * decor[i, j]
 
         mask = np.where(decor >= self.threshold, True, False)
         

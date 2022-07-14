@@ -58,7 +58,7 @@ def plot_variable_mask(var, mask, name):
     sig = np.where(mask==True)
 
     plt.figure(figsize=(10, 5))
-    plt.scatter(sig[1], sig[0], c='black', s=5, marker='.', alpha=0.4)
+    plt.scatter(sig[1], sig[0], c='black', s=3, marker='.', alpha=0.2)
     plt.imshow(var, cmap='coolwarm', vmin=-1, vmax=1)
     plt.colorbar()
     plt.xlabel('Longitudes')
