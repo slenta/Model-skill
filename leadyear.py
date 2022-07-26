@@ -44,7 +44,7 @@ class calculate_leadyear(object):
             end_year=end_year, start_month='01', variable='tos', ensemble=True, mode='hist')
         hist = hist.__getitem__()
 
-        hin = get_variable(cfg.hindcast_path, lead_year=lead_year, name=cfg.hind_name + str(start_year) + '-r', ensemble_members=cfg.ensemble_member, mod_year=cfg.hind_mod, start_year=start_year,
+        hin = get_variable(cfg.hindcast_path, lead_year=lead_year, name=cfg.hind_name, ensemble_members=cfg.ensemble_member, mod_year=cfg.hind_mod, start_year=start_year,
             end_year=end_year, start_month=cfg.start_month_hind, start_year_file=start_year, end_year_file=start_year + 10, variable='tos', ensemble=True)
         hind = hin.__getitem__()
         time, lon, lat = hin.get_coords()    
@@ -118,7 +118,7 @@ class calculate_leadyear(object):
         plt.imshow(res_hind_corr, vmin=-1, vmax=1, cmap='coolwarm')
         plt.colorbar()
         plt.title('Residual Hindcast')
-        plt.savefig(cfg.tmp_path + 'plots/example_corr_' + str(self.lead_year) + '.pdf')
+        plt.savefig(cfg.plot_path + 'example_corr_' + str(self.lead_year) + '.pdf')
         plt.show()
     
     def save_lead_corr(self):
@@ -197,5 +197,5 @@ class ly_series(object):
         ax.grid()
         fig.suptitle('Hindcast Correlation by Lead Year: {} -- {}'.format(str(cfg.start_year), str(cfg.end_year)))
         plt.legend()
-        plt.savefig('{}plots/leadyear_timeseries_,{}_{}.pdf'.format(cfg.tmp_path, str(cfg.start_year), str(cfg.end_year)))
+        plt.savefig('{}leadyear_timeseries_{}_{}.pdf'.format(cfg.plot_path, str(cfg.start_year), str(cfg.end_year)))
         plt.show()

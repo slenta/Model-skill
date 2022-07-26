@@ -37,14 +37,18 @@ class concat_hist(object):
 
         if start_year == 2015:
             if ensemble_member <= 3:
-                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20190627/tos' + cfg.model_specifics + '_' + self.scenario + '_r'
+                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20190627/tos_Omon_' + cfg.model_specifics + '_' + self.scenario + '_r'
 
             else:
-                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20200623/tos' + cfg.model_specifics + '_' + self.scenario + '_r'
+                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20200623/tos_Omon_' + cfg.model_specifics + '_' + self.scenario + '_r'
                 yearly_specifics_hist = str(ensemble_member) + 'i1p1f1_gn_' + str(start_year) + '01-' + str(2039) + '12.nc'
 
-        else:    
-            his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20181212/tos' + cfg.model_specifics + '_historical_r'
+        else:
+            if ensemble_member <= 10:
+                his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20181212/tos_Omon_' + cfg.model_specifics + '_historical_r'
+
+            else: 
+                his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20200519/tos_Omon_' + cfg.model_specifics + '_historical_r'
 
         path = his_path + yearly_specifics_hist
 
@@ -115,7 +119,7 @@ class concat(object):
 
     def concat(self):
 
-        #concatenate the different variables and save in a new file
+        #concatenate the differe/pool/data/CMIP6/data/DCPP/MIROC/MIROC6/dcppA-hindcast/nt variables and save in a new file
         paths = self.get_paths()
 
         print(self.path)
@@ -207,8 +211,9 @@ class ensemble_means(object):
         return var
     
     def get_paths(self, ensemble_member):
-
-        yearly_specifics = self.variable + '_Omon_' + cfg.model_specifics + self.name + 's' + str(self.start_year_file) + '-r' + str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + self.start_month + '-' + str(self.end_year_file) + '12.nc'
+        
+        print(self.start_year_file, self.name, ensemble_member)
+        yearly_specifics = self.variable + '_Omon_' + cfg.model_specifics + self.name + str(self.start_year_file) + '-r' + str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + self.start_month + '-' + str(self.end_year_file) + '12.nc'
         path = self.path + str(self.start_year_file) + '-r' + str(ensemble_member) + 'i1p1f1/Omon/' + self.variable + '/gn/' + self.mod_year
 
         path = path + yearly_specifics

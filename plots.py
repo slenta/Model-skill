@@ -22,7 +22,7 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
     plt.title('Correlation between {} and {}: {} year mean'.format(str(name_1), str(name_2), str(del_t)))
-    plt.savefig(cfg.tmp_path + 'plots/correlation_' + name_1 + '_' + name_2 + str(del_t) + '.pdf')
+    plt.savefig(cfg.plot_path + 'correlation_' + name_1 + '_' + name_2 + str(del_t) + '.pdf')
     plt.show()
 
     return significance
@@ -49,7 +49,7 @@ def bias_plot(var_1, var_2, name_1, name_2):
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
     plt.title('Bias: {} - {}'.format(str(name_1), str(name_2)))
-    plt.savefig(cfg.tmp_path + 'plots/bias_' + name_1 + '_' + name_2 + '.pdf')
+    plt.savefig(cfg.plot_path + 'bias_' + name_1 + '_' + name_2 + '.pdf')
 
 
 def plot_variable_mask(var, mask, name):
@@ -63,5 +63,5 @@ def plot_variable_mask(var, mask, name):
     plt.xlabel('Longitudes')
     plt.ylabel('Latitudes')
     plt.title(name)
-    plt.savefig(cfg.tmp_path + 'plots/variable_mask_' + name + '.pdf')
+    plt.savefig(cfg.plot_path + 'variable_mask_' + name + '.pdf')
     plt.show()
