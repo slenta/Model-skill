@@ -36,19 +36,19 @@ class concat_hist(object):
         yearly_specifics_hist = str(ensemble_member) + 'i1p1f1_gn_' + str(start_year) + '01-' + str(end_year) + '12.nc'
 
         if start_year == 2015:
-            if ensemble_member <= 3:
-                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20190627/tos_Omon_' + cfg.model_specifics + '_' + self.scenario + '_r'
+            if ensemble_member <= 10:
+                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + 'v20190710' + '/tos_Omon_' + cfg.model_specifics_hist + '_' + self.scenario + '_r'
 
             else:
-                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20200623/tos_Omon_' + cfg.model_specifics + '_' + self.scenario + '_r'
-                yearly_specifics_hist = str(ensemble_member) + 'i1p1f1_gn_' + str(start_year) + '01-' + str(2039) + '12.nc'
+                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + 'v20210901' + '/tos_Omon_' + cfg.model_specifics_hist + '_' + self.scenario + '_r'
+                yearly_specifics_hist = str(ensemble_member) + 'i1p1f1_gn_' + str(start_year) + '01-' + str(2034) + '12.nc'
 
         else:
             if ensemble_member <= 10:
-                his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20181212/tos_Omon_' + cfg.model_specifics + '_historical_r'
+                his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + 'v20190710' + '/tos_Omon_' + cfg.model_specifics_hist + '_historical_r'
 
             else: 
-                his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/v20200519/tos_Omon_' + cfg.model_specifics + '_historical_r'
+                his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + 'v20210901' + '/tos_Omon_' + cfg.model_specifics_hist + '_historical_r'
 
         path = his_path + yearly_specifics_hist
 
@@ -65,7 +65,7 @@ class concat_hist(object):
             for i in range(len(self.start_years)): #run over all start years and concatenate contained variables
                 hist_path.append(self.get_path(self.start_years[i], self.end_years[i], self.ensemble_members[k]))
             
-                ofile=cfg.tmp_path + 'hist_'
+                ofile=cfg.tmp_path + 'hist/hist_' +  cfg.model_specifics_hind + '_' + str(k) + '_'
                 cdo.remapbil(cfg.tmp_path + 'template.nc', input=hist_path[i], output=ofile + str(i) + '.nc')
                 hist_path[i] = ofile + str(i) + '.nc'
             
@@ -90,10 +90,9 @@ class concat_hist(object):
 
             ds = xr.Dataset(data_vars=dict(tos=(["time", "lat", "lon"], hist)),
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
-            attrs=dict(description="Complete Historical Data " + cfg.model_specifics))
+            attrs=dict(description="Complete Historical Data " + cfg.model_specifics_hist))
 
-            #os.remove(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
-            ds.to_netcdf(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
+            ds.to_netcdf(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics_hist + '_' + str(k) + '.nc')
 
 
 class concat(object):
@@ -153,7 +152,6 @@ class concat(object):
         coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
         attrs=dict(description="Concatenated data " + self.name + '_' + self.start + '_' + self.end))
 
-        #os.remove(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc')
         ds.to_netcdf(cfg.tmp_path + str(self.name) + '/' + self.name + '_' + self.start + '.nc')
 
 
@@ -213,7 +211,7 @@ class ensemble_means(object):
     def get_paths(self, ensemble_member):
         
         print(self.start_year_file, self.name, ensemble_member)
-        yearly_specifics = self.variable + '_Omon_' + cfg.model_specifics + self.name + str(self.start_year_file) + '-r' + str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + self.start_month + '-' + str(self.end_year_file) + '12.nc'
+        yearly_specifics = self.variable + '_Omon_' + cfg.model_specifics_hind + self.name + str(self.start_year_file) + '-r' + str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + self.start_month + '-' + str(self.end_year_file) + '12.nc'
         path = self.path + str(self.start_year_file) + '-r' + str(ensemble_member) + 'i1p1f1/Omon/' + self.variable + '/gn/' + self.mod_year
 
         path = path + yearly_specifics
@@ -228,7 +226,7 @@ class ensemble_means(object):
                 #get path to file
                 
                 if self.mode=='hist':
-                    path = cfg.tmp_path + 'hist/historical_' + cfg.model_specifics + '_' + str(k) + '.nc'
+                    path = cfg.tmp_path + 'hist/historical_' + cfg.model_specifics_hist + '_' + str(k) + '.nc'
 
                     indv = self.__getitem__(path)
 

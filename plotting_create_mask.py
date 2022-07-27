@@ -13,17 +13,23 @@ import matplotlib
 import h5py as h5
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 matplotlib.use('Agg')
 cfg.set_args()
 
+if not os.path.exists(cfg.plot_path):
+    os.makedirs(cfg.plot_path)
+if not os.path.exists(cfg.tmp_path):
+    os.makedirs(cfg.tmp_path)
+
 #plot correlation for a specific lead year
-lys = calculate_leadyear(cfg.start_year, cfg.end_year, lead_year='2 9')
-lys.plot()
+#lys = calculate_leadyear(cfg.start_year, cfg.end_year, lead_year='2 9')
+#lys.plot()
 
 #plot leadyear correlation for all lead years
-ly = ly_series(cfg.start_year, cfg.end_year)
-ly.ly_series()
+#ly = ly_series(cfg.start_year, cfg.end_year)
+#ly.ly_series()
 
 #plot decorrelation time for HadISSTs
 #define start and end years, threshold for decorrelation mask
@@ -35,10 +41,9 @@ HadIsst = get_variable(cfg.observation_path, name='HadIsst', start_year=start_ye
 HadIsst = HadIsst.__getitem__()
 
 #save continent mask
-continent_mask = np.where(HadIsst[0]==0.1, np.nan, 1)
-f = h5.File('tmp/continent_mask.hdf5', 'w')
-f.create_dataset('contintent_mask', continent_mask.shape, dtype = 'float32',data = continent_mask)
-f.close()
+f = h5.File('tmp/continent_mask.hdf5', 'r')
+continent_mask = f.get('continent_mask')
+
 
 #historical model run, annual mean
 hist = get_variable(cfg.historical_path, name=cfg.hist_name, ensemble_members=cfg.ensemble_member, start_year=start_year,
@@ -51,7 +56,7 @@ HadIsst_annual = HadIsst_annual.__getitem__()
 
 #create residual observation timeseries
 residual_dataset = residual(lead_year=1, start_year=start_year)
-HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist) * continent_mask
+HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist)
 
 
 #plot residual and normal annual decorrelation times
