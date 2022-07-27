@@ -48,8 +48,8 @@ class decorrelation_time(object):
 
                 #calculate decorrelation time for each gridpoint
                 dc_criteria = autocor[1]/np.e
-                
-                if dc_criteria == 0:
+                                
+                if dc_criteria <= 0:
                     decor[i, j] = 0
                 elif dc_criteria == np.nan:
                     decor[i, j] = 0

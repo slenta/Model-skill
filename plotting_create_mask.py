@@ -41,9 +41,7 @@ HadIsst = get_variable(cfg.observation_path, name='HadIsst', start_year=start_ye
 HadIsst = HadIsst.__getitem__()
 
 #save continent mask
-f = h5.File('tmp/continent_mask.hdf5', 'r')
-continent_mask = f.get('continent_mask')
-
+continent_mask = np.where(HadIsst==0, np.nan, 1)
 
 #historical model run, annual mean
 hist = get_variable(cfg.historical_path, name=cfg.hist_name, ensemble_members=cfg.ensemble_member, start_year=start_year,
@@ -60,12 +58,12 @@ HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist)
 
 
 #plot residual and normal annual decorrelation times
-decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=2, name='HadIsst_annual')
-dc, mask_decor_1 = decor.__getitem__()
-decor.plot()
-decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=4, name='HadIsst_annual')
-dc, mask_decor_4 = decor.__getitem__()
-decor.plot()
+#decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=2, name='HadIsst_annual')
+#dc, mask_decor_1 = decor.__getitem__()
+#decor.plot()
+#decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=4, name='HadIsst_annual')
+#dc, mask_decor_4 = decor.__getitem__()
+#decor.plot()
 #decor = decorrelation_time(HadIsst_annual, del_t=8, threshold=threshold, name='HadIsst_annual')
 #dc, mask_decor_8 = decor.__getitem__()
 #decor.plot()
