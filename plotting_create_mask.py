@@ -58,12 +58,12 @@ HadIsst_res = residual_dataset.obs_res(HadIsst_annual, hist)
 
 
 #plot residual and normal annual decorrelation times
-#decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=2, name='HadIsst_annual')
-#dc, mask_decor_1 = decor.__getitem__()
-#decor.plot()
-#decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=4, name='HadIsst_annual')
-#dc, mask_decor_4 = decor.__getitem__()
-#decor.plot()
+decor = decorrelation_time(HadIsst_annual, del_t=1, threshold=2, name='HadIsst_annual')
+dc, mask_decor_1 = decor.__getitem__()
+decor.plot()
+decor = decorrelation_time(HadIsst_annual, del_t=4, threshold=4, name='HadIsst_annual')
+dc, mask_decor_4 = decor.__getitem__()
+decor.plot()
 #decor = decorrelation_time(HadIsst_annual, del_t=8, threshold=threshold, name='HadIsst_annual')
 #dc, mask_decor_8 = decor.__getitem__()
 #decor.plot()
@@ -80,12 +80,12 @@ decor.plot()
 
 
 #plot ssh bias and correlation
-Aviso_ssh = get_variable(path=cfg.tmp_path + 'Aviso_Ssh_full/Aviso_Ssh_full_2000_2018.nc', name='Aviso_ssh', start_year=2000, end_year=2017, variable='var', mean='monthly')
+Aviso_ssh = get_variable(path=cfg.data_path + 'Aviso_Ssh_full/Aviso_Ssh_full_1993_2018.nc', name='Aviso_ssh', start_year=1993, end_year=2017, variable='var', mean='monthly')
 Aviso_ssh = Aviso_ssh.__getitem__()
-Assi_ssh = get_variable(path=cfg.assi_path, name='_dcppA-assim_r', ensemble_members=cfg.ensemble_member, mod_year=cfg.ssh_mod, start_year=2000, end_year=2017,  start_month='01', start_year_file=1950, end_year_file=2017, variable='zos', ensemble=True, time_edit=True, mean='monthly')
+Assi_ssh = get_variable(path=cfg.assi_path, name='_dcppA-assim_r', ensemble_members=cfg.ensemble_member, mod_year=cfg.ssh_mod, start_year=1993, end_year=2017,  start_month='01', start_year_file=1950, end_year_file=2017, variable='zos', ensemble=True, time_edit=True, mean='monthly', mode='assim')
 Assi_ssh = Assi_ssh.__getitem__()
 
-mask_ssh_8 = correlation_plot(Aviso_ssh, Assi_ssh, del_t=8, name_1='Aviso_ssh', name_2='Assimilation_ssh')
+#mask_ssh_8 = correlation_plot(Aviso_ssh, Assi_ssh, del_t=8, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 mask_ssh_4 = correlation_plot(Aviso_ssh, Assi_ssh, del_t=4, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 mask_ssh_1 = correlation_plot(Aviso_ssh, Assi_ssh, del_t=1, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 bias_plot(Aviso_ssh, Assi_ssh, name_1='Aviso_ssh', name_2='Assimilation_ssh')
@@ -93,7 +93,7 @@ bias_plot(Aviso_ssh, Assi_ssh, name_1='Aviso_ssh', name_2='Assimilation_ssh')
 #plot correlation between ocean heat content and ssts
 IAP_Ohc = get_variable(path = cfg.ohc_path, name='IAP_Ohc', start_year=196100, end_year=201600, variable='heatcontent', time_edit=False)
 IAP_Ohc = IAP_Ohc.__getitem__()
-mask_ohc_8 = correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='Residual_HadIsst', name_2='IAP_Ohc')
+#mask_ohc_8 = correlation_plot(HadIsst, IAP_Ohc, del_t=8, name_1='Residual_HadIsst', name_2='IAP_Ohc')
 mask_ohc_4 = correlation_plot(HadIsst, IAP_Ohc, del_t=4, name_1='Residual_HadIsst', name_2='IAP_Ohc')
 mask_ohc_1 = correlation_plot(HadIsst, IAP_Ohc, del_t=1, name_1='Residual_HadIsst', name_2='IAP_Ohc')
 
@@ -106,10 +106,9 @@ final_mask_4_res = mask_decor_4_res * mask_ohc_4 * mask_ssh_4
 final_mask_1_res = mask_decor_1_res * mask_ohc_1 * mask_ssh_1
 
 f4 = h5.File(cfg.tmp_path + 'correlation/correlation' + str(cfg.start_year) + '_' + str(cfg.end_year) + '_' + str(12) + '.hdf5', 'r')
-f8 = h5.File(cfg.tmp_path + 'correlation/correlation' + str(cfg.start_year) + '_' + str(cfg.end_year) + '_' + str(20) + '.hdf5', 'r')
 f1 = h5.File(cfg.tmp_path + 'correlation/correlation' + str(cfg.start_year) + '_' + str(cfg.end_year) + '_' + str(1) + '.hdf5', 'r')
+
 res_hind_4 = f4.get('res_hind_corr')
-res_hind_8 = f8.get('res_hind_corr')
 res_hind_1 = f1.get('res_hind_corr')
 
 plot_variable_mask(res_hind_1, final_mask_1_res, 'Residual_res_hindcast_leadyear_1')

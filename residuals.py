@@ -84,7 +84,7 @@ class residual(object):
         ds = xr.Dataset(data_vars=dict(res_hind=(["time", "x", "y"], res_hind), res_obs=(["time", "x", "y"], res_obs), observation=(["time", "x", "y"], obs),
         hindcast=(["time", "x", "y"], hind), historical=(["time", "x", "y"], his)),
         coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time,),
-        attrs=dict(description="Residual Hindcast and Observations" + cfg.model_specifics))
+        attrs=dict(description="Residual Hindcast and Observations" + cfg.model_specifics_hind))
 
         #calculate yearly means, assign lead year coordinate
         ds = ds.groupby('time.year').mean('time')

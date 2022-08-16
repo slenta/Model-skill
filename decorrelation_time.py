@@ -63,7 +63,7 @@ class decorrelation_time(object):
 
         mask = np.where(decor >= self.threshold, True, False)
         
-        f = h5.File(cfg.tmp_path + 'decorrelation/decorrelation_time_' + self.name + '.hdf5', 'w')
+        f = h5.File(cfg.data_path + 'decorrelation/decorrelation_time_' + self.name + '.hdf5', 'w')
         f.create_dataset('decorrelation_time', decor.shape, dtype = 'float32',data = decor)
         f.create_dataset('decor_mask', mask.shape, dtype = 'float32',data = mask)
         f.close()
@@ -72,7 +72,7 @@ class decorrelation_time(object):
 
     def plot(self):
 
-        f = h5.File(cfg.tmp_path + 'decorrelation/decorrelation_time_' + self.name + '.hdf5', 'r')
+        f = h5.File(cfg.data_path + 'decorrelation/decorrelation_time_' + self.name + '.hdf5', 'r')
         decor = f.get('decorrelation_time')
         decor = np.array(decor)
         significance = f.get('decor_mask')

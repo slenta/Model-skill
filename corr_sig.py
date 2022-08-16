@@ -8,6 +8,7 @@ from scipy.stats.mstats import gmean
 from collections import namedtuple
 from scipy.stats import t as stu
 from scipy.stats import gaussian_kde
+import statsmodels
 import statsmodels.api as sm
 from statsmodels.tsa.stattools import acf
 from sklearn import preprocessing
@@ -205,7 +206,7 @@ def ar1_fit(ts):
         g (real): lag-1 autocorrelation coefficient
 
     '''
-    ar1_mod = sm.tsa.ARMA(ts, (1, 0)).fit()
+    ar1_mod = statsmodels.tsa.arima.model.ARIMA(ts, (1, 0, 0)).fit()
     g = ar1_mod.params[1]
 
     return g
