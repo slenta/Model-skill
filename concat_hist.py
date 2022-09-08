@@ -21,7 +21,7 @@ if not os.path.exists(hist_tmp_path):
 
 
 #concatenate and save historical simulations in a single file
-concate = concat_hist(cfg.hist_start_years, cfg.hist_end_years, 10, cfg.scenario_path, cfg.scenario)
+concate = concat_hist(cfg.hist_start_years, cfg.hist_end_years, cfg.ensemble_member_hist, cfg.scenario_path, cfg.scenario)
 concate.concat()
 
 

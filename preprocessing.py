@@ -13,8 +13,52 @@ import config as cfg
 import cdo
 cdo = cdo.Cdo()
 import os
+import pandas as pd
 import matplotlib.pyplot as plt
 cfg.set_args()
+
+
+#functions to detrend xarray datasets and numpy arrays
+
+
+# define a function to compute a linear trend of a timeseries
+def linear_trend(x):
+    pf = np.polyfit(x.time, x, 1)
+    # need to return an xr.DataArray for groupby
+    return xr.DataArray(pf[0])
+
+def detrend_linear_numpy(x):
+    #assumed shape of numpy array: (time, lat, lon)
+    time = np.arange(x.shape[0])
+    lat = np.arange(x.shape[1])
+    lon = np.arange(x.shape[2])
+
+    da = xr.DataArray(x, 
+        coords={'time': time,'lat': lat,'lon': lon}, 
+        dims=["time", "lat", "lon"]
+    )
+
+    # stack lat and lon into a single dimension called allpoints
+    stacked = da.stack(allpoints=['lat','lon'])
+    # apply the function over allpoints to calculate the trend at each point
+    trend = stacked.groupby('allpoints').apply(linear_trend)
+    # unstack back to lat lon coordinates
+    trend_unstacked = trend.unstack('allpoints')
+
+    print(x.shape, trend_unstacked.to_numpy().shape)
+
+    return x - trend_unstacked.to_numpy()
+
+
+def detrend_datarray(da, dim, deg=1):
+    
+    # detrend along a single dimension
+    p = da.polyfit(dim=dim, deg=deg)
+    fit = xr.polyval(dim, p.polyfit_coefficients)
+    
+    return da - fit
+
+
 
 #class to concatenate files stored in different directories and save 
 
@@ -35,20 +79,20 @@ class concat_hist(object):
         
         yearly_specifics_hist = str(ensemble_member) + 'i1p1f1_gn_' + str(start_year) + '01-' + str(end_year) + '12.nc'
 
-        if start_year == 2015:
-            if ensemble_member <= 3:
-                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + cfg.scenario_mod + '/tos_Omon_' + cfg.model_specifics_hist + '_' + self.scenario + '_r'
+        if start_year >= 2015:
+            if ensemble_member <= 10:
+                his_path = f'{self.scenario_path}{str(ensemble_member)}i1p1f1/Omon/{cfg.variable}/gn/{cfg.scenario_mod}/{cfg.variable}_Omon_{cfg.model_specifics_hist}_{self.scenario}_r'
 
             else:
-                his_path = self.scenario_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + 'v20200623' + '/tos_Omon_' + cfg.model_specifics_hist + '_' + self.scenario + '_r'
-                yearly_specifics_hist = str(ensemble_member) + 'i1p1f1_gn_' + str(start_year) + '01-' + str(2039) + '12.nc'
+                his_path = f'{self.scenario_path}{str(ensemble_member)}i1p1f1/Omon/{cfg.variable}/gn/v20210901/{cfg.variable}_Omon_{cfg.model_specifics_hist}_{self.scenario}_r'
+                yearly_specifics_hist = f'{str(ensemble_member)}i1p1f1_gn_{str(start_year)}01-203412.nc'
 
         else:
             if ensemble_member <= 10:
-                his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + cfg.hist_mod + '/tos_Omon_' + cfg.model_specifics_hist + '_historical_r'
+                his_path = f'{cfg.historical_path}{str(ensemble_member)}i1p1f1/Omon/{cfg.variable}/gn/{cfg.hist_mod}/{cfg.variable}_Omon_{cfg.model_specifics_hist}_historical_r'
 
             else: 
-                his_path = cfg.historical_path + str(ensemble_member) + 'i1p1f1/Omon/tos/gn/' + 'v20210901' + '/tos_Omon_' + cfg.model_specifics_hist + '_historical_r'
+                his_path = f'{cfg.historical_path}{str(ensemble_member)}i1p1f1/Omon/{cfg.variable}/gn/v20210901/{cfg.variable}_Omon_{cfg.model_specifics_hist}_historical_r'
 
         path = his_path + yearly_specifics_hist
 
@@ -62,11 +106,12 @@ class concat_hist(object):
 
             print(k)
             hist_path = []
+            
             for i in range(len(self.start_years)): #run over all start years and concatenate contained variables
                 hist_path.append(self.get_path(self.start_years[i], self.end_years[i], k))
             
-                ofile=cfg.tmp_path + 'hist/hist_' +  cfg.model_specifics_hind + '_' + str(k) + '_'
-                cdo.remapbil(cfg.tmp_path + 'template.nc', input=hist_path[i], output=ofile + str(i) + '.nc')
+                ofile = f'{cfg.tmp_path}hist/hist_{cfg.model_specifics_hind}_{str(k)}_'
+                cdo.remapbil(cfg.data_path + 'template.nc', input=hist_path[i], output=ofile + str(i) + '.nc')
                 hist_path[i] = ofile + str(i) + '.nc'
             
             dhis = xr.merge([xr.load_dataset(hist_path[i], decode_times=False) for i in range(len(hist_path))])
@@ -76,12 +121,12 @@ class concat_hist(object):
             dhis['time'] = nc.num2date(time_his[:],time_his.units)
             dhis = dhis.sel(time=slice('1850-01', '2035-01'))
             
-            hist = dhis.tos.values
+            hist = dhis[cfg.variable]
             time = dhis.time.values
             hist = np.array(hist)
 
             #get lon, lat values from template
-            ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
+            ds = xr.open_dataset(cfg.data_path + 'template.nc', decode_times=False)
             lon = ds.lon.values
             lat = ds.lat.values
 
@@ -92,7 +137,7 @@ class concat_hist(object):
             coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time),
             attrs=dict(description="Complete Historical Data " + cfg.model_specifics_hist))
 
-            ds.to_netcdf(cfg.tmp_path + 'hist/historical_' + cfg.model_specifics_hist + '_' + str(k) + '.nc')
+            ds.to_netcdf(f'{cfg.tmp_path}hist/historical_{cfg.model_specifics_hist}_{str(k)}.nc')
 
 
 class concat(object):
@@ -127,8 +172,10 @@ class concat(object):
 
             #remap to common grid
             ofile=cfg.tmp_path + 'tmp/' + self.name + str(i) + '.nc'
-            cdo.remapbil(cfg.tmp_path + 'template.nc', input=paths[i], output=ofile)  
-            paths[i] = ofile
+            cdo.remapbil(cfg.data_path + 'template.nc', input=paths[i], output=ofile)  
+            paths[i] = ofile 
+
+
 
 
         ds = xr.merge([xr.load_dataset(paths[i], decode_times=False) for i in range(len(paths))])
@@ -141,7 +188,7 @@ class concat(object):
         time = ds.time
 
         #get lon, lat values from template
-        ds = xr.open_dataset(cfg.tmp_path + 'template.nc', decode_times=False)
+        ds = xr.open_dataset(cfg.data_path + 'template.nc', decode_times=False)
         lon = ds.lon.values
         lat = ds.lat.values
 
@@ -210,8 +257,8 @@ class ensemble_means(object):
     
     def get_paths(self, ensemble_member):
         
-        yearly_specifics = self.variable + '_Omon_' + cfg.model_specifics_hind + self.name + str(self.start_year_file) + '-r' + str(ensemble_member) + 'i1p1f1_gn_' + str(self.start_year_file) + self.start_month + '-' + str(self.end_year_file) + '12.nc'
-        path = self.path + str(self.start_year_file) + '-r' + str(ensemble_member) + 'i1p1f1/Omon/' + self.variable + '/gn/' + self.mod_year
+        yearly_specifics = f'{self.variable}_Omon_{cfg.model_specifics_hind}{self.name}{str(self.start_year_file)}-r{str(ensemble_member)}i1p1f1_gn_{str(self.start_year_file)}{self.start_month}-{str(self.end_year_file)}12.nc'
+        path = f'{self.path}{str(self.start_year_file)}-r{str(ensemble_member)}i1p1f1/Omon/{self.variable}/gn/{self.mod_year}/'
 
         path = path + yearly_specifics
 
@@ -234,8 +281,8 @@ class ensemble_means(object):
                     
                     if self.mode=='assim':
 
-                        yearly_specifics = self.variable + '_Omon_MIROC6' + self.name + str(k) + 'i1p1f1_gn_' + str(self.start_year_file) + self.start_month + '-' + str(self.end_year_file) + '12.nc'
-                        path = self.path + str(k) + 'i1p1f1/Omon/' + self.variable + '/gn/' + self.mod_year
+                        yearly_specifics = f'{self.variable}_Omon_{cfg.model_specifics_hind}{self.name}{str(k)}i1p1f1_gn_{str(self.start_year_file)}{self.start_month}-{str(self.end_year_file)}12.nc'
+                        path = f'{self.path}{str(k)}i1p1f1/Omon/{self.variable}/gn/{self.mod_year}/'
 
                         path = path + yearly_specifics
 
@@ -255,7 +302,7 @@ class ensemble_means(object):
                     #remap grids to allow for correlation calculation
                     #fit each other to coarsest grids - template 1°x1° grid
 
-                    cdo.remapbil(cfg.tmp_path + 'template.nc', input=ifile, output=path)
+                    cdo.remapbil(cfg.data_path + 'template.nc', input=ifile, output=path)
 
                     indv = self.__getitem__(path)
 
@@ -302,7 +349,7 @@ class get_variable(object):
             else:
                 ofile = cfg.tmp_path + 'tmp/' + self.name + str(self.start_year) + '.nc'
 
-            cdo.remapbil(cfg.tmp_path + 'template.nc', input=self.path, output=ofile)
+            cdo.remapbil(cfg.data_path + 'template.nc', input=self.path, output=ofile)
             ds = xr.load_dataset(ofile, decode_times=False)
 
             #decode times into day-month-year shape
@@ -315,6 +362,12 @@ class get_variable(object):
                 ds = ds.sel(time=slice(str(self.start_year + 1) + '-01', str(self.end_year) + '-12'))
 
             else:
+                time = []
+                for t in ds.time.values:
+                    time.append(pd.to_datetime(f'{t}', format='%Y%m%d.5'))
+
+
+                ds['time'] = np.array(time)                
                 ds = ds.sel(time=slice(self.start_year + 1, self.end_year))
 
             if self.mean == 'monthly':
@@ -355,4 +408,5 @@ class get_variable(object):
         time = ds.time.values
 
         return time, lon, lat
+
 

@@ -6,6 +6,7 @@ import numpy as np
 from scipy.stats import pearsonr
 import xarray as xr
 import config as cfg
+import h5py as h5
 
 cfg.set_args()
 
@@ -73,21 +74,27 @@ class residual(object):
         return res_obs
 
 
-    def save_data(self, obs, his, hind, time, lon, lat):
+    def save_data(self, obs, his, hind):
 
         #load variables from other functions
         res_hind = self.hind_res(his, hind)
         res_obs = self.obs_res(obs, his)
-        lead = range(1, 11)
         
-        #create xarray Dataset with all variables
-        ds = xr.Dataset(data_vars=dict(res_hind=(["time", "x", "y"], res_hind), res_obs=(["time", "x", "y"], res_obs), observation=(["time", "x", "y"], obs),
-        hindcast=(["time", "x", "y"], hind), historical=(["time", "x", "y"], his)),
-        coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time,),
-        attrs=dict(description="Residual Hindcast and Observations" + cfg.model_specifics_hind))
+        f = h5.File(f'{cfg.residual_path}_{str(self.start_year)}_{str(self.lead_year)}.hdf5', 'w')
+        f.create_dataset('res_hind', shape=res_hind.shape, dtype = 'float32', data = res_hind)
+        f.create_dataset('res_obs', shape=res_obs.shape, dtype = 'float32', data = res_obs)
+        f.close()
+        
+        #lead = range(1, cfg.hind_length + 1)
+        
+        ##create xarray Dataset with all variables
+        #ds = xr.Dataset(data_vars=dict(res_hind=(["time", "x", "y"], res_hind), res_obs=(["time", "x", "y"], res_obs), observation=(["time", "x", "y"], obs),
+        #hindcast=(["time", "x", "y"], hind), historical=(["time", "x", "y"], his)),
+        #coords=dict(lon=(["lon"], lon),lat=(["lat"], lat),time=time,),
+        #attrs=dict(description="Residual Hindcast and Observations" + cfg.model_specifics_hind))
 
-        #calculate yearly means, assign lead year coordinate
-        ds = ds.groupby('time.year').mean('time')
-        ds = ds.assign_coords(lead =("year", lead))
+        ##calculate yearly means, assign lead year coordinate
+        #ds = ds.groupby('time.year').mean('time')
+        #ds = ds.assign_coords(lead =("year", lead))
 
-        ds.to_netcdf(cfg.residual_path + '_' + str(self.start_year) + '_' + str(self.lead_year) + '.nc')
+        #ds.to_netcdf(cfg.residual_path + '_' + str(self.start_year) + '_' + str(self.lead_year) + '.nc')

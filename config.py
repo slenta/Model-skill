@@ -30,27 +30,14 @@ plot_path = None
 hist_mod = None
 scenario_mod = None
 data_path = None
+hind_length = None
+ensemble_member_hist = None
+variable = None
 
 def set_args():
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('--historical_path', type=str, default='/pool/data/CMIP6/data/CMIP/MIROC/MIROC6/historical/r')
-    arg_parser.add_argument('--hindcast_path', type=str, default='/pool/data/CMIP6/data/DCPP/MIROC/MIROC6/dcppA-hindcast/s')
-    arg_parser.add_argument('--scenario_path', type=str, default='/pool/data/CMIP6/data/ScenarioMIP/MIROC/MIROC6/ssp245/r')
-    arg_parser.add_argument('--assi_path', type=str, default='/pool/data/CMIP6/data/DCPP/MIROC/MIROC6/dcppA-assim/r')
-    arg_parser.add_argument('--hind_mod', type=str, default='v20190821/')
-    arg_parser.add_argument('--scenario_mod', type=str, default='v20190627/') #2:v20200623
-    arg_parser.add_argument('--hist_mod', type=str, default='v20181212/') #2:v20210901
-    arg_parser.add_argument('--hist_start_years', type=list, default=[1850, 1950, 2015])
-    arg_parser.add_argument('--hist_end_years', type=list, default=[1949, 2014, 2100])
-    arg_parser.add_argument('--start_year', type=int, default=1960)
-    arg_parser.add_argument('--end_year', type=int, default=2011)
-    arg_parser.add_argument('--start_month_hind', type=str, default='11')
-    arg_parser.add_argument('--ensemble_member', type=int, default=10)
-    arg_parser.add_argument('--model_specifics_hist', type=str, default='MIROC6')
-    arg_parser.add_argument('--model_specifics_hind', type=str, default='MIROC6')
 
     arg_parser.add_argument('--observation_path', type=str, default='/pool/data/ICDC/ocean/hadisst1/DATA/HadISST_sst.nc')
-    arg_parser.add_argument('--residual_path', type=str, default='/work/uo1075/u301617/HiWi_Vimal/Code/tmp/residuals/residual')
     arg_parser.add_argument('--aviso_path', type=str, default='/pool/data/ICDC/ocean/aviso_ssh/DATA/')
     arg_parser.add_argument('--ohc_path', type=str, default='/work/uo1075/u241265/obs/ohc/IAP_ohc700m_mm_1960_2016.nc')
     arg_parser.add_argument('--hist_name', type=str, default='_historical_r')
@@ -64,22 +51,101 @@ def set_args():
     arg_parser.add_argument('--lead_years', type=str)
 
 
-    #arg_parser.add_argument('--historical_path', type=str, default='/pool/data/CMIP6/data/CMIP/MPI-M/MPI-ESM1-2-LR/historical/r')
-    #arg_parser.add_argument('--hindcast_path', type=str, default='/pool/data/CMIP6/data/DCPP/MPI-M/MPI-ESM1-2-HR/dcppA-hindcast/s')
-    #arg_parser.add_argument('--scenario_path', type=str, default='/pool/data/CMIP6/data/ScenarioMIP/MPI-M/MPI-ESM1-2-LR/ssp245/r')
+    #arg_parser.add_argument('--historical_path', type=str, default='/pool/data/CMIP6/data/CMIP/MIROC/MIROC6/historical/r')
+    #arg_parser.add_argument('--hindcast_path', type=str, default='/pool/data/CMIP6/data/DCPP/MIROC/MIROC6/dcppA-hindcast/s')
+    #arg_parser.add_argument('--scenario_path', type=str, default='/pool/data/CMIP6/data/ScenarioMIP/MIROC/MIROC6/ssp245/r')
     #arg_parser.add_argument('--assi_path', type=str, default='/pool/data/CMIP6/data/DCPP/MIROC/MIROC6/dcppA-assim/r')
-    #arg_parser.add_argument('--hind_mod', type=str, default='v20190917/')
-    #arg_parser.add_argument('--scenario_mod', type=str, default='v20190710/') #2:v20210901
-    #arg_parser.add_argument('--hist_mod', type=str, default='v20190710/') #2:v20210901
-    #arg_parser.add_argument('--hist_start_years', type=list, default=[1850, 1870, 1890, 1910, 1930, 1950, 1970, 1990, 2010, 2015])
-    #arg_parser.add_argument('--hist_end_years', type=list, default=[1869, 1889, 1909, 1929, 1949, 1969, 1989, 2009, 2014, 2034])
+    #arg_parser.add_argument('--hind_mod', type=str, default='v20190821')
+    #arg_parser.add_argument('--scenario_mod', type=str, default='v20190627') #2:v20200623
+    #arg_parser.add_argument('--hist_mod', type=str, default='v20181212') #2:v20210901
+    #arg_parser.add_argument('--hist_start_years', type=list, default=[1850, 1950, 2015])
+    #arg_parser.add_argument('--hist_end_years', type=list, default=[1949, 2014, 2100])
+    #arg_parser.add_argument('--start_year', type=int, default=1970)
+    #arg_parser.add_argument('--end_year', type=int, default=2018)
+    #arg_parser.add_argument('--start_month_hind', type=str, default='11')
+    #arg_parser.add_argument('--ensemble_member', type=int, default=10)
+    #arg_parser.add_argument('--ensemble_member_hist', type=int, default=20)
+    #arg_parser.add_argument('--hind_length', type=int, default=10)
+    #arg_parser.add_argument('--model_specifics_hist', type=str, default='MIROC6')
+    #arg_parser.add_argument('--model_specifics_hind', type=str, default='MIROC6')
+    #arg_parser.add_argument('--variable', type=str, default='tos') 
+
+    arg_parser.add_argument('--historical_path', type=str, default='/pool/data/CMIP6/data/CMIP/MPI-M/MPI-ESM1-2-LR/historical/r')
+    arg_parser.add_argument('--hindcast_path', type=str, default='/pool/data/CMIP6/data/DCPP/MPI-M/MPI-ESM1-2-HR/dcppA-hindcast/s')
+    arg_parser.add_argument('--scenario_path', type=str, default='/pool/data/CMIP6/data/ScenarioMIP/MPI-M/MPI-ESM1-2-LR/ssp245/r')
+    arg_parser.add_argument('--assi_path', type=str, default='/work/uo1075/u301617/HiWi_Vimal/Code/tmp/MPI-ESM1-2-HR/assimilation_MPI-ESM1-2-HR_1958_2017.nc')
+    arg_parser.add_argument('--hind_mod', type=str, default='v20190917')
+    arg_parser.add_argument('--scenario_mod', type=str, default='v20190710') #2:v20210901
+    arg_parser.add_argument('--hist_mod', type=str, default='v20190710') #2:v20210901
+    arg_parser.add_argument('--hist_start_years', type=list, default=[1850, 1870, 1890, 1910, 1930, 1950, 1970, 1990, 2010, 2015])
+    arg_parser.add_argument('--hist_end_years', type=list, default=[1869, 1889, 1909, 1929, 1949, 1969, 1989, 2009, 2014, 2034])
+    arg_parser.add_argument('--start_year', type=int, default=1970)
+    arg_parser.add_argument('--end_year', type=int, default=2018)
+    arg_parser.add_argument('--start_month_hind', type=str, default='11')
+    arg_parser.add_argument('--ensemble_member', type=int, default=5)
+    arg_parser.add_argument('--ensemble_member_hist', type=int, default=20)
+    arg_parser.add_argument('--hind_length', type=int, default=10)
+    arg_parser.add_argument('--model_specifics_hist', type=str, default='MPI-ESM1-2-LR')
+    arg_parser.add_argument('--model_specifics_hind', type=str, default='MPI-ESM1-2-HR')
+    arg_parser.add_argument('--variable', type=str, default='tos')
+
+    #arg_parser.add_argument('--historical_path', type=str, default='/pool/data/CMIP6/data/CMIP/CCCma/CanESM5/historical/r')
+    #arg_parser.add_argument('--hindcast_path', type=str, default='/pool/data/CMIP6/data/DCPP/CCCma/CanESM5/dcppA-hindcast/s')
+    #arg_parser.add_argument('--scenario_path', type=str, default='/pool/data/CMIP6/data/ScenarioMIP/CCCma/CanESM5/ssp245/r')
+    #arg_parser.add_argument('--assi_path', type=str, default='/pool/data/CMIP6/data/DCPP/CCCma/CanESM5/dcppA-assim/r')
+    #arg_parser.add_argument('--hind_mod', type=str, default='v20190429')
+    #arg_parser.add_argument('--scenario_mod', type=str, default='v20190429') #2:v20190429
+    #arg_parser.add_argument('--hist_mod', type=str, default='v20190429') #2:v20190429
+    #arg_parser.add_argument('--hist_start_years', type=list, default=[1850, 1861, 1871, 1881, 1891, 1901, 1911, 1921, 1931, 1941, 1951, 1961, 1971, 1981, 1991, 2001, 2011, 2015, 2021])
+    #arg_parser.add_argument('--hist_end_years', type=list, default=[1860, 1870, 1880, 1890, 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2014, 2020, 2030])
+    #arg_parser.add_argument('--start_year', type=int, default=1966)
+    #arg_parser.add_argument('--end_year', type=int, default=2008)
+    #arg_parser.add_argument('--start_month_hind', type=str, default='01')
+    #arg_parser.add_argument('--ensemble_member', type=int, default=2)
+    #arg_parser.add_argument('--ensemble_member_hist', type=int, default=25)
+    #arg_parser.add_argument('--hind_length', type=int, default=9)
+    #arg_parser.add_argument('--model_specifics_hist', type=str, default='CanESM5')
+    #arg_parser.add_argument('--model_specifics_hind', type=str, default='CanESM5')
+    #arg_parser.add_argument('--variable', type=str, default='thetao')
+
+
+    #arg_parser.add_argument('--historical_path', type=str, default='/pool/data/CMIP6/data/CMIP/NCC/NorCPM1/historical/r')
+    #arg_parser.add_argument('--hindcast_path', type=str, default='/pool/data/CMIP6/data/DCPP/NCC/NorCPM1/dcppA-hindcast/s')
+    #arg_parser.add_argument('--scenario_path', type=str, default='/pool/data/CMIP6/data/ScenarioMIP/NCC/NorCPM1/ssp245/r')
+    #arg_parser.add_argument('--assi_path', type=str, default='/pool/data/CMIP6/data/DCPP/NCC/NorCPM1/dcppA-assim/r')
+    #arg_parser.add_argument('--hind_mod', type=str, default='v20190914')
+    #arg_parser.add_argument('--scenario_mod', type=str, default='v20190429') #2:v20190429
+    #arg_parser.add_argument('--hist_mod', type=str, default='v20200724') #2:v20190429
+    #arg_parser.add_argument('--hist_start_years', type=list, default=[1850])
+    #arg_parser.add_argument('--hist_end_years', type=list, default=[2014])
+    #arg_parser.add_argument('--start_year', type=int, default=1970)
+    #arg_parser.add_argument('--end_year', type=int, default=2013)
+    #arg_parser.add_argument('--start_month_hind', type=str, default='10')
+    #arg_parser.add_argument('--ensemble_member', type=int, default=3)
+    #arg_parser.add_argument('--ensemble_member_hist', type=int, default=25)
+    #arg_parser.add_argument('--hind_length', type=int, default=10)
+    #arg_parser.add_argument('--model_specifics_hist', type=str, default='NorCPM1')
+    #arg_parser.add_argument('--model_specifics_hind', type=str, default='NorCPM1')
+    #arg_parser.add_argument('--variable', type=str, default='tos')
+
+    #arg_parser.add_argument('--historical_path', type=str, default='/pool/data/CMIP6/data/CMIP/MRI/MRI-ESM2-0/historical/r')
+    #arg_parser.add_argument('--hindcast_path', type=str, default='/pool/data/CMIP6/data/DCPP/MRI/MRI-ESM2-0/dcppA-hindcast/s')
+    #arg_parser.add_argument('--scenario_path', type=str, default='/pool/data/CMIP6/data/ScenarioMIP/MRI/MRI-ESM2-0/ssp245/r')
+    #arg_parser.add_argument('--assi_path', type=str, default='/pool/data/CMIP6/data/DCPP/MRI/MRI-ESM2-0/dcppA-assim/r')
+    #arg_parser.add_argument('--hind_mod', type=str, default='v20201016/')
+    #arg_parser.add_argument('--scenario_mod', type=str, default='v20190904/') #2:v20200623
+    #arg_parser.add_argument('--hist_mod', type=str, default='v20190904/') #2:v20210901
+    #arg_parser.add_argument('--hist_start_years', type=list, default=[1850, 2015])
+    #arg_parser.add_argument('--hist_end_years', type=list, default=[2014, 2100])
     #arg_parser.add_argument('--start_year', type=int, default=1960)
     #arg_parser.add_argument('--end_year', type=int, default=2011)
     #arg_parser.add_argument('--start_month_hind', type=str, default='11')
-    #arg_parser.add_argument('--ensemble_member', type=int, default=5)
-    #arg_parser.add_argument('--model_specifics_hist', type=str, default='MPI-ESM1-2-LR')
-    #arg_parser.add_argument('--model_specifics_hind', type=str, default='MPI-ESM1-2-HR')
-
+    #arg_parser.add_argument('--ensemble_member', type=int, default=10)
+    #arg_parser.add_argument('--ensemble_member_hist', type=int, default=1)
+    #arg_parser.add_argument('--hind_length', type=int, default=5)
+    #arg_parser.add_argument('--model_specifics_hist', type=str, default='MRI-ESM2-0')
+    #arg_parser.add_argument('--model_specifics_hind', type=str, default='MRI-ESM2-0')
+    #arg_parser.add_argument('--variable', type=str, default='tos')
 
     args = arg_parser.parse_args()
 
@@ -113,11 +179,14 @@ def set_args():
     global hist_mod
     global scenario_mod
     global data_path
+    global hind_length
+    global ensemble_member_hist
+    global variable
 
     historical_path = args.historical_path
     hindcast_path = args.hindcast_path
     observation_path = args.observation_path
-    residual_path = args.residual_path
+    residual_path = args.tmp_path + args.model_specifics_hind + 'residuals/residual'
     scenario_path = args.scenario_path
     assi_path = args.assi_path
     aviso_path = args.aviso_path
@@ -128,6 +197,7 @@ def set_args():
     hist_end_years = args.hist_end_years
     start_month_hind = args.start_month_hind
     ensemble_member = args.ensemble_member
+    ensemble_member_hist = args.ensemble_member_hist
     model_specifics_hist = args.model_specifics_hist
     model_specifics_hind = args.model_specifics_hind
     plot_path = args.plot_path + args.model_specifics_hind + '/'
@@ -143,3 +213,5 @@ def set_args():
     hist_mod = args.hist_mod
     scenario_mod = args.scenario_mod
     data_path = args.tmp_path
+    hind_length = args.hind_length
+    variable = args.variable

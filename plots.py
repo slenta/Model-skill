@@ -11,8 +11,21 @@ from collections import namedtuple
 #simple function to plot correlations between two variables
 def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     
+    #calculate running mean, if necessary
+    if del_t != 1:
+        n = var_1.shape
+        var_mean_1 = np.zeros((n[0] - (del_t - 1), n[1], n[2]))
+        var_mean_2 = np.zeros((n[0] - (del_t - 1), n[1], n[2]))
+        for k in range(len(var_mean_1)):
+            var_mean_1[k, :, :] = np.mean(var_1[k:k + del_t, :, :], axis=0)
+            var_mean_2[k, :, :] = np.mean(var_2[k:k + del_t, :, :], axis=0)
+
+    else:
+        var_mean_1 = var_1
+        var_mean_2 = var_2
+
     SET = namedtuple("SET", "nsim method alpha")
-    corr, significance = corr_2d_ttest(var_1, var_2, options = SET(nsim=1000, method='ttest', alpha=0.01), nd=3)
+    corr, significance = corr_2d_ttest(var_mean_1, var_mean_2, options = SET(nsim=1000, method='ttest', alpha=0.01), nd=3)
     sig = np.where(significance==True)
 
     plt.figure(figsize=(10, 5))
@@ -25,7 +38,7 @@ def correlation_plot(var_1, var_2, del_t, name_1, name_2):
     plt.savefig(cfg.plot_path + 'correlation_' + name_1 + '_' + name_2 + str(del_t) + '.pdf')
     plt.show()
 
-    return significance
+    return corr, significance
 
 #simple function to plot correlations between two variables
 def bias_plot(var_1, var_2, name_1, name_2):
@@ -36,7 +49,7 @@ def bias_plot(var_1, var_2, name_1, name_2):
     var_2 = np.mean(var_2, axis=0)
 
 
-    #calculate correlation between both variables
+    #calculate bias between both variables
     for j in range(n[1]):
         for k in range(n[2]):
             bias[j, k] = var_1[j, k] - var_2[j, k]

@@ -40,36 +40,55 @@ class calculate_leadyear(object):
         obs = get_variable(cfg.observation_path, lead_year=lead_year, name='HadIobs', start_year=start_year, end_year=end_year)
         obs = obs.__getitem__()
 
-        hist = get_variable(cfg.historical_path, lead_year=lead_year, name=cfg.hist_name, ensemble_members=cfg.ensemble_member, start_year=start_year,
-            end_year=end_year, start_month='01', variable='tos', ensemble=True, mode='hist')
+        hist = get_variable(cfg.historical_path, lead_year=lead_year, name=cfg.hist_name, ensemble_members=cfg.ensemble_member_hist, start_year=start_year,
+            end_year=end_year, start_month='01', variable=cfg.variable, ensemble=True, mode='hist')
         hist = hist.__getitem__()
 
         hin = get_variable(cfg.hindcast_path, lead_year=lead_year, name=cfg.hind_name, ensemble_members=cfg.ensemble_member, mod_year=cfg.hind_mod, start_year=start_year,
-            end_year=end_year, start_month=cfg.start_month_hind, start_year_file=start_year, end_year_file=start_year + 10, variable='tos', ensemble=True)
+            end_year=end_year, start_month=cfg.start_month_hind, start_year_file=start_year, end_year_file=start_year + cfg.hind_length, variable=cfg.variable, ensemble=True)
         hind = hin.__getitem__()
-        time, lon, lat = hin.get_coords()    
+        #time, lon, lat = hin.get_coords()
 
-        residual_dataset = residual(lead_year, start_year)
-        residual_dataset.save_data(obs, hist, hind, time, lon, lat)
+        if cfg.variable == 'thetao':
+            hist = hist[:, 0, :, :]
+            hind = hind[:, 0, :, :]   
+
+
+        #residual_dataset = residual(lead_year, start_year)
+        #residual_dataset.save_data(obs, hist, hind, time, lon, lat)
 
         #select only lead year from residuals
+        #if type(self.lead_year) == int:
+        #    ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + '_' + str(lead_year) + '.nc', decode_times=False)
+        #    ds = ds.sel(year=ds.year.values[self.lead_year - 1])
+        #else:
+        #    ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + '_' + str(lead_year) + '.nc', decode_times=False)
+        #    ds = ds.sel(year=slice(ds.year.values[lead_year1 - 1], ds.year.values[lead_year2 - 1])).mean('year')
+
         if type(self.lead_year) == int:
-            ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + '_' + str(lead_year) + '.nc', decode_times=False)
-            ds = ds.sel(year=ds.year.values[self.lead_year - 1])
+            hist = hist[lead_year - 1, :, :]
+            hind = hind[lead_year - 1, :, :]
+            obs = obs[lead_year - 1, :, :]
         else:
-            ds = xr.open_dataset(cfg.residual_path + '_' + str(start_year) + '_' + str(lead_year) + '.nc', decode_times=False)
-            ds = ds.sel(year=slice(ds.year.values[lead_year1 - 1], ds.year.values[lead_year2 - 1])).mean('year')
+            hist = np.nanmean(hist[lead_year1 - 1: lead_year2 - 1, :, :], axis=0)            
+            hind = np.nanmean(hind[lead_year1 - 1: lead_year2 - 1, :, :], axis=0)            
+            obs = np.nanmean(obs[lead_year1 - 1: lead_year2 - 1, :, :], axis=0)            
 
-        
-        obs = ds.observation.values
-        hind = ds.hindcast.values
-        hist = ds.historical.values
-        res_obs = ds.res_obs.values
-        res_hind = ds.res_hind.values
 
-        return obs, hind, hist, res_obs, res_hind
+        return obs, hind, hist#, res_obs, res_hind
 
     def calculate_lead_corr(self):
+
+        #transform lead years into lead year
+        if type(self.lead_year) == int:
+            lead_year = self.lead_year
+
+        else:
+            lead_year = self.lead_year.split()
+            lead_year1 = int(lead_year[0])
+            lead_year2 = int(lead_year[1])
+            lead_year = lead_year1 + 2*lead_year2
+
 
         obs = np.zeros(shape=(self.end_year - self.start_year, 180, 360))
         hind = np.zeros(shape=(self.end_year - self.start_year, 180, 360))
@@ -77,9 +96,23 @@ class calculate_leadyear(object):
         res_obs = np.zeros(shape=(self.end_year - self.start_year, 180, 360))
         res_hind = np.zeros(shape=(self.end_year - self.start_year, 180, 360))
 
-        for i in range(self.start_year, self.end_year):               
-            obs[i - self.start_year], hind[i - self.start_year], hist[i - self.start_year], res_obs[i - self.start_year], res_hind[i - self.start_year] = self.__getitem__(i, i+10)
-            
+        if type(self.lead_year) == int:
+            for i in range(self.start_year - self.lead_year, self.end_year - self.lead_year):               
+                #obs[i - self.start_year], hind[i - self.start_year], hist[i - self.start_year], res_obs[i - self.start_year], res_hind[i - self.start_year] = self.__getitem__(i, i+ cfg.hind_length)
+                obs[i - self.start_year], hind[i - self.start_year], hist[i - self.start_year] = self.__getitem__(i, i+ cfg.hind_length)
+        else:
+            for i in range(self.start_year - lead_year2, self.end_year - lead_year2):               
+                obs[i - self.start_year], hind[i - self.start_year], hist[i - self.start_year] = self.__getitem__(i, i+ cfg.hind_length)
+
+
+        residual_dataset = residual(lead_year, self.start_year)
+        residual_dataset.save_data(obs, hist, hind)
+
+        f_res = h5.File(f'{cfg.residual_path}_{str(self.start_year)}_{str(lead_year)}.hdf5', 'r')
+        res_hind = f_res.get('res_hind')
+        res_obs = f_res.get('res_obs')
+        
+
         n = hind.shape
         hind_corr = np.zeros((n[1], n[2]))
         hist_corr = np.zeros((n[1], n[2]))
@@ -164,7 +197,7 @@ class ly_series(object):
         res_hind_ly_ts = []
         hist_ly_ts = []
 
-        for i in range(1, 10):
+        for i in range(1, cfg.hind_length):
             hind_corr, res_hind_corr, hist_corr = self.load_lead_corr(lead_year = i)
             
             hind_ly_ts.append(np.nanmean(np.nanmean(hind_corr, axis=0), axis=0))
@@ -184,7 +217,7 @@ class ly_series(object):
         hist_ly_ts.append(np.nanmean(np.nanmean(hist_corr_29, axis=0), axis=0))
 
         print(hind_ly_ts, res_hind_ly_ts, hist_ly_ts)
-        x = range(1, 12)
+        x = range(1, cfg.hind_length + 2)
 
         fig, ax = plt.subplots()
         ax.plot(x, hind_ly_ts, 'x', label='Hindcast correlation')
@@ -199,3 +232,5 @@ class ly_series(object):
         plt.legend()
         plt.savefig('{}leadyear_timeseries_{}_{}.pdf'.format(cfg.plot_path, str(cfg.start_year), str(cfg.end_year)))
         plt.show()
+
+        return np.array(hind_ly_ts), np.array(res_hind_ly_ts), np.array(hist_ly_ts)

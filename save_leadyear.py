@@ -11,10 +11,19 @@ tempfile.tempdir ='/mnt/lustre02/work/uo1075/u301617/tmp'
 
 cfg.set_args()
 
+correlation_path = cfg.tmp_path + 'correlation/'
+tmp_path = cfg.tmp_path + 'tmp/'
+
 if not os.path.exists(cfg.plot_path):
     os.makedirs(cfg.plot_path)
 if not os.path.exists(cfg.tmp_path):
     os.makedirs(cfg.tmp_path)
+if not os.path.exists(correlation_path):
+    os.makedirs(correlation_path)
+if not os.path.exists(tmp_path):
+    os.makedirs(tmp_path)
+if not os.path.exists(cfg.residual_path):
+    os.makedirs(cfg.residual_path)
 
 #save lead correlation for cfg.lead_year
 if cfg.lead_years:
