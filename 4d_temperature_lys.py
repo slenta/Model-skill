@@ -8,22 +8,23 @@ import xarray as xr
 import h5py
 
 
+# return important parameters
+print(cfg.model_specifics_hind)
+print(cfg.lead_year)
+
 start_year = cfg.start_year
 end_year = cfg.end_year
-length = end_year - start_year
-ly_series = np.zeros(shape=(cfg.hind_length - 1, length, 180, 360))
 
-print(cfg.model_specifics_hind)
-ly = cfg.lead_year
+
 timeseries = []
-print(ly)
-for year in range(start_year, start_year + 1):
+for year in range(start_year, end_year):
     print(year)
     hind = get_variable(
         path=cfg.hindcast_path,
-        lead_year=ly,
+        lead_year=cfg.lead_year,
         name=cfg.hind_name,
-        ensemble_members=cfg.ensemble_member,
+        # ensemble_members=cfg.ensemble_member,
+        ensemble_members=1,
         mod_year=cfg.hind_mod,
         start_year=start_year,
         end_year=end_year + cfg.hind_length,
@@ -43,7 +44,7 @@ for year in range(start_year, start_year + 1):
 # get latitude, longitudes for xarray Dataset
 ens = prepro.ensemble_means(
     path=cfg.hindcast_path,
-    lead_year=ly,
+    lead_year=cfg.lead_year,
     name=cfg.hind_name,
     ensemble_members=cfg.ensemble_member,
     mod_year=cfg.hind_mod,
@@ -63,31 +64,34 @@ ds_template = xr.open_dataset(path)
 lat = ds_template.latitude.values
 lon = ds_template.longitude.values
 time = range(start_year, end_year)
+depth = ds_template.lev.values
 
 
 timeseries = np.array(timeseries)
-print(timeseries.shape)
-f = h5py.File(
-    f"for_vimal/4d_temperature_{cfg.model_specifics_hind}_{cfg.region}_ly_{ly}.nc", "w"
-)
-f.create_dataset(name="ly_timseries", shape=timeseries.shape, data=timeseries)
-
 dims = range(0, 3)
 dnames = ["time", "lat", "lon"]
 
+# control if shapes are correct
+print(lat.shape, lon.shape, depth.shape)
+print(timeseries.shape)
+
+f = h5py.File(
+    f"for_vimal/4d_temperature_{cfg.model_specifics_hind}_{cfg.region}_ly_{cfg.lead_year}.hdf5",
+    "w",
+)
+f.create_dataset(name="ly_ts", shape=timeseries.shape, data=timeseries)
 for dim, dname in zip(dims, dnames):
-    h5py[cfg.data_types[0]].dims[dim].label = dname
-
-
+    f["ly_ts"].dims[dim].label = dname
 f.close()
 
 # convert timeseries to xarray Dataset
 ds = xr.Dataset(
-    data_vars=dict(timeseries=(["time", "x", "y"], timeseries)),
+    data_vars=dict(timeseries=(["time", "depth", "x", "y"], timeseries)),
     coords=dict(
         time=(["time"], time),
-        lon=(["lon"], lon),
-        lat=(["lat"], lat),
+        depth=(["depth"], depth),
+        lon=(["x", "y"], lon),
+        lat=(["x", "y"], lat),
     ),
     attrs=dict(
         description=f"4d temperature leadyear timeseries for model {cfg.model_specifics_hind} for leadyear {cfg.lead_year}"
@@ -96,5 +100,5 @@ ds = xr.Dataset(
 
 # save final dataset
 ds.to_netcdf(
-    f"for_vimal/4d_temperature_{cfg.model_specifics_hind}_{cfg.region}_ly_{ly}.nc"
+    f"for_vimal/4d_temperature_{cfg.model_specifics_hind}_{cfg.region}_ly_{cfg.lead_year}.nc"
 )
