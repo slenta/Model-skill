@@ -75,14 +75,6 @@ dnames = ["time", "lat", "lon"]
 print(lat.shape, lon.shape, depth.shape)
 print(timeseries.shape)
 
-f = h5py.File(
-    f"for_vimal/4d_temperature_{cfg.model_specifics_hind}_{cfg.region}_ly_{cfg.lead_year}.hdf5",
-    "w",
-)
-f.create_dataset(name="ly_ts", shape=timeseries.shape, data=timeseries)
-for dim, dname in zip(dims, dnames):
-    f["ly_ts"].dims[dim].label = dname
-f.close()
 
 # convert timeseries to xarray Dataset
 ds = xr.Dataset(

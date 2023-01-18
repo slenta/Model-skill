@@ -62,6 +62,8 @@ def set_args():
     arg_parser.add_argument("--lead_years", type=str)
     arg_parser.add_argument("--scenario", type=str, default="ssp245")
     arg_parser.add_argument("--region", type=str, default="global")
+    arg_parser.add_argument("--start_year", type=int, default=1970)
+    arg_parser.add_argument("--end_year", type=int, default=2018)
 
     model_parsers = arg_parser.add_subparsers(help="model types")
 
@@ -98,8 +100,6 @@ def set_args():
         "--hist_start_years", type=list, default=[1850, 1950, 2015]
     )
     MIROC_parser.add_argument("--hist_end_years", type=list, default=[1949, 2014, 2100])
-    MIROC_parser.add_argument("--start_year", type=int, default=1970)
-    MIROC_parser.add_argument("--end_year", type=int, default=2018)
     MIROC_parser.add_argument("--start_month_hind", type=str, default="11")
     MIROC_parser.add_argument("--ensemble_member", type=int, default=10)
     MIROC_parser.add_argument("--ensemble_member_hist", type=int, default=20)
@@ -157,8 +157,6 @@ def set_args():
         type=list,
         default=[1869, 1889, 1909, 1929, 1949, 1969, 1989, 2009, 2014, 2034],
     )
-    MPI_parser.add_argument("--start_year", type=int, default=1970)
-    MPI_parser.add_argument("--end_year", type=int, default=2018)
     MPI_parser.add_argument("--start_month_hind", type=str, default="11")
     MPI_parser.add_argument("--ensemble_member", type=int, default=5)
     MPI_parser.add_argument("--ensemble_member_hist", type=int, default=20)
@@ -166,6 +164,99 @@ def set_args():
     MPI_parser.add_argument("--model_specifics_hist", type=str, default="MPI-ESM1-2-LR")
     MPI_parser.add_argument("--model_specifics_hind", type=str, default="MPI-ESM1-2-HR")
     MPI_parser.add_argument("--variable", type=str, default="tos")
+
+    BCC_parser = model_parsers.add_parser("BCC")
+
+    BCC_parser.add_argument(
+        "--historical_path",
+        type=str,
+        default="/pool/data/CMIP6/data/CMIP/BCC/BCC-CSM2-MR/historical/r",
+    )
+    BCC_parser.add_argument(
+        "--hindcast_path",
+        type=str,
+        default="/pool/data/CMIP6/data/DCPP/BCC/BCC-CSM2-MR/dcppA-hindcast/s",
+    )
+    BCC_parser.add_argument(
+        "--scenario_path",
+        type=str,
+        default="/pool/data/CMIP6/data/ScenarioMIP/BCC/BCC-CSM2-MR/ssp245/r",
+    )
+    BCC_parser.add_argument(
+        "--assi_path",
+        type=str,
+        default="/work/uo1075/u301617/HiWi_Vimal/Code/tmp/MPI-ESM1-2-HR/assimilation_MPI-ESM1-2-HR_1958_2017.nc",
+    )
+    BCC_parser.add_argument(
+        "--pi_path",
+        type=str,
+        default="/work/uo1075/u301617/HiWi_Vimal/Code/tmp/BCC-CSM2-MR/picontrol_thetao_BCC_185001_244912.nc",
+    )
+    BCC_parser.add_argument(
+        "--hind_mod", type=str, default="v20200117"
+    )  # v20190917 bei tos
+    BCC_parser.add_argument(
+        "--scenario_mod", type=str, default="v20190319"
+    )  # 2:v20210901
+    BCC_parser.add_argument("--hist_mod", type=str, default="v20181126")  # 2:v20210901
+    BCC_parser.add_argument(
+        "--hist_start_years",
+        type=list,
+        default=[
+            1850,
+            1860,
+            1870,
+            1880,
+            1890,
+            1900,
+            1910,
+            1920,
+            1930,
+            1940,
+            1950,
+            1960,
+            1970,
+            1980,
+            1990,
+            2000,
+            2010,
+            2010,
+            2015,
+            2025,
+        ],
+    )
+    BCC_parser.add_argument(
+        "--hist_end_years",
+        type=list,
+        default=[
+            1859,
+            1869,
+            1879,
+            1889,
+            1899,
+            1909,
+            1919,
+            1929,
+            1939,
+            1949,
+            1959,
+            1969,
+            1979,
+            1989,
+            1999,
+            2009,
+            2014,
+            2024,
+            2034,
+        ],
+    )
+    BCC_parser.add_argument("--start_month_hind", type=str, default="01")
+    BCC_parser.add_argument("--ensemble_member", type=int, default=8)
+    BCC_parser.add_argument("--ensemble_member_hist", type=int, default=3)
+    BCC_parser.add_argument("--hind_length", type=int, default=9)
+    BCC_parser.add_argument("--model_specifics_hist", type=str, default="BCC-CSM2-MR")
+    BCC_parser.add_argument("--model_specifics_hind", type=str, default="BCC-CSM2-MR")
+    BCC_parser.add_argument("--variable", type=str, default="thetao")
 
     # arg_parser.add_argument('--historical_path', type=str, default='/pool/data/CMIP6/data/CMIP/CCCma/CanESM5/historical/r')
     # arg_parser.add_argument('--hindcast_path', type=str, default='/pool/data/CMIP6/data/DCPP/CCCma/CanESM5/dcppA-hindcast/s')
