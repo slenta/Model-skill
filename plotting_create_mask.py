@@ -7,8 +7,7 @@ from preprocessing import get_variable
 from preprocessing import detrend_linear_numpy
 import preprocessing as pp
 from decorrelation_time import decorrelation_time
-from plots import correlation_plot, plot_variable_mask
-from plots import bias_plot
+from plots import correlation_plot, plot_variable_mask, rmse_plot, bias_plot
 from residuals import residual
 import matplotlib
 import h5py as h5
@@ -24,18 +23,11 @@ if not os.path.exists(cfg.plot_path):
     os.makedirs(cfg.plot_path)
 if not os.path.exists(cfg.tmp_path):
     os.makedirs(cfg.tmp_path)
+if not os.path.exists(f"{cfg.tmp_path}/tmp/"):
+    os.makedirs(f"{cfg.tmp_path}/tmp/")
+if not os.path.exists(cfg.data_path):
+    os.makedirs(cfg.data_path)
 
-IAP_Ohc = get_variable(
-    path=cfg.ohc_path,
-    name="IAP_Ohc",
-    start_year=196100,
-    end_year=201600,
-    variable="heatcontent",
-    mean="annual",
-    time_edit=False,
-)
-IAP_Ohc = IAP_Ohc.__getitem__()
-IAP_Ohc = detrend_linear_numpy(IAP_Ohc)
 
 # plot correlation for lead year 1 and 2-5
 lys = calculate_leadyear(cfg.start_year, cfg.end_year, lead_year=1)
@@ -126,46 +118,96 @@ decor_4_res, mask_decor_4_res = decor_4.__getitem__()
 decor_4.plot()
 
 
-# plot ssh bias and correlation
-Aviso_ssh = get_variable(
-    path=cfg.data_path + "Aviso_Ssh_full/Aviso_Ssh_full_1993_2018.nc",
-    name="Aviso_ssh",
-    start_year=1993,
-    end_year=2017,
-    variable="var",
-    mean="monthly",
-)
-Aviso_ssh = Aviso_ssh.__getitem__()
-Aviso_ssh = detrend_linear_numpy(Aviso_ssh)
+# plot ssh bias and correlation, if assimilation existent
+if cfg.assi == True:
+    assi_start = 1993
+    assi_end = 2017
 
-Assi_ssh = get_variable(
-    path=cfg.assi_path,
-    name="_dcppA-assim_r",
-    start_year=1993,
-    end_year=2017,
-    variable="zos",
+    Aviso_ssh = get_variable(
+        path=cfg.data_path + "Aviso_Ssh_full/Aviso_Ssh_full_1993_2018.nc",
+        name="Aviso_ssh",
+        start_year=assi_start,
+        end_year=assi_end,
+        variable="var",
+        mean="monthly",
+    )
+    Aviso_ssh = Aviso_ssh.__getitem__()
+    Aviso_ssh = detrend_linear_numpy(Aviso_ssh)
+
+    Assi_ssh = get_variable(
+        path=cfg.assi_path,
+        name="_dcppA-assim_r",
+        start_year=assi_start,
+        end_year=assi_end,
+        variable="zos",
+        time_edit=True,
+        mean="monthly",
+        mode="assim",
+    )
+    Assi_ssh = Assi_ssh.__getitem__()[:, 0, :, :]
+    Assi_ssh = detrend_linear_numpy(Assi_ssh)
+
+    corr_ssh_4, mask_ssh_4 = correlation_plot(
+        Aviso_ssh, Assi_ssh, del_t=4, name_1="Aviso_ssh", name_2="Assimilation_ssh"
+    )
+    corr_ssh_1, mask_ssh_1 = correlation_plot(
+        Aviso_ssh, Assi_ssh, del_t=1, name_1="Aviso_ssh", name_2="Assimilation_ssh"
+    )
+    bias_plot(Aviso_ssh, Assi_ssh, name_1="Aviso_ssh", name_2="Assimilation_ssh")
+
+    n = Assi_ssh.shape
+    Assi_initial = np.zeros(shape=(assi_end - assi_start, n[1], n[2]))
+    Aviso_initial = np.zeros(shape=(assi_end - assi_start, n[1], n[2]))
+    for i in range(Assi_ssh.shape[0]):
+        if i % int(cfg.start_month_hind):
+            Assi_initial[i // cfg.start_month_hind, :, :] = Assi_ssh[i, :, :]
+            Aviso_initial[i // cfg.start_month_hind, :, :] = Aviso_ssh[i, :, :]
+
+    Assi_rmse = rmse_plot(
+        Aviso_initial,
+        Assi_initial,
+        name_1="Aviso_ssh_initial_month",
+        name_2="Assimilation_ssh_initial_month",
+    )
+
+
+# plot pi_control thetao and sst correlation
+pi_control = get_variable(
+    path=cfg.pi_path,
+    name="Pi_control_thetao",
+    start_year=cfg.start_year,
+    end_year=cfg.end_year,
+    variable="thetao",
+    mean="annual",
     time_edit=True,
-    mean="monthly",
-    mode="assim",
 )
-Assi_ssh = Assi_ssh.__getitem__()[:, 0, :, :]
-Assi_ssh = detrend_linear_numpy(Assi_ssh)
+pi_control_thetao = pi_control.__getitem__()
+pi_control_ohc_proxy = np.mean(pi_control_thetao, axis=1)
+pi_control_sst = pi_control_thetao[:, 0, :, :]
 
-corr_ssh_4, mask_ssh_4 = correlation_plot(
-    Aviso_ssh, Assi_ssh, del_t=4, name_1="Aviso_ssh", name_2="Assimilation_ssh"
+pi_corr_1, pi_sig_1 = correlation_plot(
+    pi_control_ohc_proxy,
+    pi_control_sst,
+    name_1="pi_ohc",
+    name_2="pi_sst",
+    del_t=1,
 )
-corr_ssh_1, mask_ssh_1 = correlation_plot(
-    Aviso_ssh, Assi_ssh, del_t=1, name_1="Aviso_ssh", name_2="Assimilation_ssh"
+pi_corr_4, pi_sig_4 = correlation_plot(
+    pi_control_ohc_proxy,
+    pi_control_sst,
+    name_1="pi_ohc",
+    name_2="pi_sst",
+    del_t=4,
 )
-bias_plot(Aviso_ssh, Assi_ssh, name_1="Aviso_ssh", name_2="Assimilation_ssh")
+
 
 # plot correlation between ocean heat content and ssts
 # get OHC data
 IAP_Ohc = get_variable(
     path=cfg.ohc_path,
     name="IAP_Ohc",
-    start_year=196100,
-    end_year=201600,
+    start_year=1961,
+    end_year=2016,
     variable="heatcontent",
     mean="annual",
     time_edit=True,
@@ -213,11 +255,12 @@ ds_1 = xr.Dataset(
         ssh_mask=(["x", "y"], mask_ssh_1),
         decorrelation_time=(["x", "y"], decor_1_res),
         ohc_correlation=(["x", "y"], corr_ohc_1),
-        ssh_correlation=(["x", "y"], corr_ssh_1),
         hindcast_correlation=(["x", "y"], hind_corr_1),
         historical_correlation=(["x", "y"], hist_corr_1),
         residual_hindcast_correlation=(["x", "y"], res_hind_corr_1),
         difference_hindcast_historical=(["x", "y"], diff_1),
+        pi_ohc_correlation=(["x", "y"], pi_corr_1),
+        pi_ohc_sign=(["x", "y"], pi_sig_1),
     ),
     coords=dict(lon=(["lon"], lon), lat=(["lat"], lat)),
     attrs=dict(
@@ -231,11 +274,12 @@ ds_4 = xr.Dataset(
         ssh_mask=(["x", "y"], mask_ssh_4),
         decorrelation_time=(["x", "y"], decor_4_res),
         ohc_correlation=(["x", "y"], corr_ohc_4),
-        ssh_correlation=(["x", "y"], corr_ssh_4),
         hindcast_correlation=(["x", "y"], hind_corr_4),
         historical_correlation=(["x", "y"], hist_corr_4),
         residual_hindcast_correlation=(["x", "y"], res_hind_corr_4),
         difference_hindcast_historical=(["x", "y"], diff_4),
+        pi_ohc_correlation=(["x", "y"], pi_corr_4),
+        pi_ohc_sign=(["x", "y"], pi_sig_4),
     ),
     coords=dict(lon=(["lon"], lon), lat=(["lat"], lat)),
     attrs=dict(
@@ -253,7 +297,24 @@ ds_ly = xr.Dataset(
     attrs=dict(description=f"Leadyear timeseries for model {cfg.model_specifics_hind}"),
 )
 
+# if assimilation existent, save assimilation correlation and rmse plots
+if cfg.assi == True:
+    ds_assi = xr.Dataset(
+        data_vars=dict(
+            ssh_correlation_annual=(["x", "y"], corr_ssh_1),
+            ssh_correlation_4_year=(["x", "y"], corr_ssh_4),
+            assimilation_initial_rmse=(["x", "y"], Assi_rmse),
+        ),
+        coords=dict(lon=(["lon"], lon), lat=(["lat"], lat)),
+        attrs=dict(
+            description=f"Assimilation ssh masks for model {cfg.model_specifics_hind}"
+        ),
+    )
+
+    ds_assi.to_netcdf(f"for_vimal/assimilation_{cfg.model_specifics_hind}.nc")
+
+
 # save final dataset with all masks and images
 ds_1.to_netcdf(f"for_vimal/final_masks_{cfg.model_specifics_hind}_1.nc")
 ds_4.to_netcdf(f"for_vimal/final_masks_{cfg.model_specifics_hind}_4.nc")
-ds_ly.to_netcdf(f"for_vimal/Leadyear_timeseries_{cfg.model_specifics_hind}.nc")
+ds_ly.to_netcdf(f"for_vimal/leadyear_timeseries_{cfg.model_specifics_hind}.nc")

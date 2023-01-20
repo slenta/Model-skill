@@ -432,15 +432,10 @@ class get_variable(object):
 
             if self.lead_year:
                 ofile = (
-                    cfg.tmp_path
-                    + "tmp/"
-                    + self.name
-                    + str(self.start_year)
-                    + str(self.lead_year)
-                    + ".nc"
+                    f"{cfg.tmp_path}tmp/{self.name}{self.start_year}{self.lead_year}.nc"
                 )
             else:
-                ofile = cfg.tmp_path + "tmp/" + self.name + str(self.start_year) + ".nc"
+                ofile = f"{cfg.data_path}tmp/{self.name}{str(self.start_year)}.nc"
 
             if self.remap == True:
                 cdo.remapbil(
@@ -470,10 +465,14 @@ class get_variable(object):
             else:
                 time = []
                 for t in ds.time.values:
-                    time.append(pd.to_datetime(f"{t}", format="%Y%m%d.5"))
+                    time.append(pd.to_datetime(f"{t}", format="%Y%m.5"))
 
                 ds["time"] = np.array(time)
-                ds = ds.sel(time=slice(self.start_year + 1, self.end_year))
+                ds = ds.sel(
+                    time=slice(
+                        str(self.start_year + 1) + "-01", str(self.end_year) + "-12"
+                    )
+                )
 
             if self.mean == "monthly":
                 ds = ds.resample(time="1M").mean()

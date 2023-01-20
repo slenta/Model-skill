@@ -35,6 +35,7 @@ hind_length = None
 ensemble_member_hist = None
 variable = None
 region = None
+data_path = None
 
 
 def set_args():
@@ -55,7 +56,7 @@ def set_args():
     )
     arg_parser.add_argument("--hist_name", type=str, default="_historical_r")
     arg_parser.add_argument("--hind_name", type=str, default="_dcppA-hindcast_s")
-    arg_parser.add_argument("--tmp_path", type=str, default="./tmp/")
+    arg_parser.add_argument("--data_path", type=str, default="./tmp/")
     arg_parser.add_argument("--ssh_mod", type=str, default="v20190821/")
     arg_parser.add_argument("--plot_path", type=str, default="./plots/")
     arg_parser.add_argument("--lead_year", type=int, default=1)
@@ -107,6 +108,7 @@ def set_args():
     MIROC_parser.add_argument("--model_specifics_hist", type=str, default="MIROC6")
     MIROC_parser.add_argument("--model_specifics_hind", type=str, default="MIROC6")
     MIROC_parser.add_argument("--variable", type=str, default="tos")
+    MIROC_parser.add_argument("--assi", type=str, default=True)
     MIROC_parser.add_argument(
         "--pi_path",
         type=str,
@@ -141,8 +143,8 @@ def set_args():
         default="/work/uo1075/u301617/HiWi_Vimal/Code/tmp/MPI-ESM1-2-HR/picontrol_MPI_thetao_1850_2349.nc",
     )
     MPI_parser.add_argument(
-        "--hind_mod", type=str, default="v20200909"
-    )  # v20190917 bei tos
+        "--hind_mod", type=str, default="v20190917"
+    )  # v20200909 bei thetao
     MPI_parser.add_argument(
         "--scenario_mod", type=str, default="v20190710"
     )  # 2:v20210901
@@ -164,6 +166,7 @@ def set_args():
     MPI_parser.add_argument("--model_specifics_hist", type=str, default="MPI-ESM1-2-LR")
     MPI_parser.add_argument("--model_specifics_hind", type=str, default="MPI-ESM1-2-HR")
     MPI_parser.add_argument("--variable", type=str, default="tos")
+    MPI_parser.add_argument("--assi", type=str, default=True)
 
     BCC_parser = model_parsers.add_parser("BCC")
 
@@ -251,6 +254,7 @@ def set_args():
         ],
     )
     BCC_parser.add_argument("--start_month_hind", type=str, default="01")
+    BCC_parser.add_argument("--assi", type=str, default=False)
     BCC_parser.add_argument("--ensemble_member", type=int, default=8)
     BCC_parser.add_argument("--ensemble_member_hist", type=int, default=3)
     BCC_parser.add_argument("--hind_length", type=int, default=9)
@@ -351,11 +355,14 @@ def set_args():
     global variable
     global region
     global pi_path
+    global data_path
 
     historical_path = args.historical_path
     hindcast_path = args.hindcast_path
     observation_path = args.observation_path
-    residual_path = args.tmp_path + args.model_specifics_hind + "residuals/residual"
+    residual_path = (
+        f"{args.data_path}/{args.model_specifics_hind}/{args.region}/residuals/residual"
+    )
     scenario_path = args.scenario_path
     assi_path = args.assi_path
     aviso_path = args.aviso_path
@@ -369,8 +376,9 @@ def set_args():
     ensemble_member_hist = args.ensemble_member_hist
     model_specifics_hist = args.model_specifics_hist
     model_specifics_hind = args.model_specifics_hind
-    plot_path = args.plot_path + args.model_specifics_hind + "/"
-    tmp_path = args.tmp_path + args.model_specifics_hind + "/"
+    plot_path = f"{args.plot_path}{args.model_specifics_hind}/{args.region}/"
+    tmp_path = f"{args.data_path}/{args.model_specifics_hind}/{args.region}/"
+    data_path = args.data_path + "/tmp/"
     lead_years = args.lead_years
     scenario = args.scenario
     lead_year = args.lead_year
@@ -380,7 +388,7 @@ def set_args():
     ssh_mod = args.ssh_mod
     hist_mod = args.hist_mod
     scenario_mod = args.scenario_mod
-    data_path = args.tmp_path
+    data_path = args.data_path
     hind_length = args.hind_length
     variable = args.variable
     region = args.region
