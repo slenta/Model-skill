@@ -119,7 +119,7 @@ decor_4.plot()
 
 
 # plot ssh bias and correlation, if assimilation existent
-if cfg.assi == True:
+if cfg.assi_path != None:
     assi_start = 1993
     assi_end = 2017
 
@@ -156,12 +156,14 @@ if cfg.assi == True:
     bias_plot(Aviso_ssh, Assi_ssh, name_1="Aviso_ssh", name_2="Assimilation_ssh")
 
     n = Assi_ssh.shape
-    Assi_initial = np.zeros(shape=(assi_end - assi_start, n[1], n[2]))
-    Aviso_initial = np.zeros(shape=(assi_end - assi_start, n[1], n[2]))
+    Assi_initial = np.zeros(shape=(assi_end - assi_start + 1, n[1], n[2]))
+    Aviso_initial = np.zeros(shape=(assi_end - assi_start + 1, n[1], n[2]))
+    print(Assi_initial.shape, Assi_ssh.shape)
     for i in range(Assi_ssh.shape[0]):
-        if i % int(cfg.start_month_hind):
-            Assi_initial[i // cfg.start_month_hind, :, :] = Assi_ssh[i, :, :]
-            Aviso_initial[i // cfg.start_month_hind, :, :] = Aviso_ssh[i, :, :]
+        if i % int(cfg.start_month_hind) == 0:
+            print(i)
+            Assi_initial[i // int(cfg.start_month_hind), :, :] = Assi_ssh[i, :, :]
+            Aviso_initial[i // int(cfg.start_month_hind), :, :] = Aviso_ssh[i, :, :]
 
     Assi_rmse = rmse_plot(
         Aviso_initial,
@@ -298,7 +300,7 @@ ds_ly = xr.Dataset(
 )
 
 # if assimilation existent, save assimilation correlation and rmse plots
-if cfg.assi == True:
+if cfg.assi_path != None:
     ds_assi = xr.Dataset(
         data_vars=dict(
             ssh_correlation_annual=(["x", "y"], corr_ssh_1),

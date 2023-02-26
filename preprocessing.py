@@ -435,7 +435,7 @@ class get_variable(object):
                     f"{cfg.tmp_path}tmp/{self.name}{self.start_year}{self.lead_year}.nc"
                 )
             else:
-                ofile = f"{cfg.data_path}tmp/{self.name}{str(self.start_year)}.nc"
+                ofile = f"{cfg.tmp_path}tmp/{self.name}{str(self.start_year)}.nc"
 
             if self.remap == True:
                 cdo.remapbil(
