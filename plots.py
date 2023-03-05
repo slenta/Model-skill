@@ -90,7 +90,7 @@ def plot_variable_mask(var, mask, name):
 def rmse_plot(var_1, var_2, name_1, name_2):
 
     n = var_1.shape
-    rmse = np.sqrt((var_1 - var_2) ** 2)
+    rmse = np.nanmean(np.sqrt((var_1 - var_2) ** 2), axis=0)
 
     plt.figure(figsize=(8, 5))
     plt.imshow(rmse, cmap="coolwarm", vmin=-2, vmax=2)

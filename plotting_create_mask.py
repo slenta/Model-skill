@@ -156,14 +156,12 @@ if cfg.assi_path != None:
     bias_plot(Aviso_ssh, Assi_ssh, name_1="Aviso_ssh", name_2="Assimilation_ssh")
 
     n = Assi_ssh.shape
-    Assi_initial = np.zeros(shape=(assi_end - assi_start + 1, n[1], n[2]))
-    Aviso_initial = np.zeros(shape=(assi_end - assi_start + 1, n[1], n[2]))
-    print(Assi_initial.shape, Assi_ssh.shape)
+    Assi_initial = np.zeros(shape=(assi_end - assi_start, n[1], n[2]))
+    Aviso_initial = np.zeros(shape=(assi_end - assi_start, n[1], n[2]))
     for i in range(Assi_ssh.shape[0]):
-        if i % int(cfg.start_month_hind) == 0:
-            print(i)
-            Assi_initial[i // int(cfg.start_month_hind), :, :] = Assi_ssh[i, :, :]
-            Aviso_initial[i // int(cfg.start_month_hind), :, :] = Aviso_ssh[i, :, :]
+        if i % 12 == (int(cfg.start_month_hind) - 1):
+            Assi_initial[i // 12, :, :] = Assi_ssh[i, :, :]
+            Aviso_initial[i // 12, :, :] = Aviso_ssh[i, :, :]
 
     Assi_rmse = rmse_plot(
         Aviso_initial,
