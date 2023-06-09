@@ -28,7 +28,6 @@ if not os.path.exists(f"{cfg.tmp_path}/tmp/"):
 if not os.path.exists(cfg.data_path):
     os.makedirs(cfg.data_path)
 
-
 # plot correlation for lead year 1 and 2-5
 lys = calculate_leadyear(cfg.start_year, cfg.end_year, lead_year=1)
 hind_corr_1, res_hind_corr_1, hist_corr_1, diff_1 = lys.calculate_lead_corr()
@@ -45,7 +44,7 @@ hind_ly_ts, res_hind_ly_ts, hist_ly_ts = ly.ly_series()
 # plot decorrelation time for HadISSTs
 # define start and end years, threshold for decorrelation mask
 start_year = 1970
-end_year = 2017
+end_year = 2016
 
 # normal monthly hadissts
 HadIsst = get_variable(
@@ -134,17 +133,37 @@ if cfg.assi_path != None:
     Aviso_ssh = Aviso_ssh.__getitem__()
     Aviso_ssh = detrend_linear_numpy(Aviso_ssh)
 
-    Assi_ssh = get_variable(
-        path=cfg.assi_path,
-        name="_dcppA-assim_r",
-        start_year=assi_start,
-        end_year=assi_end,
-        variable="zos",
-        time_edit=True,
-        mean="monthly",
-        mode="assim",
-    )
-    Assi_ssh = Assi_ssh.__getitem__()[:, 0, :, :]
+    if cfg.model_specifics_hind == "MIROC6":
+        Assi_ssh = get_variable(
+            path=cfg.assi_path,
+            name="_dcppA-assim_r",
+            start_year=assi_start,
+            end_year=assi_end,
+            start_year_file=1950,
+            end_year_file=2017,
+            start_month="01",
+            variable="zos",
+            mod_year="v20190821",
+            ensemble=True,
+            ensemble_members=10,
+            time_edit=True,
+            mean="monthly",
+            mode="assim",
+        )
+        Assi_ssh = Assi_ssh.__getitem__()[:, :, :]
+    else:
+        Assi_ssh = get_variable(
+            path=cfg.assi_path,
+            name="_dcppA-assim_r",
+            start_year=assi_start,
+            end_year=assi_end,
+            variable="zos",
+            time_edit=True,
+            mean="monthly",
+            mode="assim",
+        )
+        Assi_ssh = Assi_ssh.__getitem__()[:, 0, :, :]
+
     Assi_ssh = detrend_linear_numpy(Assi_ssh)
 
     corr_ssh_4, mask_ssh_4 = correlation_plot(
@@ -176,7 +195,7 @@ pi_control = get_variable(
     path=cfg.pi_path,
     name="Pi_control_thetao",
     start_year=cfg.start_year,
-    end_year=cfg.end_year,
+    end_year=3999,
     variable="thetao",
     mean="annual",
     time_edit=True,
@@ -206,11 +225,11 @@ pi_corr_4, pi_sig_4 = correlation_plot(
 IAP_Ohc = get_variable(
     path=cfg.ohc_path,
     name="IAP_Ohc",
-    start_year=1961,
-    end_year=2016,
+    start_year=start_year,
+    end_year=end_year,
     variable="heatcontent",
     mean="annual",
-    time_edit=True,
+    time_edit=False,
 )
 IAP_Ohc = IAP_Ohc.__getitem__()
 IAP_Ohc = detrend_linear_numpy(IAP_Ohc)
@@ -227,11 +246,11 @@ final_mask_4_res = mask_decor_4_res * mask_ohc_4 * mask_ssh_4
 final_mask_1_res = mask_decor_1_res * mask_ohc_1 * mask_ssh_1
 
 f4 = h5.File(
-    f"{cfg.tmp_path}correlation/correlation{str(cfg.start_year)}_{str(cfg.end_year)}_12.hdf5",
+    f"{cfg.tmp_path}correlation/correlation_{str(cfg.start_year)}_{str(cfg.end_year)}_12.hdf5",
     "r",
 )
 f1 = h5.File(
-    f"{cfg.tmp_path}correlation/correlation{str(cfg.start_year)}_{str(cfg.end_year)}_1.hdf5",
+    f"{cfg.tmp_path}correlation/correlation_{str(cfg.start_year)}_{str(cfg.end_year)}_1.hdf5",
     "r",
 )
 
@@ -311,10 +330,14 @@ if cfg.assi_path != None:
         ),
     )
 
-    ds_assi.to_netcdf(f"for_vimal/assimilation_{cfg.model_specifics_hind}.nc")
+    ds_assi.to_netcdf(
+        f"for_vimal/assimilation_{cfg.region}_{cfg.model_specifics_hind}.nc"
+    )
 
 
 # save final dataset with all masks and images
-ds_1.to_netcdf(f"for_vimal/final_masks_{cfg.model_specifics_hind}_1.nc")
-ds_4.to_netcdf(f"for_vimal/final_masks_{cfg.model_specifics_hind}_4.nc")
-ds_ly.to_netcdf(f"for_vimal/leadyear_timeseries_{cfg.model_specifics_hind}.nc")
+ds_1.to_netcdf(f"for_vimal/final_masks_{cfg.region}_{cfg.model_specifics_hind}_1.nc")
+ds_4.to_netcdf(f"for_vimal/final_masks_{cfg.region}_{cfg.model_specifics_hind}_4.nc")
+ds_ly.to_netcdf(
+    f"for_vimal/leadyear_timeseries_{cfg.region}_{cfg.model_specifics_hind}.nc"
+)

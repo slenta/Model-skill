@@ -5,6 +5,7 @@ from statistics import mean
 from tracemalloc import start
 from typing_extensions import Self
 from anyio import open_file
+import datetime as dt
 import matplotlib
 import netCDF4 as nc
 import xarray as xr
@@ -448,6 +449,8 @@ class get_variable(object):
 
             else:
                 ds = xr.load_dataset(self.path, decode_times=False)
+                ds = ds.sel(lon=slice(cfg.lonlats[0], cfg.lonlats[1]))
+                ds = ds.sel(lat=slice(cfg.lonlats[2], cfg.lonlats[3]))
 
             # decode times into day-month-year shape
             time = ds.time
@@ -480,6 +483,7 @@ class get_variable(object):
                 ds = ds.resample(time="1Y").mean()
 
             var = ds[self.variable]
+
         var = np.array(var)
 
         # get out all NaNs

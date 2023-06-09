@@ -112,7 +112,7 @@ def set_args():
     MIROC_parser.add_argument(
         "--pi_path",
         type=str,
-        default="/work/uo1075/u301617/HiWi_Vimal/Code/tmp/MIROC6/pi_control_thetao_320001_399912.nc",
+        default="/work/uo1075/u301617/HiWi_Vimal/Code/tmp/MIROC6/pi_control/pi_thetao_MIROC6_3900_3999.nc",
     )
 
     MPI_parser = model_parsers.add_parser("MPI")
@@ -398,4 +398,4 @@ def set_args():
     elif region == "indian_ocean":
         lonlats = [50, 110, -30, 26]
     elif region == "SPG":
-        lonlats = [-60, -10, 50, 65]
+        lonlats = [300, 350, 50, 65]
